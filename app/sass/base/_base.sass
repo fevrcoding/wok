@@ -1,0 +1,156 @@
+/* ==========================================================================
+   Base styles
+   ========================================================================== */
+
+*,
+*:before,
+*:after
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+
+html,
+button,
+input,
+select,
+textarea
+  color: $color-text
+
+
+body
+  background: $color-bg
+  color: $color-text
+  font-size: $font-size-default
+  line-height: ($font-lheight-default/$font-size-default)
+  font-family: $font-family-base
+
+
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection declarations have to be separate.
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection
+  color: $color-text-selection
+  text-shadow: none
+
+
+::selection
+  color: $color-text-selection
+  text-shadow: none
+
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr
+  display: block
+  height: 1px
+  border: 0
+  border-top: 1px solid $color-border
+  margin: 1em 0
+  padding: 0
+
+
+/*
+ * Remove the gap between images and the bottom of their containers: h5bp.com/i/440
+ */
+
+img
+  vertical-align: middle
+
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset
+  border: 0
+  margin: 0
+  padding: 0
+
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea
+  resize: vertical
+
+
+
+
+/* Shared styles
+   ========================================================================== */
+
+%inline-block
+  @include inline-block
+
+%headings
+  margin: 0 0 0.2em
+  color: $color-text
+  font-family: $font-family-h
+  font-size: $font-size-h
+  font-weight: bold
+  line-height: 1
+
+%img-responsive
+  display: block
+  height: auto
+  max-width: 100%
+
+/* ==========================================================================
+   Default Typography
+   ========================================================================== */
+
+/* Headings and base
+   ========================================================================== */
+
+#{headings()}
+  @extend %headings
+
+
+h1, .h1
+  font-size: em($font-size-h1)
+
+h2, .h2
+  font-size: em($font-size-h2)
+
+h3, .h3
+  font-size: em($font-size-h3)
+
+
+h4, .h4,
+  font-size: em($font-size-h4)
+
+h5, .h5
+  font-size: em($font-size-h5)
+
+h6, .h6
+  font-size: em($font-size-h6)
+
+
+a
+  color: $color-link
+  text-decoration: underline
+
+  &:hover
+    color: $color-link
+    text-decoration: none
+
+/* Typographic helpers
+   ========================================================================== */
+
+.fsize-xs
+  font-size: em($font-size-xs)
+
+.fsize-s
+  font-size: em($font-size-s)
+
+.fsize-l
+  font-size: em($font-size-l)
+
+.fsize-xl
+  font-size: em($font-size-xl)

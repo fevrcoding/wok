@@ -1,0 +1,19 @@
+{
+  "name": "static-boilerplate",
+  "version": "0.1.0",
+  "authors": [
+    "Marco Solazzi <marco.solazzi@intesys.it>"
+  ],
+  "license": "(c) Intesys",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize-css": "1.1.3"
+  }
+}

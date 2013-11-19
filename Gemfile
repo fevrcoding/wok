@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+gem "json"
+gem "sass", ">=3.2.12"
+gem "sass-css-importer", "~>1.0.0.beta.0"
+gem "sass-globbing", "~>1.1.0"
+gem "compass" , "~>0.12.2"
+gem "compass-rgbapng", ">=0.2"

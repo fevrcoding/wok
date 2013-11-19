@@ -1,0 +1,103 @@
+## Default .gitignore
+## For other languages / frameworks / editors
+## See: https://github.com/github/gitignore
+
+
+
+#################
+## Eclipse
+#################
+
+*.pydevproject
+.project
+.metadata
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings
+.loadpath
+.externalToolBuilders/
+*.launch
+.cproject
+.buildpath
+
+
+
+##########
+## VIM
+##########
+
+.*.s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+
+
+#############################
+## SublimeText project files
+#############################
+
+*.sublime-workspace
+*.sublime-project
+
+
+
+#################
+## OS generated
+#################
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+#Mac
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+
+############
+### SASS
+############
+*.sass-cache
+
+
+
+################
+## Application
+################
+
+#Exclude logs
+log
+*.log
+
+
+
+############
+## Misc
+############
+
+*.mo
+.svn
+.phptidy-cache
+_svn
+node_modules
+bin
+etc
+lib
+www/*
+Gemfile.lock

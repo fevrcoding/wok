@@ -1,0 +1,33 @@
+{
+	"predef": [  // Extra globals.
+		"Modernizr"
+	],
+
+	"browser": true,
+	"jquery": true,
+
+	//Enforcing options
+	"camelcase": true,
+	"curly": true, // Require {} for every new block or scope.
+	"eqeqeq": true,
+	"immed": true,
+	"trailing": true,
+	"undef": true,
+    "indent": 4,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "quotmark": "single",
+    "regexp": true,
+    "unused": true,
+
+	//Relaxing options
+	"evil": false,  // Tolerate use of `eval`.
+
+	"regexdash": true,
+	"sub": true,
+	"smarttabs": true,
+	"expr": false, // Tolerate `ExpressionStatement` as Programs.
+	"boss": false // Tolerate assignments inside if, for & while. Usually conditions & loops are for comparison
+
+}
