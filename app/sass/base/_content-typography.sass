@@ -1,0 +1,54 @@
+// =============================================================================
+//   Content typography and styles
+//  ============================================================================
+%typography
+  word-wrap: break-word
+  overflow-wrap: break-word
+  color: $color-text
+
+  a
+    color: $color-link
+    text-decoration: underline
+
+    &:hover
+      text-decoration: none
+
+
+
+  p
+    margin-top: 0
+
+
+  ol,
+  ul
+    margin-top: 0.1em
+    padding-left: 1.5em
+
+
+  img
+    max-width: 100%
+    height: auto
+
+
+  table
+    @include table-scaffolding
+
+    margin-bottom: 2em
+
+    td,
+    th
+      border-bottom: 1px solid $color-border
+      padding: 0.2em 0.5em
+
+
+
+
+  blockquote
+    margin-bottom: 2em
+    font-style: italic
+
+
+  iframe,
+  object,
+  embed
+    width: 100%
