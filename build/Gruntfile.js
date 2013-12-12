@@ -413,7 +413,7 @@ module.exports = function(grunt) {
 						expand: true, // Enable dynamic expansion
 						cwd: '<%= paths.app %>/images/', // Src matches are relative to this path
 						src: ['**/*.{png,jpg,gif}'], // Actual patterns to match
-						dest: '<%= paths.images %>' // Destination path prefix
+						dest: '<%= paths.images %>/' // Destination path prefix
 					}
 				]
 			}
