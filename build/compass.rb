@@ -6,7 +6,7 @@ require 'fileutils'
 require 'sass-css-importer' #gem install --pre sass-css-importer
 require 'sass-globbing'
 require 'rgbapng'
-#require 'breakpoint'
+require 'breakpoint'
 
 #environment = :development --> this is default!
 #environment = :production
@@ -15,7 +15,7 @@ project_path = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 
 relative_images_path = 'images'
 
-sass_dir = 'app/sass'
+sass_dir = 'application/assets/stylesheets'
 # this setting enforces the compilation of `style.css` in the theme root folder
 css_dir = 'www/stylesheets'
 images_dir = 'www/' + relative_images_path

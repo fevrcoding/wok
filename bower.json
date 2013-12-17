@@ -1,6 +1,6 @@
 {
   "name": "static-boilerplate",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "authors": [
     "Marco Solazzi <marco.solazzi@intesys.it>"
   ],
@@ -14,6 +14,6 @@
     "tests"
   ],
   "dependencies": {
-    "normalize-css": "1.1.3"
+    "normalize-css": "~2.1.3"
   }
 }

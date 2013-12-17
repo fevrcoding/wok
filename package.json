@@ -1,7 +1,7 @@
 {
   "name": "static-boilerplate",
   "description": "A Static Boilerplate",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Marco Solazzi",
     "url": "https://www.intesys.it/",
@@ -13,23 +13,23 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.1",
+    "grunt": "~0.4.2",
     "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-compass": "~0.6.0",
+    "grunt-contrib-compass": "~0.7.0",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-usemin": "~2.0.0",
+    "grunt-usemin": "~2.0.2",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.2.7",
     "grunt-rsync": "~0.2.1",
-    "grunt-ejs-render": "~0.2.0",
-    "grunt-modernizr": "~0.4.1",
-    "load-grunt-tasks": "~0.2.0",
+    "grunt-ejs-render": "~0.2.1",
+    "load-grunt-tasks": "~0.2.1",
     "grunt-contrib-cssmin": "~0.7.0",
-    "grunt-contrib-imagemin": "~0.3.0",
-    "grunt-filerev": "~0.1.1",
-    "grunt-concurrent": "~0.4.1",
+    "grunt-contrib-imagemin": "~0.4.0",
+    "grunt-filerev": "~0.2.0",
+    "grunt-concurrent": "~0.4.2",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-preprocess": "~3.0.1",
-    "grunt-weinre": "0.0.2"
+    "grunt-weinre": "0.0.2",
+    "grunt-modernizr": "~0.4.1"
   }
 }

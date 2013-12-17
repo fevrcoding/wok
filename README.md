@@ -7,8 +7,8 @@ Requirements
 * Node 0.10+
 * Ruby
 * bundler (`gem install bundler`)
-* bower (`npm install -g bower`)
-* grunt-cli (`npm install -g grunt-cli`)
+* bower (`sudo npm install -g bower`)
+* grunt-cli (`sudo npm install -g grunt-cli`)
 
 
 From project root

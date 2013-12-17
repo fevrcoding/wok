@@ -1,0 +1,10 @@
+<script>
+    (function () {
+        var w = document.createElement('script');
+        w.type = 'text/javascript';
+        w.async = true;
+        w.src = 'http://<%= data.devbox.host %>:<%= data.devbox.ports.weinre %>/target/target-script-min.js#anonymous';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(w, s);
+    }());
+</script>

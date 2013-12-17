@@ -5,8 +5,7 @@
 module.exports = function(grunt) {
 	'use strict';
 
-	var path = require('path'),
-		basePath = path.normalize(__dirname + '/../www');
+	var path = require('path');
 
 	grunt.file.setBase('../');
 
@@ -33,7 +32,9 @@ module.exports = function(grunt) {
 		 */
 		paths: {
 
-			app: 'app',
+			application: 'application',
+
+			assets: '<%= paths.application %>/assets',
 
 			www: 'www',
 
@@ -44,14 +45,18 @@ module.exports = function(grunt) {
 			images: '<%= paths.www %>/images',
 			//where to store built files
 			js: '<%= paths.www %>/javascripts',
-			//
+
 			css: '<%= paths.www %>/stylesheets',
 
-			data: '<%= paths.app %>/data',
+			fixtures: '<%= paths.application %>/fixtures',
 
-			sass: '<%= paths.app %>/sass',
+			sass: '<%= paths.assets %>/stylesheets',
 
-			md: '<%= paths.app %>/md'
+			documents: '<%= paths.application %>/documents',
+
+			partials: '<%= paths.application %>/partials',
+			//rsync needs absolute path
+			rsync: path.normalize(__dirname + '/../www')
 		},
 
 		/**
@@ -63,14 +68,14 @@ module.exports = function(grunt) {
 				host: 'devug.intesys.it',
 				username: 'web',
 				password: 'rezzonico',
-				path: '/home/httpd/spgi-abitaresubito-gc/stage'
+				path: '/home/httpd/virtualhost'
 			},
 
 			production: {
-				host: 'devug.intesys.it',
+				host: 'mississippi.intesys.it',
 				username: 'web',
 				password: 'rezzonico',
-				path: '/home/httpd/spgi-abitaresubito-gc/stage'
+				path: '/home/httpd/virtualhost'
 			},
 
 			//remote host of developer box for mobile debug with weinre
@@ -108,13 +113,13 @@ module.exports = function(grunt) {
 			//dev only
 			js: {
 				expand: true,
-				cwd: '<%= paths.app %>/javascripts/',
+				cwd: '<%= paths.assets %>/javascripts/',
 				src: '**/*.js',
 				dest: '<%= paths.js %>/'
 			},
 			images: {
 				expand: true,
-				cwd: '<%= paths.app %>/images/',
+				cwd: '<%= paths.assets %>/images/',
 				src: '**',
 				dest: '<%= paths.images %>/'
 			}
@@ -193,7 +198,7 @@ module.exports = function(grunt) {
 				files: [
 					{
 						expand: true,
-						cwd: '<%= paths.app %>/',
+						cwd: '<%= paths.application %>/',
 						src: ['*.html'],
 						dest: '<%= paths.tmp %>',
 						ext: '.html'
@@ -203,7 +208,7 @@ module.exports = function(grunt) {
 					data: {
 						devbox: '<%= hosts.devbox %>'
 					},
-					partialPaths: ['<%= paths.md %>']
+					partialPaths: ['<%= paths.documents %>']
 				}
 			}
 		},
@@ -311,7 +316,7 @@ module.exports = function(grunt) {
 		 */
 		rsync: {
 			options: {
-				src: basePath,
+				src: '<%= paths.rsync %>',
 				recursive: true,
 				compareMode: 'checksum',
 				syncDestIgnoreExcl: true,
@@ -411,7 +416,7 @@ module.exports = function(grunt) {
 				files: [
 					{
 						expand: true, // Enable dynamic expansion
-						cwd: '<%= paths.app %>/images/', // Src matches are relative to this path
+						cwd: '<%= paths.assets %>/images/', // Src matches are relative to this path
 						src: ['**/*.{png,jpg,gif}'], // Actual patterns to match
 						dest: '<%= paths.images %>/' // Destination path prefix
 					}
@@ -446,16 +451,16 @@ module.exports = function(grunt) {
 			// 	tasks: ['compass:dev']
 			// },
 			images: {
-				files: ['<%= paths.app %>/images/**/*.{png,jpg,jpeg,gif}'],
+				files: ['<%= paths.assets %>/images/**/*.{png,jpg,jpeg,gif}'],
 				tasks: ['imagemin']
 			},
 			js: {
-				files: ['<%= paths.app %>/javascripts/{,*/}*.js'],
+				files: ['<%= paths.assets %>/javascripts/{,*/}*.js'],
 				tasks: ['copy:js']
 
 			},
 			app: {
-				files: ['<%= paths.md %>/*.md','<%= paths.app %>/{,includes/}*.html', '<%= paths.app %>/data/*.json'],
+				files: ['<%= paths.documents %>/*.md','<%= paths.application %>/*.html', '<%= paths.partials %>/*.html', '<%= paths.fixtures %>/*.json'],
 				tasks: ['render', 'preprocess:dev']
 			},
 			livereload: {
@@ -499,8 +504,6 @@ module.exports = function(grunt) {
 			dev: ['watch', 'compass:watch']
 		}
 	});
-
-
 
 
 
