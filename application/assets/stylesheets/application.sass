@@ -4,9 +4,12 @@
 @import "base/fonts"
 
 
+//plugins
+@import "breakpoint"
 @import "rgbapng"
 
 
+//compass modules
 @import "compass/utilities/general/clearfix"
 @import "compass/utilities/tables/scaffolding"
 @import "compass/typography/links/hover-link"
@@ -14,6 +17,7 @@
 
 @import "compass/css3"
 @import "compass/css3/user-interface"
+
 
 //base styles and mixins
 @import "CSS:normalize-css/normalize"
@@ -26,14 +30,17 @@
 @import "layouts/header"
 @import "layouts/footer"
 
+
 //modules here
 @import "modules/*"
 
+
+//states and themes
 @import "layouts/states"
 //@import "layouts/themes"
 //@import "layouts/swatches"
 //@import "layouts/ie"
 
+//utility styles
 @import "base/print"
-
 @import "base/dev"

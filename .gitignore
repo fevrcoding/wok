@@ -100,4 +100,6 @@ bin
 etc
 lib
 www/*
+#share vendors
+!www/vendor
 Gemfile.lock

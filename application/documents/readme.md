@@ -1,0 +1,3 @@
+Place here text documents you want to include in your views.
+
+It may be an _news article_, a _page content_ or ...

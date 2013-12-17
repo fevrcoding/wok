@@ -18,8 +18,8 @@
         <script src="/vendor/modernizr/modernizr.js"></script>
         <!-- @endif -->
 
-        <!-- build:css stylesheets/application.css -->
-        <link rel="stylesheet" href="stylesheets/application.css" type="text/css" />
+        <!-- build:css /stylesheets/application.css -->
+        <link rel="stylesheet" href="/stylesheets/application.css" type="text/css" />
         <!-- endbuild -->
 
     </head>
@@ -35,26 +35,8 @@
         <!-- endbuild -->
 
         <!-- @ifndef PRODUCTION -->
-        <script>
-            (function () {
-                var w = document.createElement('script');
-                w.type = 'text/javascript';
-                w.async = true;
-                w.src = 'http://<%= data.devbox.host %>:<%= data.devbox.ports.weinre %>/target/target-script-min.js#anonymous';
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(w, s);
-            }());
-        </script>
-        <script>
-            (function () {
-                var w = document.createElement('script');
-                w.type = 'text/javascript';
-                w.async = true;
-                w.src = 'http://' + (location.host || 'localhost').split(':')[0] + ':<%= data.devbox.ports.livereload %>/livereload.js?snipver=2';
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(w, s);
-            }());
-        </script>
+        <% include partials/_weinre-script.html %>
+        <% include partials/_livereload-script.html %>
        <!-- @endif -->
 
     </body>
