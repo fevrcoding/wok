@@ -11,14 +11,16 @@ require 'breakpoint'
 #environment = :development --> this is default!
 #environment = :production
 
+#custom variables
 project_path = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-
 relative_images_path = 'images'
+generated_assets_path = 'www'
+
 
 sass_dir = 'application/assets/stylesheets'
 # this setting enforces the compilation of `style.css` in the theme root folder
-css_dir = 'www/stylesheets'
-images_dir = 'www/' + relative_images_path
+css_dir = generated_assets_path + '/stylesheets'
+images_dir = generated_assets_path + '/' + relative_images_path
 
 #Place a common cache folder in the project path
 cache_path = File.expand_path(File.join(project_path, 'var', 'tmp', '.sass-cache'))
