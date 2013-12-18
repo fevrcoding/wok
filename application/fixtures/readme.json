@@ -1,4 +1,4 @@
-/**
- * Place here JSON files you want to use inside views
- * It may be a list of countries, users, menu items etc...
- */
+{
+	"_comment": "Place here JSON files you want to use inside views",
+	"_comment2": "It may be a list of countries, users, menu items etc..."
+}

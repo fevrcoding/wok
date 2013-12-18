@@ -19,12 +19,18 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 
+
 		pkg: grunt.file.readJSON('package.json'),
 
-		/* rigt now this is useless... */
+
+		/**
+		 * Project Metadata
+		 * ===============================
+		 */
 		meta: {
 			banner: '/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today("yyyy") %> <%= pkg.author.company %> */\n'
 		},
+
 
 		/**
 		 * Project Paths Configuration
@@ -59,6 +65,7 @@ module.exports = function(grunt) {
 			rsync: path.normalize(__dirname + '/../www')
 		},
 
+
 		/**
 		 * Remote Hosts Configuration
 		 * ===============================
@@ -88,6 +95,7 @@ module.exports = function(grunt) {
 			}
 		},
 
+
 		/**
 		 * Clean Task
 		 * ===============================
@@ -104,6 +112,7 @@ module.exports = function(grunt) {
 			css: ['<%= paths.css %>'],
 			html: ['<%= paths.www %>/*.html']
 		},
+
 
 		/**
 		 * Copy Task
@@ -152,6 +161,7 @@ module.exports = function(grunt) {
 			}
 		},
 
+
 		/**
 		 * JS Concatenation Task
 		 * (just banner other stuff is configured by usemin)
@@ -194,6 +204,13 @@ module.exports = function(grunt) {
 		 * ===============================
 		 */
 		render: {
+			options: {
+				helpers: {
+					getConfig : function (prop) {
+						return grunt.config.get(prop);
+					}
+				}
+			},
 			html: {
 				files: [
 					{
@@ -205,13 +222,12 @@ module.exports = function(grunt) {
 					}
 				],
 				options: {
-					data: {
-						devbox: '<%= hosts.devbox %>'
-					},
+					data: ['<%= paths.fixtures %>/{,*/}*.json'],
 					partialPaths: ['<%= paths.documents %>']
 				}
 			}
 		},
+
 
 		/**
 		 * Find replace based on env vars
@@ -249,46 +265,11 @@ module.exports = function(grunt) {
 			}
 		},
 
+
 		/**
-		 * Find replace based on envs
+		 * Building and Minifying
 		 * ===============================
 		 */
-		/*
-		devcode: {
-			options: {
-				html: true, // html files parsing?
-				js: false, // javascript files parsing?
-				css: false, // css files parsing?
-				clean: true, // removes devcode comments even if code was not removed
-				block: {
-					open: 'devcode', // with this string we open a block of code
-					close: 'endcode' // with this string we close a block of code
-				},
-				dest: 'dist' // default destination which overwrittes environment variable
-			},
-			dev: { // settings for task used with 'devcode:dev'
-				options: {
-					source: '<%= paths.tmp %>/',
-					dest: '<%= paths.www %>/',
-					env: 'development'
-				}
-			},
-			html: { // settings for task used with 'devcode:html'
-				options: {
-					source: '<%= paths.tmp %>/statichtml',
-					dest: '<%= paths.www %>/statichtml',
-					env: 'development'
-				}
-			},
-			dist: { // settings for task used with 'devcode:dist'
-				options: {
-					source: '<%= paths.tmp %>/',
-					dest: '<%= paths.www %>',
-					env: 'production'
-				}
-			}
-		},*/
-
 		useminPrepare: {
 			options: {
 				dest: '<%= paths.www %>',
@@ -309,6 +290,7 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+
 
 		/**
 		 * Deploy with rsync
@@ -404,6 +386,7 @@ module.exports = function(grunt) {
 			customTests: []
 		},
 
+
 		/**
 		 * Shrink images
 		 * ===============================
@@ -424,11 +407,11 @@ module.exports = function(grunt) {
 			}
 		},
 
+
 		/**
 		 * Add revision number to static resources
 		 * ===============================
 		 */
-
 		filerev: {
 			images: {
 				src: ['<%= paths.images %>/**/*.{png,jpg,gif}']
@@ -441,15 +424,12 @@ module.exports = function(grunt) {
 			}
 		},
 
+
 		/**
 		 * Watch Task (used internally)
 		 * ===============================
 		 */
 		watch: {
-			// compass: {
-			// 	files: ['<%= paths.images %>/**/*', '<%= paths.sass %>/**/*.sass'],
-			// 	tasks: ['compass:dev']
-			// },
 			images: {
 				files: ['<%= paths.assets %>/images/**/*.{png,jpg,jpeg,gif}'],
 				tasks: ['imagemin']
@@ -480,7 +460,6 @@ module.exports = function(grunt) {
 		/**
 		 * Weinre Mobile Debug server Tasks
 		 * ===============================
-		 * TODO
 		 */
 		weinre: {
 			dev: {
@@ -491,6 +470,7 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+
 
 		/**
 		 * Concurrent Tasks
@@ -505,9 +485,6 @@ module.exports = function(grunt) {
 		}
 	});
 
-
-
-	//grunt.registerTask('default', ['dev', 'concurrent:dev']);
 
 	grunt.registerTask('default', 'Default task', function (target) {
 		if (target === 'weinre') {
@@ -527,7 +504,6 @@ module.exports = function(grunt) {
 		'compass:dev',
 		'render',
 		'preprocess:dev'
-		//'devcode:dev'
 	]);
 
 	grunt.registerTask('dist', [
@@ -537,7 +513,6 @@ module.exports = function(grunt) {
 		'compass:dist',
 		'render',
 		'preprocess:dist',
-		//'devcode:dist',
 		'useminPrepare',
 		'concat',
 		'uglify',
