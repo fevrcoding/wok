@@ -1,6 +1,6 @@
 /*jshint node:true */
 
 
-module.export = {
+module.exports = {
 	viewmatch: '*.html' // for php projects use: '*.{html,php,phtml}'
 };

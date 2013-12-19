@@ -1,6 +1,6 @@
 /*jshint node:true */
 
-module.export = {
+module.exports = {
 
 	staging: {
 		host: 'devug.intesys.it',

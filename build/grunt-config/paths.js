@@ -1,7 +1,7 @@
 /*jshint node:true */
 
 
-module.export = {
+module.exports = {
 
 	//NOTE: folders are relative to project root folder
 
@@ -30,7 +30,7 @@ module.export = {
 
 	documents: '<%= paths.application %>/documents',
 
-	views: '<%= <%= paths.application %>/views',
+	views: '<%= paths.application %>/views',
 
 	partials: '<%= paths.views %>/partials',
 
