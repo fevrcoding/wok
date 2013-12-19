@@ -5,7 +5,11 @@
 module.exports = function(grunt) {
 	'use strict';
 
-	var path = require('path');
+	var path = require('path'),
+		//load configurations
+		confPaths = require('./grunt-config/paths.js'),
+		confHosts = require('./grunt-config/hosts.js'),
+		confProperties = require('./grunt-config/properties.js');
 
 	grunt.file.setBase('../');
 
@@ -13,6 +17,13 @@ module.exports = function(grunt) {
 	//since using `.setBase` changes working folder and
 	//concurrent tasks won't find Gruntfile.js anymore
 	grunt.option('gruntfile', __filename);
+
+	//make rsync path absolute
+	if (confPaths.hasOwnProperty('rsync')) {
+		confPaths.rsync = path.normalize(__dirname + '/../' + confPaths.rsync);
+	}
+
+
 
 	require('load-grunt-tasks')(grunt);
 
@@ -31,69 +42,21 @@ module.exports = function(grunt) {
 			banner: '/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today("yyyy") %> <%= pkg.author.company %> */\n'
 		},
 
+		properties: confProperties,
+
 
 		/**
 		 * Project Paths Configuration
 		 * ===============================
 		 */
-		paths: {
-
-			application: 'application',
-
-			assets: '<%= paths.application %>/assets',
-
-			www: 'www',
-
-			vendor: '<%= paths.www %>/vendor',
-
-			tmp: 'var/tmp',
-			//images folder name
-			images: '<%= paths.www %>/images',
-			//where to store built files
-			js: '<%= paths.www %>/javascripts',
-
-			css: '<%= paths.www %>/stylesheets',
-
-			fixtures: '<%= paths.application %>/fixtures',
-
-			sass: '<%= paths.assets %>/stylesheets',
-
-			documents: '<%= paths.application %>/documents',
-
-			partials: '<%= paths.application %>/partials',
-			//rsync needs absolute path
-			rsync: path.normalize(__dirname + '/../www')
-		},
+		paths: confPaths,
 
 
 		/**
 		 * Remote Hosts Configuration
 		 * ===============================
 		 */
-		hosts: {
-			staging: {
-				host: 'devug.intesys.it',
-				username: 'web',
-				password: 'rezzonico',
-				path: '/home/httpd/virtualhost'
-			},
-
-			production: {
-				host: 'mississippi.intesys.it',
-				username: 'web',
-				password: 'rezzonico',
-				path: '/home/httpd/virtualhost'
-			},
-
-			//remote host of developer box for mobile debug with weinre
-			devbox: {
-				host: 'pilcomayo.intesys.it',
-				ports: {
-					livereload: 35729,
-					weinre: 8080
-				}
-			}
-		},
+		hosts: confHosts,
 
 
 		/**
@@ -110,7 +73,7 @@ module.exports = function(grunt) {
 			images: ['<%= paths.images %>'],
 			js: ['<%= paths.js %>'],
 			css: ['<%= paths.css %>'],
-			html: ['<%= paths.www %>/*.html']
+			html: ['<%= paths.www %>/<%= properties.viewmatch %>']
 		},
 
 
@@ -215,10 +178,9 @@ module.exports = function(grunt) {
 				files: [
 					{
 						expand: true,
-						cwd: '<%= paths.application %>/',
-						src: ['*.html'],
-						dest: '<%= paths.tmp %>',
-						ext: '.html'
+						cwd: '<%= paths.application %>/views/',
+						src: ['<%= properties.viewmatch %>'],
+						dest: '<%= paths.tmp %>'
 					}
 				],
 				options: {
@@ -240,9 +202,8 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: '<%= paths.tmp %>/',
-						src: ['*.html'],
-						dest: '<%= paths.www %>',
-						ext: '.html'
+						src: ['<%= properties.viewmatch %>'],
+						dest: '<%= paths.www %>'
 					}
 				]
 			},
@@ -257,9 +218,8 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: '<%= paths.tmp %>/',
-						src: ['*.html'],
-						dest: '<%= paths.www %>',
-						ext: '.html'
+						src: ['<%= properties.viewmatch %>'],
+						dest: '<%= paths.www %>'
 					}
 				]
 			}
@@ -275,14 +235,14 @@ module.exports = function(grunt) {
 				dest: '<%= paths.www %>',
 				staging: '<%= paths.tmp %>'
 			},
-			html: ['<%= paths.www %>/*.html']
+			html: ['<%= paths.www %>/<%= properties.viewmatch %>']
 		},
 
 		usemin: {
 			options: {
 				dirs: ['<%= paths.www %>']
 			},
-			html: ['<%= paths.www %>/*.html'],
+			html: ['<%= paths.www %>/<%= properties.viewmatch %>'],
 			css: {
 				src: ['<%= paths.css %>/{,*/}*.css'],
 				options: {
@@ -440,7 +400,7 @@ module.exports = function(grunt) {
 
 			},
 			app: {
-				files: ['<%= paths.documents %>/*.md','<%= paths.application %>/*.html', '<%= paths.partials %>/*.html', '<%= paths.fixtures %>/*.json'],
+				files: ['<%= paths.documents %>/*.md', '<%= paths.views %>/**/<%= properties.viewmatch %>', '<%= paths.fixtures %>/*.json'],
 				tasks: ['render', 'preprocess:dev']
 			},
 			livereload: {
@@ -448,7 +408,7 @@ module.exports = function(grunt) {
 					livereload: '<%= hosts.devbox.ports.livereload %>'
 				},
 				files: [
-					'<%= paths.www %>/*.html',
+					'<%= paths.www %>/<%= properties.viewmatch %>',
 					'<%= paths.css %>/{,*/}*.css',
 					'<%= paths.images %>/**/*.{png,jpg,jpeg,gif}',
 					'<%= paths.js %>/{,*/}*.js'
