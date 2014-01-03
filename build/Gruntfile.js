@@ -75,7 +75,7 @@ module.exports = function(grunt) {
 			images: ['<%= paths.images %>'],
 			js: ['<%= paths.js %>'],
 			css: ['<%= paths.css %>'],
-			html: ['<%= paths.www %>/<%= properties.viewmatch %>'],
+			html: ['<%= paths.html %>/<%= properties.viewmatch %>'],
 			styleguide: ['<%= paths.www %>/styleguide']
 		},
 
@@ -206,7 +206,7 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: '<%= paths.tmp %>/',
 						src: ['<%= properties.viewmatch %>'],
-						dest: '<%= paths.www %>'
+						dest: '<%= paths.html %>'
 					}
 				]
 			},
@@ -217,14 +217,7 @@ module.exports = function(grunt) {
 						PRODUCTION: true
 					}
 				},
-				files: [
-					{
-						expand: true,
-						cwd: '<%= paths.tmp %>/',
-						src: ['<%= properties.viewmatch %>'],
-						dest: '<%= paths.www %>'
-					}
-				]
+				files: '<%= preprocess.dev.files %>'
 			}
 		},
 
@@ -235,23 +228,19 @@ module.exports = function(grunt) {
 		 */
 		useminPrepare: {
 			options: {
+				root: '<%= paths.www %>',
 				dest: '<%= paths.www %>',
 				staging: '<%= paths.tmp %>'
 			},
-			html: ['<%= paths.www %>/<%= properties.viewmatch %>']
+			html: ['<%= paths.html %>/<%= properties.viewmatch %>']
 		},
 
 		usemin: {
 			options: {
-				dirs: ['<%= paths.www %>']
-			},
-			html: ['<%= paths.www %>/<%= properties.viewmatch %>'],
-			css: {
-				src: ['<%= paths.css %>/{,*/}*.css'],
-				options: {
 					assetsDirs: ['<%= paths.www %>']
-				}
-			}
+			},
+			html: ['<%= paths.html %>/<%= properties.viewmatch %>'],
+			css: ['<%= paths.css %>/{,*/}*.css']
 		},
 
 
@@ -436,7 +425,7 @@ module.exports = function(grunt) {
 					livereload: '<%= hosts.devbox.ports.livereload %>'
 				},
 				files: [
-					'<%= paths.www %>/<%= properties.viewmatch %>',
+					'<%= paths.html %>/<%= properties.viewmatch %>',
 					'<%= paths.css %>/{,*/}*.css',
 					'<%= paths.images %>/**/*.{png,jpg,jpeg,gif}',
 					'<%= paths.js %>/{,*/}*.js'
