@@ -27,6 +27,8 @@ module.exports = function(grunt) {
 
 	require('load-grunt-tasks')(grunt);
 
+	grunt.loadNpmTasks('sassdown');
+
 	// Project configuration.
 	grunt.initConfig({
 
@@ -73,7 +75,8 @@ module.exports = function(grunt) {
 			images: ['<%= paths.images %>'],
 			js: ['<%= paths.js %>'],
 			css: ['<%= paths.css %>'],
-			html: ['<%= paths.www %>/<%= properties.viewmatch %>']
+			html: ['<%= paths.www %>/<%= properties.viewmatch %>'],
+			styleguide: ['<%= paths.www %>/styleguide']
 		},
 
 
@@ -385,6 +388,31 @@ module.exports = function(grunt) {
 		},
 
 
+
+		/**
+		 * Live styleguide generation
+		 * ===============================
+		 */
+		sassdown: {
+			options: {
+				assets: ['<%= paths.css %>/**/*.css'],
+				excludeMissing: true,
+				readme: 'README.md',
+				baseUrl: '/styleguide/',
+				commentStart: /\/\* (?:[=]{4,}\n[ ]+|(?!\n))/,
+				commentEnd: /[ ]+[=]{4,} \*\//
+			},
+			styleguide: {
+				files: [{
+                    expand: true,
+                    cwd: '<%= paths.sass %>',
+                    src: ['**/*.{sass,scss}'],
+                    dest: '<%= paths.www %>/styleguide/'
+                }]
+			}
+		},
+
+
 		/**
 		 * Watch Task (used internally)
 		 * ===============================
@@ -415,6 +443,24 @@ module.exports = function(grunt) {
 				]
 			}
 		},
+
+		/**
+		 * Standalone Static Server
+		 * ===============================
+		 */
+		connect: {
+			options: {
+				hostname: '*',
+				port: '<%= hosts.devbox.ports.connect %>',
+				base: ['<%= paths.www %>']
+			},
+			server: {
+				options: {
+					keepalive: true
+				}
+			}
+		},
+
 
 
 		/**
@@ -463,7 +509,8 @@ module.exports = function(grunt) {
 		'copy',
 		'compass:dev',
 		'render',
-		'preprocess:dev'
+		'preprocess:dev',
+		'sassdown'
 	]);
 
 	grunt.registerTask('dist', [

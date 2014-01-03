@@ -27,9 +27,11 @@
     "grunt-contrib-imagemin": "~0.4.0",
     "grunt-filerev": "~0.2.0",
     "grunt-concurrent": "~0.4.2",
-    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-copy": "~0.5.0",
     "grunt-preprocess": "~4.0.0",
     "grunt-weinre": "0.0.2",
-    "grunt-modernizr": "~0.4.1"
+    "grunt-modernizr": "~0.4.1",
+    "grunt-contrib-connect": "~0.6.0",
+    "sassdown": "git+http://github.com/dwightjack/sassdown.git#feature/commenthandling"
   }
 }

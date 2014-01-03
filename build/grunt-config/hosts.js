@@ -21,7 +21,9 @@ module.exports = {
 		host: 'pilcomayo.intesys.it',
 		ports: {
 			livereload: 35729,
-			weinre: 8080
+			weinre: 8080,
+			//optional port for standalone static server
+			connect: 8000
 		}
 	}
 
