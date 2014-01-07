@@ -441,13 +441,30 @@ module.exports = function(grunt) {
 			options: {
 				hostname: '*',
 				port: '<%= hosts.devbox.ports.connect %>',
-				base: ['<%= paths.www %>']
+				base: ['<%= paths.www %>', '<%= paths.html %>'],
+				//Custom middleware to serve PHP files as plain HTML
+				middleware: function(connect, options) {
+					var middlewares = [];
+					connect.static.mime.define({'text/html': ['php', 'phtml']});
+					if (!Array.isArray(options.base)) {
+						options.base = [options.base];
+					}
+					var directory = options.directory || options.base[options.base.length - 1];
+					options.base.forEach(function(base) {
+						// Serve static files.
+						middlewares.push(connect.static(base));
+					});
+					// Make directory browse-able.
+					middlewares.push(connect.directory(directory));
+					return middlewares;
+				}
 			},
 			server: {
 				options: {
 					keepalive: true
 				}
-			}
+			},
+			dev: {}
 		},
 
 
@@ -481,8 +498,13 @@ module.exports = function(grunt) {
 	});
 
 
-	grunt.registerTask('default', 'Default task', function (target) {
-		if (target === 'weinre') {
+	grunt.registerTask('default', 'Default task', function () {
+		var tasks = ['dev'],
+			args = grunt.util.toArray(arguments);
+
+		args.forEach(function (arg) {
+
+			if (arg === 'weinre') {
 			var concurrent = grunt.config.get('concurrent.dev');
 
 			concurrent.push('weinre:dev');
@@ -490,7 +512,13 @@ module.exports = function(grunt) {
 			grunt.config.set('concurrent.dev', concurrent);
 
 		}
-		grunt.task.run(['dev', 'concurrent:dev']);
+			if (arg === 'server') {
+				tasks.push('connect:dev');
+			}
+		});
+		//this always comes last
+		tasks.push('concurrent:dev');
+		grunt.task.run(tasks);
 	});
 
 	grunt.registerTask('dev',[
