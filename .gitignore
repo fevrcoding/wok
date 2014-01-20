@@ -103,3 +103,4 @@ www/*
 #share vendors
 !www/vendor
 Gemfile.lock
+var/tmp
