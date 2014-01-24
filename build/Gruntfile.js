@@ -237,7 +237,7 @@ module.exports = function(grunt) {
 
 		usemin: {
 			options: {
-					assetsDirs: ['<%= paths.www %>']
+				assetsDirs: ['<%= paths.www %>']
 			},
 			html: ['<%= paths.html %>/<%= properties.viewmatch %>'],
 			css: ['<%= paths.css %>/{,*/}*.css']
@@ -351,7 +351,7 @@ module.exports = function(grunt) {
 				files: [
 					{
 						expand: true, // Enable dynamic expansion
-						cwd: '<%= paths.assets %>/images/', // Src matches are relative to this path
+						cwd: '<%= paths.images %>/', // Src matches are relative to this path
 						src: ['**/*.{png,jpg,gif}'], // Actual patterns to match
 						dest: '<%= paths.images %>/' // Destination path prefix
 					}
@@ -477,7 +477,7 @@ module.exports = function(grunt) {
 			dev: {
 				options: {
 					boundHost: '-all-',
-					httpPort: 8080,
+					httpPort: '<%= hosts.devbox.ports.weinre %>',
 					verbose: true
 				}
 			}
@@ -505,13 +505,13 @@ module.exports = function(grunt) {
 		args.forEach(function (arg) {
 
 			if (arg === 'weinre') {
-			var concurrent = grunt.config.get('concurrent.dev');
+				var concurrent = grunt.config.get('concurrent.dev');
 
-			concurrent.push('weinre:dev');
+				concurrent.push('weinre:dev');
 
-			grunt.config.set('concurrent.dev', concurrent);
+				grunt.config.set('concurrent.dev', concurrent);
 
-		}
+			}
 			if (arg === 'server') {
 				tasks.push('connect:dev');
 			}
@@ -530,9 +530,14 @@ module.exports = function(grunt) {
 		'sassdown'
 	]);
 
+	grunt.registerTask('revdist', function () {
+		console.log(grunt.filerev.summary);
+	});
+
 	grunt.registerTask('dist', [
 		'clean',
 		'copy:js',
+		'copy:images',
 		'imagemin',
 		'compass:dist',
 		'render',
@@ -543,7 +548,8 @@ module.exports = function(grunt) {
 		'cssmin',
 		'filerev',
 		'usemin',
-		'modernizr'
+		'modernizr',
+		'revdist'
 	]);
 
 	grunt.registerTask('deploy', 'Build and deploy the project', function(target) {
