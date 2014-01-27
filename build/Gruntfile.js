@@ -1,7 +1,7 @@
 /**
  * Grunt build tasks
  */
-/*jshint node:true */
+/*jshint node:true, camelcase:false */
 module.exports = function(grunt) {
 	'use strict';
 
@@ -75,6 +75,7 @@ module.exports = function(grunt) {
 			images: ['<%= paths.images %>'],
 			js: ['<%= paths.js %>'],
 			css: ['<%= paths.css %>'],
+			fonts: ['<%= paths.fonts %>'],
 			html: ['<%= paths.html %>/<%= properties.viewmatch %>'],
 			styleguide: ['<%= paths.www %>/styleguide']
 		},
@@ -97,6 +98,12 @@ module.exports = function(grunt) {
 				cwd: '<%= paths.assets %>/images/',
 				src: '**',
 				dest: '<%= paths.images %>/'
+			},
+			fonts: {
+				expand: true,
+				cwd: '<%= paths.assets %>/fonts/',
+				src: '**/*.{eot,svg,ttf,woff}',
+				dest: '<%= paths.fonts %>/'
 			}
 		},
 
@@ -373,7 +380,7 @@ module.exports = function(grunt) {
 				files: [
 					{
 						expand: true, // Enable dynamic expansion
-						cwd: '<%= paths.assets %>/images/', // Src matches are relative to this path
+						cwd: '<%= paths.images %>/', // Src matches are relative to this path
 						src: ['**/*.{png,jpg,gif}'], // Actual patterns to match
 						dest: '<%= paths.images %>/' // Destination path prefix
 					}
@@ -436,6 +443,11 @@ module.exports = function(grunt) {
 			js: {
 				files: ['<%= paths.assets %>/javascripts/{,*/}*.js'],
 				tasks: ['copy:js']
+
+			},
+			fonts: {
+				files: ['<%= paths.assets %>/fonts/**/*.{eot,svg,ttf,woff}'],
+				tasks: ['copy:fonts']
 
 			},
 			app: {
@@ -555,6 +567,8 @@ module.exports = function(grunt) {
 	grunt.registerTask('dist', [
 		'clean',
 		'copy:js',
+		'copy:fonts',
+		'copy:images',
 		'imagemin',
 		'compass:dist',
 		'render',

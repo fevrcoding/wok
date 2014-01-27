@@ -1,7 +1,7 @@
 {
   "name": "static-boilerplate",
   "description": "A Static Boilerplate",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": {
     "name": "Marco Solazzi",
     "url": "https://www.intesys.it/",
@@ -15,24 +15,24 @@
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-compass": "~0.7.0",
+    "grunt-contrib-compass": "~0.7.1",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-usemin": "~2.0.2",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-uglify": "~0.3.2",
     "grunt-rsync": "~0.2.1",
-    "grunt-ejs-render": "~0.2.2",
-    "load-grunt-tasks": "~0.2.1",
+    "grunt-ejs-render": "~0.2.3",
+    "load-grunt-tasks": "~0.3.0",
     "grunt-contrib-cssmin": "~0.7.0",
-    "grunt-contrib-imagemin": "~0.4.0",
+    "grunt-contrib-imagemin": "~0.5.0",
     "grunt-filerev": "~0.2.0",
-    "grunt-concurrent": "~0.4.2",
+    "grunt-concurrent": "~0.4.3",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-preprocess": "~4.0.0",
     "grunt-weinre": "0.0.2",
     "grunt-modernizr": "~0.4.1",
     "grunt-contrib-connect": "~0.6.0",
-    "sassdown": "git+http://github.com/dwightjack/sassdown.git#feature/commenthandling",
+    "sassdown": "~0.1.5",
     "grunt-htmlrefs": "git+http://github.com/dwightjack/grunt-htmlrefs#master"
   }
 }

@@ -20,6 +20,8 @@ module.exports = {
 	js: '<%= paths.www %>/javascripts',
 
 	css: '<%= paths.www %>/stylesheets',
+
+	fonts: '<%= paths.www %>/fonts',
 	
 	html: '<%= paths.www %>',
 
