@@ -116,19 +116,19 @@ end
 
 #Copy fonts file from gem bootstrap-sass to specified fonts folder
 on_stylesheet_saved do |file|
-  if defined?(::Bootstrap)
-    Dir.glob(Bootstrapstrap.fonts_path + '/bootstrap/*').each do |file|
-      font_file_base = fonts_pathile.basename(file)
-      bootstrap_font_dir = File.join(project_path, fonts_paths_path, 'bootstrap')
-
-      unless File.directory?(bootstrap_font_dir)
-                    FileUtils.mkdir(bootstrap_font_dir)
-      end
-
-      unless File.exists?project_path(File.join(bootstrap_font_dir, font_file_base))
-        FileUtils.copy_file(file, bootstrap_font_dir + '/' + font_file_base)
-      end
-    end
-  end
+	if defined?(::Bootstrap)
+		Dir.glob(Bootstrap.fonts_path + '/bootstrap/*').each do |file|
+			font_file_base = File.basename(file)
+			bootstrap_font_dir = File.join(project_path, fonts_path, 'bootstrap')
+		
+			unless File.directory?(bootstrap_font_dir)
+				FileUtils.mkdir(bootstrap_font_dir)
+			end
+		
+			unless File.exists?(File.join(bootstrap_font_dir, font_file_base))
+				FileUtils.copy_file(file, bootstrap_font_dir + '/' + font_file_base)
+			end
+		end
+	end
 end
 
