@@ -7,7 +7,7 @@ require 'sass-css-importer' #gem install --pre sass-css-importer
 require 'sass-globbing'
 require 'rgbapng'
 require 'breakpoint'
-#require 'bootstrap-sass' 
+#require 'bootstrap-sass'
 
 
 #environment = :development --> this is default!
@@ -32,8 +32,8 @@ http_images_path = '/' + relative_images_path
 http_generated_images_path =  '/' + relative_images_path
 
 #path of font folder
-fonts_path =  css_dir + '/fonts'
-fonts_dir =  'stylesheets/fonts'
+fonts_path =  generated_assets_path + '/fonts'
+fonts_dir =  'fonts'
 
 if environment == :production
 	asset_cache_buster :none
