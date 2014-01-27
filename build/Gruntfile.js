@@ -511,7 +511,7 @@ module.exports = function(grunt) {
 			dev: {
 				options: {
 					boundHost: '-all-',
-					httpPort: 8080,
+					httpPort: '<%= hosts.devbox.ports.weinre %>',
 					verbose: true
 				}
 			}
@@ -564,6 +564,10 @@ module.exports = function(grunt) {
 		'sassdown'
 	]);
 
+	grunt.registerTask('revdist', function () {
+		console.log(grunt.filerev.summary);
+	});
+
 	grunt.registerTask('dist', [
 		'clean',
 		'copy:js',
@@ -580,7 +584,8 @@ module.exports = function(grunt) {
 		'cssmin',
 		'filerev',
 		'usemin',
-		'modernizr'
+		'modernizr',
+		'revdist'
 	]);
 
 	grunt.registerTask('deploy', 'Build and deploy the project', function(target) {
