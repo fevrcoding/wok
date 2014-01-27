@@ -32,8 +32,12 @@
         <!-- endbuild -->
 
         <!-- ref:remove -->
-        <% include partials/_weinre-script.html %>
-        <% include partials/_livereload-script.html %>
+        <% if (env.weinre) { %>
+            <% include partials/_weinre-script.html %>
+        <% } %>
+        <% if (env.livereload) { %>
+            <% include partials/_livereload-script.html %>
+        <% } %>
        <!-- endref -->
 
     </body>
