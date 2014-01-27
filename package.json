@@ -32,6 +32,7 @@
     "grunt-weinre": "0.0.2",
     "grunt-modernizr": "~0.4.1",
     "grunt-contrib-connect": "~0.6.0",
-    "sassdown": "git+http://github.com/dwightjack/sassdown.git#feature/commenthandling"
+    "sassdown": "git+http://github.com/dwightjack/sassdown.git#feature/commenthandling",
+    "grunt-htmlrefs": "git+http://github.com/dwightjack/grunt-htmlrefs#master"
   }
 }

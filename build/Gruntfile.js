@@ -196,9 +196,10 @@ module.exports = function(grunt) {
 
 		/**
 		 * Find replace based on env vars
+		 * DEPRECATED?
 		 * ===============================
 		 */
-		preprocess: {
+		/*preprocess: {
 
 			dev: {
 				files: [
@@ -219,6 +220,27 @@ module.exports = function(grunt) {
 				},
 				files: '<%= preprocess.dev.files %>'
 			}
+		},*/
+
+
+		/**
+		 * Replace/remove refs to development resources
+		 * ===============================
+		 */
+		htmlrefs: {
+			dist: {
+				files: [
+					{
+						expand: true,
+						cwd: '<%= paths.tmp %>/',
+						src: ['<%= properties.viewmatch %>'],
+						dest: '<%= paths.html %>'
+					}
+				],
+				options: {
+					includes: {}
+				}
+			}
 		},
 
 
@@ -237,7 +259,7 @@ module.exports = function(grunt) {
 
 		usemin: {
 			options: {
-					assetsDirs: ['<%= paths.www %>']
+				assetsDirs: ['<%= paths.www %>']
 			},
 			html: ['<%= paths.html %>/<%= properties.viewmatch %>'],
 			css: ['<%= paths.css %>/{,*/}*.css']
@@ -505,13 +527,13 @@ module.exports = function(grunt) {
 		args.forEach(function (arg) {
 
 			if (arg === 'weinre') {
-			var concurrent = grunt.config.get('concurrent.dev');
+				var concurrent = grunt.config.get('concurrent.dev');
 
-			concurrent.push('weinre:dev');
+				concurrent.push('weinre:dev');
 
-			grunt.config.set('concurrent.dev', concurrent);
+				grunt.config.set('concurrent.dev', concurrent);
 
-		}
+			}
 			if (arg === 'server') {
 				tasks.push('connect:dev');
 			}
@@ -526,7 +548,7 @@ module.exports = function(grunt) {
 		'copy',
 		'compass:dev',
 		'render',
-		'preprocess:dev',
+		//'preprocess:dev',
 		'sassdown'
 	]);
 
@@ -536,7 +558,8 @@ module.exports = function(grunt) {
 		'imagemin',
 		'compass:dist',
 		'render',
-		'preprocess:dist',
+		//'preprocess:dist',
+		'htmlrefs:dist',
 		'useminPrepare',
 		'concat',
 		'uglify',
