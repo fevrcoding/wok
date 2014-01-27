@@ -564,10 +564,6 @@ module.exports = function(grunt) {
 		'sassdown'
 	]);
 
-	grunt.registerTask('revdist', function () {
-		console.log(grunt.filerev.summary);
-	});
-
 	grunt.registerTask('dist', [
 		'clean',
 		'copy:js',
@@ -584,8 +580,7 @@ module.exports = function(grunt) {
 		'cssmin',
 		'filerev',
 		'usemin',
-		'modernizr',
-		'revdist'
+		'modernizr'
 	]);
 
 	grunt.registerTask('deploy', 'Build and deploy the project', function(target) {
