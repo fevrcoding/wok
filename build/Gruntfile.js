@@ -182,7 +182,9 @@ module.exports = function(grunt) {
 					getConfig : function (prop) {
 						return grunt.config.get(prop);
 					}
-				}
+				},
+				//custom option object. to be used to switch between env related blocks
+				env: {}
 			},
 			html: {
 				files: [
@@ -190,7 +192,7 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: '<%= paths.application %>/views/',
 						src: ['<%= properties.viewmatch %>'],
-						dest: '<%= paths.tmp %>'
+						dest: '<%= paths.html %>'
 					}
 				],
 				options: {
@@ -239,7 +241,7 @@ module.exports = function(grunt) {
 				files: [
 					{
 						expand: true,
-						cwd: '<%= paths.tmp %>/',
+						cwd: '<%= paths.html %>/',
 						src: ['<%= properties.viewmatch %>'],
 						dest: '<%= paths.html %>'
 					}
@@ -452,7 +454,7 @@ module.exports = function(grunt) {
 			},
 			app: {
 				files: ['<%= paths.documents %>/*.md', '<%= paths.views %>/**/<%= properties.viewmatch %>', '<%= paths.fixtures %>/*.json'],
-				tasks: ['render', 'preprocess:dev']
+				tasks: ['render']
 			},
 			livereload: {
 				options: {
@@ -534,12 +536,18 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('default', 'Default task', function () {
 		var tasks = ['dev'],
-			args = grunt.util.toArray(arguments);
+			args = grunt.util.toArray(arguments),
+			renderOptions = grunt.config.get('render.options');
+
+		//enable livereload script in footer by default
+		renderOptions.env.livereload = true;
 
 		args.forEach(function (arg) {
 
 			if (arg === 'weinre') {
 				var concurrent = grunt.config.get('concurrent.dev');
+
+				renderOptions.env.weinre = true;
 
 				concurrent.push('weinre:dev');
 
@@ -549,7 +557,11 @@ module.exports = function(grunt) {
 			if (arg === 'server') {
 				tasks.push('connect:dev');
 			}
+
 		});
+		//save modified render task configuration
+		grunt.config.set('render.options', renderOptions);
+
 		//this always comes last
 		tasks.push('concurrent:dev');
 		grunt.task.run(tasks);
