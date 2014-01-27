@@ -1,7 +1,7 @@
 /**
  * Grunt build tasks
  */
-/*jshint node:true */
+/*jshint node:true, camelcase:false */
 module.exports = function(grunt) {
 	'use strict';
 
@@ -26,6 +26,8 @@ module.exports = function(grunt) {
 
 
 	require('load-grunt-tasks')(grunt);
+
+	grunt.loadNpmTasks('sassdown');
 
 	// Project configuration.
 	grunt.initConfig({
@@ -73,7 +75,9 @@ module.exports = function(grunt) {
 			images: ['<%= paths.images %>'],
 			js: ['<%= paths.js %>'],
 			css: ['<%= paths.css %>'],
-			html: ['<%= paths.www %>/<%= properties.viewmatch %>']
+			fonts: ['<%= paths.fonts %>'],
+			html: ['<%= paths.html %>/<%= properties.viewmatch %>'],
+			styleguide: ['<%= paths.www %>/styleguide']
 		},
 
 
@@ -94,6 +98,12 @@ module.exports = function(grunt) {
 				cwd: '<%= paths.assets %>/images/',
 				src: '**',
 				dest: '<%= paths.images %>/'
+			},
+			fonts: {
+				expand: true,
+				cwd: '<%= paths.assets %>/fonts/',
+				src: '**/*.{eot,svg,ttf,woff}',
+				dest: '<%= paths.fonts %>/'
 			}
 		},
 
@@ -193,9 +203,10 @@ module.exports = function(grunt) {
 
 		/**
 		 * Find replace based on env vars
+		 * DEPRECATED?
 		 * ===============================
 		 */
-		preprocess: {
+		/*preprocess: {
 
 			dev: {
 				files: [
@@ -203,7 +214,7 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: '<%= paths.tmp %>/',
 						src: ['<%= properties.viewmatch %>'],
-						dest: '<%= paths.www %>'
+						dest: '<%= paths.html %>'
 					}
 				]
 			},
@@ -214,14 +225,28 @@ module.exports = function(grunt) {
 						PRODUCTION: true
 					}
 				},
+				files: '<%= preprocess.dev.files %>'
+			}
+		},*/
+
+
+		/**
+		 * Replace/remove refs to development resources
+		 * ===============================
+		 */
+		htmlrefs: {
+			dist: {
 				files: [
 					{
 						expand: true,
 						cwd: '<%= paths.tmp %>/',
 						src: ['<%= properties.viewmatch %>'],
-						dest: '<%= paths.www %>'
+						dest: '<%= paths.html %>'
 					}
-				]
+				],
+				options: {
+					includes: {}
+				}
 			}
 		},
 
@@ -232,23 +257,19 @@ module.exports = function(grunt) {
 		 */
 		useminPrepare: {
 			options: {
+				root: '<%= paths.www %>',
 				dest: '<%= paths.www %>',
 				staging: '<%= paths.tmp %>'
 			},
-			html: ['<%= paths.www %>/<%= properties.viewmatch %>']
+			html: ['<%= paths.html %>/<%= properties.viewmatch %>']
 		},
 
 		usemin: {
 			options: {
-				dirs: ['<%= paths.www %>']
+				assetsDirs: ['<%= paths.www %>']
 			},
-			html: ['<%= paths.www %>/<%= properties.viewmatch %>'],
-			css: {
-				src: ['<%= paths.css %>/{,*/}*.css'],
-				options: {
-					assetsDirs: ['<%= paths.www %>']
-				}
-			}
+			html: ['<%= paths.html %>/<%= properties.viewmatch %>'],
+			css: ['<%= paths.css %>/{,*/}*.css']
 		},
 
 
@@ -359,7 +380,7 @@ module.exports = function(grunt) {
 				files: [
 					{
 						expand: true, // Enable dynamic expansion
-						cwd: '<%= paths.assets %>/images/', // Src matches are relative to this path
+						cwd: '<%= paths.images %>/', // Src matches are relative to this path
 						src: ['**/*.{png,jpg,gif}'], // Actual patterns to match
 						dest: '<%= paths.images %>/' // Destination path prefix
 					}
@@ -385,6 +406,31 @@ module.exports = function(grunt) {
 		},
 
 
+
+		/**
+		 * Live styleguide generation
+		 * ===============================
+		 */
+		sassdown: {
+			options: {
+				assets: ['<%= paths.css %>/**/*.css'],
+				excludeMissing: true,
+				readme: 'README.md',
+				baseUrl: '/styleguide/',
+				commentStart: /\/\* (?:[=]{4,}\n[ ]+|(?!\n))/,
+				commentEnd: /[ ]+[=]{4,} \*\//
+			},
+			styleguide: {
+				files: [{
+                    expand: true,
+                    cwd: '<%= paths.sass %>',
+                    src: ['**/*.{sass,scss}'],
+                    dest: '<%= paths.www %>/styleguide/'
+                }]
+			}
+		},
+
+
 		/**
 		 * Watch Task (used internally)
 		 * ===============================
@@ -399,6 +445,11 @@ module.exports = function(grunt) {
 				tasks: ['copy:js']
 
 			},
+			fonts: {
+				files: ['<%= paths.assets %>/fonts/**/*.{eot,svg,ttf,woff}'],
+				tasks: ['copy:fonts']
+
+			},
 			app: {
 				files: ['<%= paths.documents %>/*.md', '<%= paths.views %>/**/<%= properties.viewmatch %>', '<%= paths.fixtures %>/*.json'],
 				tasks: ['render', 'preprocess:dev']
@@ -408,13 +459,48 @@ module.exports = function(grunt) {
 					livereload: '<%= hosts.devbox.ports.livereload %>'
 				},
 				files: [
-					'<%= paths.www %>/<%= properties.viewmatch %>',
+					'<%= paths.html %>/<%= properties.viewmatch %>',
 					'<%= paths.css %>/{,*/}*.css',
 					'<%= paths.images %>/**/*.{png,jpg,jpeg,gif}',
 					'<%= paths.js %>/{,*/}*.js'
 				]
 			}
 		},
+
+		/**
+		 * Standalone Static Server
+		 * ===============================
+		 */
+		connect: {
+			options: {
+				hostname: '*',
+				port: '<%= hosts.devbox.ports.connect %>',
+				base: ['<%= paths.www %>', '<%= paths.html %>'],
+				//Custom middleware to serve PHP files as plain HTML
+				middleware: function(connect, options) {
+					var middlewares = [];
+					connect.static.mime.define({'text/html': ['php', 'phtml']});
+					if (!Array.isArray(options.base)) {
+						options.base = [options.base];
+					}
+					var directory = options.directory || options.base[options.base.length - 1];
+					options.base.forEach(function(base) {
+						// Serve static files.
+						middlewares.push(connect.static(base));
+					});
+					// Make directory browse-able.
+					middlewares.push(connect.directory(directory));
+					return middlewares;
+				}
+			},
+			server: {
+				options: {
+					keepalive: true
+				}
+			},
+			dev: {}
+		},
+
 
 
 		/**
@@ -446,16 +532,27 @@ module.exports = function(grunt) {
 	});
 
 
-	grunt.registerTask('default', 'Default task', function (target) {
-		if (target === 'weinre') {
-			var concurrent = grunt.config.get('concurrent.dev');
+	grunt.registerTask('default', 'Default task', function () {
+		var tasks = ['dev'],
+			args = grunt.util.toArray(arguments);
 
-			concurrent.push('weinre:dev');
+		args.forEach(function (arg) {
 
-			grunt.config.set('concurrent.dev', concurrent);
+			if (arg === 'weinre') {
+				var concurrent = grunt.config.get('concurrent.dev');
 
-		}
-		grunt.task.run(['dev', 'concurrent:dev']);
+				concurrent.push('weinre:dev');
+
+				grunt.config.set('concurrent.dev', concurrent);
+
+			}
+			if (arg === 'server') {
+				tasks.push('connect:dev');
+			}
+		});
+		//this always comes last
+		tasks.push('concurrent:dev');
+		grunt.task.run(tasks);
 	});
 
 	grunt.registerTask('dev',[
@@ -463,16 +560,20 @@ module.exports = function(grunt) {
 		'copy',
 		'compass:dev',
 		'render',
-		'preprocess:dev'
+		//'preprocess:dev',
+		'sassdown'
 	]);
 
 	grunt.registerTask('dist', [
 		'clean',
 		'copy:js',
+		'copy:fonts',
+		'copy:images',
 		'imagemin',
 		'compass:dist',
 		'render',
-		'preprocess:dist',
+		//'preprocess:dist',
+		'htmlrefs:dist',
 		'useminPrepare',
 		'concat',
 		'uglify',

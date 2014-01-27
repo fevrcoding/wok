@@ -81,6 +81,7 @@ Icon
 ## Application
 ################
 
+var/*
 #Exclude logs
 log
 *.log

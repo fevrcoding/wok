@@ -7,6 +7,8 @@ require 'sass-css-importer' #gem install --pre sass-css-importer
 require 'sass-globbing'
 require 'rgbapng'
 require 'breakpoint'
+#require 'bootstrap-sass'
+
 
 #environment = :development --> this is default!
 #environment = :production
@@ -28,6 +30,10 @@ cache_path = File.expand_path(File.join(project_path, 'var', 'tmp', '.sass-cache
 #http_stylesheets_path = project_url
 http_images_path = '/' + relative_images_path
 http_generated_images_path =  '/' + relative_images_path
+
+#path of font folder
+fonts_path =  generated_assets_path + '/fonts'
+fonts_dir =  'fonts'
 
 if environment == :production
 	asset_cache_buster :none
@@ -107,3 +113,22 @@ end
 module Sass::Script::Functions
   include Compass::SassExtensions::Functions::Files
 end
+
+#Copy fonts file from gem bootstrap-sass to specified fonts folder
+on_stylesheet_saved do |file|
+  if defined?(::Bootstrap)
+    Dir.glob(Bootstrapstrap.fonts_path + '/bootstrap/*').each do |file|
+      font_file_base = fonts_pathile.basename(file)
+      bootstrap_font_dir = File.join(project_path, fonts_paths_path, 'bootstrap')
+
+      unless File.directory?(bootstrap_font_dir)
+                    FileUtils.mkdir(bootstrap_font_dir)
+      end
+
+      unless File.exists?project_path(File.join(bootstrap_font_dir, font_file_base))
+        FileUtils.copy_file(file, bootstrap_font_dir + '/' + font_file_base)
+      end
+    end
+  end
+end
+

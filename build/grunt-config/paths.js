@@ -21,6 +21,10 @@ module.exports = {
 
 	css: '<%= paths.www %>/stylesheets',
 
+	fonts: '<%= paths.www %>/fonts',
+	
+	html: '<%= paths.www %>',
+
 	//where to put files in paths.views after processing them...
 	//publicView: '<%= paths.www %>',
 

@@ -11,12 +11,9 @@
         <meta name="MobileOptimized" content="320" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-        <!-- @ifdef PRODUCTION -->
-        <script src="/vendor/modernizr/modernizr.min.js"></script>
-        <!-- @endif -->
-        <!-- @ifndef PRODUCTION -->
+        <!-- ref:js /vendor/modernizr/modernizr.min.js -->
         <script src="/vendor/modernizr/modernizr.js"></script>
-        <!-- @endif -->
+        <!-- endref -->
 
         <!-- build:css /stylesheets/application.css -->
         <link rel="stylesheet" href="/stylesheets/application.css" type="text/css" />
@@ -34,10 +31,10 @@
         <script src="/javascripts/application.js"></script>
         <!-- endbuild -->
 
-        <!-- @ifndef PRODUCTION -->
+        <!-- ref:remove -->
         <% include partials/_weinre-script.html %>
         <% include partials/_livereload-script.html %>
-       <!-- @endif -->
+       <!-- endref -->
 
     </body>
 </html>
