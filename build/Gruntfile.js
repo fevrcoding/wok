@@ -75,7 +75,7 @@ module.exports = function(grunt) {
 			images: ['<%= paths.images %>'],
 			js: ['<%= paths.js %>'],
 			css: ['<%= paths.css %>'],
-			fonts: ['<%= paths.fonts %>'],
+			fonts: ['<%= paths.fonts %>/**/*.*', '!<%= paths.fonts %>/boostrap/*.*'],
 			html: ['<%= paths.html %>/<%= properties.viewmatch %>'],
 			styleguide: ['<%= paths.www %>/styleguide']
 		},
