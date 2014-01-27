@@ -548,8 +548,6 @@ module.exports = function(grunt) {
 				var concurrent = grunt.config.get('concurrent.dev');
 
 				renderOptions.env.weinre = true;
-				//save modified render task configuration
-				grunt.config.set('render.options', renderOptions);
 
 				concurrent.push('weinre:dev');
 
@@ -561,6 +559,9 @@ module.exports = function(grunt) {
 			}
 
 		});
+		//save modified render task configuration
+		grunt.config.set('render.options', renderOptions);
+
 		//this always comes last
 		tasks.push('concurrent:dev');
 		grunt.task.run(tasks);
