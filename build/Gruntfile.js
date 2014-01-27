@@ -511,7 +511,7 @@ module.exports = function(grunt) {
 			dev: {
 				options: {
 					boundHost: '-all-',
-					httpPort: 8080,
+					httpPort: '<%= hosts.devbox.ports.weinre %>',
 					verbose: true
 				}
 			}
