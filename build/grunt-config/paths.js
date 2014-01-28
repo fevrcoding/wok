@@ -9,25 +9,6 @@ module.exports = {
 
 	assets: '<%= paths.application %>/assets',
 
-	www: 'www',
-
-	vendor: '<%= paths.www %>/vendor',
-
-	tmp: 'var/tmp',
-	//images folder name
-	images: '<%= paths.www %>/images',
-	//where to store built files
-	js: '<%= paths.www %>/javascripts',
-
-	css: '<%= paths.www %>/stylesheets',
-
-	fonts: '<%= paths.www %>/fonts',
-	
-	html: '<%= paths.www %>',
-
-	//where to put files in paths.views after processing them...
-	//publicView: '<%= paths.www %>',
-
 	fixtures: '<%= paths.application %>/fixtures',
 
 	sass: '<%= paths.assets %>/stylesheets',
@@ -38,6 +19,28 @@ module.exports = {
 
 	partials: '<%= paths.views %>/partials',
 
+	www: 'www',
+
+	//images folder name
+	images: '<%= paths.www %>/images',
+
+	//where to store built files
+	js: '<%= paths.www %>/javascripts',
+
+	css: '<%= paths.www %>/stylesheets',
+
+	fonts: '<%= paths.www %>/fonts',
+
+	//where static files are to be saved
+	html: '<%= paths.www %>',
+
+	//path to views to be processed by usemin/htmlrefs
+	usemin: '<%= paths.html %>',
+
 	//don't use grunt templates here
-	rsync: 'www'
+	rsync: 'www',
+
+	vendor: '<%= paths.www %>/vendor',
+
+	tmp: 'var/tmp'
 };

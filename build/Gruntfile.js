@@ -79,8 +79,8 @@ module.exports = function(grunt) {
 			images: ['<%= paths.images %>'],
 			js: ['<%= paths.js %>'],
 			css: ['<%= paths.css %>'],
-			fonts: ['<%= paths.fonts %>/**/*.*', '!<%= paths.fonts %>/boostrap/*.*'],
-			html: ['<%= paths.html %>/<%= properties.viewmatch %>'],
+			fonts: ['<%= paths.fonts %>'],
+			html: ['<%= paths.html %>/<%= properties.viewmatch %>', '<%= paths.html %>/partials'], //html in root and whole partials folder
 			styleguide: ['<%= paths.www %>/styleguide']
 		},
 
@@ -194,8 +194,8 @@ module.exports = function(grunt) {
 				files: [
 					{
 						expand: true,
-						cwd: '<%= paths.application %>/views/',
-						src: ['<%= properties.viewmatch %>'],
+						cwd: '<%= paths.views %>/',
+						src: ['{,partials/}<%= properties.viewmatch %>', '!{,partials/}_*.*'], //render all views except those starting with `_` ala SASS
 						dest: '<%= paths.html %>'
 					}
 				],
@@ -238,6 +238,7 @@ module.exports = function(grunt) {
 
 		/**
 		 * Replace/remove refs to development resources
+		 * Overwrites source files
 		 * ===============================
 		 */
 		htmlrefs: {
@@ -245,9 +246,9 @@ module.exports = function(grunt) {
 				files: [
 					{
 						expand: true,
-						cwd: '<%= paths.html %>/',
-						src: ['<%= properties.viewmatch %>'],
-						dest: '<%= paths.html %>'
+						cwd: '<%= paths.usemin %>/',
+						src: ['**/<%= properties.viewmatch %>'],
+						dest: '<%= paths.usemin %>'
 					}
 				],
 				options: {
@@ -267,14 +268,14 @@ module.exports = function(grunt) {
 				dest: '<%= paths.www %>',
 				staging: '<%= paths.tmp %>'
 			},
-			html: ['<%= paths.html %>/<%= properties.viewmatch %>']
+			html: ['<%= paths.usemin %>/**/<%= properties.viewmatch %>']
 		},
 
 		usemin: {
 			options: {
 				assetsDirs: ['<%= paths.www %>']
 			},
-			html: ['<%= paths.html %>/<%= properties.viewmatch %>'],
+			html: ['<%= paths.usemin %>/**/<%= properties.viewmatch %>'],
 			css: ['<%= paths.css %>/{,*/}*.css']
 		},
 
@@ -465,7 +466,7 @@ module.exports = function(grunt) {
 					livereload: '<%= hosts.devbox.ports.livereload %>'
 				},
 				files: [
-					'<%= paths.html %>/<%= properties.viewmatch %>',
+					'<%= paths.html %>/{,partials/}<%= properties.viewmatch %>',
 					'<%= paths.css %>/{,*/}*.css',
 					'<%= paths.images %>/**/*.{png,jpg,jpeg,gif}',
 					'<%= paths.js %>/{,*/}*.js'
