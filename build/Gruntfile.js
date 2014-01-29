@@ -541,18 +541,18 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('default', 'Default task', function () {
 		var tasks = ['dev'],
-			args = grunt.util.toArray(arguments),
-			renderOptions = grunt.config.get('render.options');
+			args = grunt.util.toArray(arguments);
+			//renderOptions = grunt.config.get('render.options');
 
 		//enable livereload script in footer by default
-		renderOptions.env.livereload = true;
+		//renderOptions.env.livereload = true;
 
 		args.forEach(function (arg) {
 
 			if (arg === 'weinre') {
 				var concurrent = grunt.config.get('concurrent.dev');
 
-				renderOptions.env.weinre = true;
+				//renderOptions.env.weinre = true;
 
 				concurrent.push('weinre:dev');
 
@@ -565,7 +565,7 @@ module.exports = function(grunt) {
 
 		});
 		//save modified render task configuration
-		grunt.config.set('render.options', renderOptions);
+		//grunt.config.set('render.options', renderOptions);
 
 		//this always comes last
 		tasks.push('concurrent:dev');
