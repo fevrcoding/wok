@@ -440,7 +440,7 @@ module.exports = function(grunt) {
 		watch: {
 			images: {
 				files: ['<%= paths.assets %>/images/**/*.{png,jpg,jpeg,gif}'],
-				tasks: ['imagemin']
+				tasks: ['copy:images']
 			},
 			js: {
 				files: ['<%= paths.assets %>/javascripts/{,*/}*.js'],
