@@ -162,12 +162,15 @@ module.exports = function(grunt) {
 
 		/**
 		 * CSS Minification Task
-		 * (just banner other stuff is configured by usemin)
+		 * (just options and banner other stuff is configured by usemin)
+		 * @see https://github.com/twbs/bootstrap/blob/master/Gruntfile.js#L188
 		 * ===============================
 		 */
 		cssmin: {
 			options: {
-				banner: '<%= meta.banner %>'
+				banner: '<%= meta.banner %>',
+				noAdvanced: true, // turn advanced optimizations off until the issue is fixed in clean-css
+				selectorsMergeMode: 'ie8'
 			}
 		},
 
