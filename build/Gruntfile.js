@@ -11,7 +11,11 @@ module.exports = function(grunt) {
 		confHosts = require('./grunt-config/hosts.js'),
 		confProperties = require('./grunt-config/properties.js');
 
-	grunt.file.setBase('../');
+	if (!grunt.option('base')) {
+		//if working directory hasn't been set (--base option)
+		//then jump to the project root folder
+		grunt.file.setBase('../');
+	}
 
 	//forcing `--gruntfile` flag to current Gruntfile.js
 	//since using `.setBase` changes working folder and
@@ -20,7 +24,7 @@ module.exports = function(grunt) {
 
 	//make rsync path absolute
 	if (confPaths.hasOwnProperty('rsync')) {
-		confPaths.rsync = path.normalize(__dirname + '/../' + confPaths.rsync);
+		confPaths.rsync = path.join(process.cwd(), confPaths.rsync);
 	}
 
 
