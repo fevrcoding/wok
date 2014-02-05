@@ -121,13 +121,9 @@ on_stylesheet_saved do |file|
 			font_file_base = File.basename(file)
 			bootstrap_font_dir = File.join(project_path, fonts_path, 'bootstrap')
 
-			#generate base font dir
-			unless File.directory?(File.join(project_path, fonts_path))
-				FileUtils.mkdir(File.join(project_path, fonts_path))
-			end
 			#generate boostrapdir
 			unless File.directory?(bootstrap_font_dir)
-				FileUtils.mkdir(bootstrap_font_dir)
+				FileUtils.mkdir_p(bootstrap_font_dir)
 			end
 
 			unless File.exists?(File.join(bootstrap_font_dir, font_file_base))
