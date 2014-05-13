@@ -119,7 +119,8 @@ module.exports = function(grunt) {
 		compass: {
 
 			options: {
-				config: path.normalize(__dirname + '/compass.rb')
+				config: path.normalize(__dirname + '/compass.rb'),
+        bundleExec: grunt.file.exists('Gemfile')
 			},
 
 			watch: {
