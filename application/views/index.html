@@ -25,6 +25,7 @@
 <!--[if IE 8]>    <body class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <body> <!--<![endif]-->
 
+        <h1>Hello World!</h1>
 
         <!-- build:js /javascripts/application.min.js -->
         <script src="/javascripts/base/plugins.js"></script>
@@ -32,12 +33,8 @@
         <!-- endbuild -->
 
         <!-- ref:remove -->
-        <% if (env.weinre) { %>
-            <% include partials/_weinre-script.html %>
-        <% } %>
-        <% if (env.livereload) { %>
-            <% include partials/_livereload-script.html %>
-        <% } %>
+        <% include partials/_weinre-script.html %>
+        <% include partials/_livereload-script.html %>
        <!-- endref -->
 
     </body>
