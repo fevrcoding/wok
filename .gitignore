@@ -49,6 +49,13 @@ Session.vim
 
 
 
+#############
+## Softwares
+#############
+
+nbproject
+.idea
+
 #################
 ## OS generated
 #################
