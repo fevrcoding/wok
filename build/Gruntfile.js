@@ -11,11 +11,15 @@ module.exports = function(grunt) {
 		confHosts = require('./grunt-config/hosts.js'),
 		confProperties = require('./grunt-config/properties.js');
 
+
 	if (!grunt.option('base')) {
 		//if working directory hasn't been set (--base option)
 		//then jump to the project root folder
 		grunt.file.setBase('../');
+	} else {
+		grunt.file.setBase(grunt.option('base'));
 	}
+
 
 	//forcing `--gruntfile` flag to current Gruntfile.js
 	//since using `.setBase` changes working folder and
@@ -27,11 +31,19 @@ module.exports = function(grunt) {
 		confPaths.rsync = path.join(process.cwd(), confPaths.rsync);
 	}
 
-
-
-	require('load-grunt-tasks')(grunt);
-
-	grunt.loadNpmTasks('sassdown');
+	//This is needed when building with Phing, since npm modules aren't downloaded
+	//at build time
+	if (grunt.option('base')) {
+		//if base is different,
+		//change it for a moment and load npm modules
+		process.chdir(path.join(__dirname, '..'));
+		require('load-grunt-tasks')(grunt);
+		grunt.loadNpmTasks('sassdown');
+		process.chdir( grunt.option('base') );
+	} else {
+		require('load-grunt-tasks')(grunt);
+		grunt.loadNpmTasks('sassdown');
+	}
 
 	// Project configuration.
 	grunt.initConfig({
@@ -45,7 +57,8 @@ module.exports = function(grunt) {
 		 * ===============================
 		 */
 		meta: {
-			banner: '/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today("yyyy") %> <%= pkg.author.company %> */\n'
+			banner: '/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today("yyyy") %> <%= pkg.author.company %> */\n',
+			vendorBanner: '/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n',
 		},
 
 		properties: confProperties,
@@ -77,10 +90,11 @@ module.exports = function(grunt) {
 			//@see https://github.com/rafalgalka/grunt-usemin/commit/c59840e87841dc608340623c939ec74172e34241
 			tmp: ['<%= paths.tmp %>', '.tmp'],
 			images: ['<%= paths.images %>'],
-			js: ['<%= paths.js %>'],
+			js: ['<%= paths.js %>', '<%= paths.vendor %>/dist'],
 			css: ['<%= paths.css %>'],
 			fonts: ['<%= paths.fonts %>'],
 			html: ['<%= paths.html %>/<%= properties.viewmatch %>', '<%= paths.html %>/partials'], //html in root and whole partials folder
+			revmap: ['<%= paths.revmap %>'],
 			styleguide: ['<%= paths.www %>/styleguide']
 		},
 
@@ -94,7 +108,8 @@ module.exports = function(grunt) {
 			js: {
 				expand: true,
 				cwd: '<%= paths.assets %>/javascripts/',
-				src: '**/*.js',
+				//exclude specs and config files
+				src: ['**/*.js', '!**/*.{spec,conf}.js'],
 				dest: '<%= paths.js %>/'
 			},
 			images: {
@@ -119,13 +134,13 @@ module.exports = function(grunt) {
 		compass: {
 
 			options: {
-				config: path.normalize(__dirname + '/compass.rb'),
-        bundleExec: grunt.file.exists('Gemfile')
+				config: path.normalize(process.cwd() + '/build/compass.rb'),
+        		bundleExec: grunt.file.exists(path.normalize(process.cwd() + 'Gemfile'))
 			},
 
 			watch: {
 				options: {
-					watch: true,
+					watch: true
 				}
 			},
 
@@ -134,7 +149,8 @@ module.exports = function(grunt) {
 			dist: {
 				options: {
 					force: true,
-					environment: 'production'
+					environment: 'production',
+					outputStyle: 'expanded' //there's an external task to minify css
 				}
 			}
 		},
@@ -149,6 +165,16 @@ module.exports = function(grunt) {
 			options: {
 				stripBanners: true,
 				banner: '<%= meta.banner %>'
+			},
+
+			vendors: {
+				options: {
+					stripBanners: false,
+					banner: '<%= meta.vendorBanner %>'
+				},
+				files: []
+
+			
 			}
 		},
 
@@ -189,6 +215,24 @@ module.exports = function(grunt) {
 				helpers: {
 					getConfig : function (prop) {
 						return grunt.config.get(prop);
+					},
+					getAsset: function (relPath, type) {
+						var www = grunt.config.get('paths.www'),
+							regexp = new RegExp('^' +(www || 'www') + '\\\/'),
+							assetPath = grunt.config.get('paths.' + (type || 'images')) || '';
+
+						return assetPath.replace(regexp, '/') + relPath;
+					},
+					lorem: function (lorem, min, max) {
+						var str = this.data.lorem[lorem];
+						var _ = this._;
+
+						return _( str.slice( _.random(0, 50) ) )
+								.chain()
+								.trim(' ,')
+								.capitalize()
+								.prune(_.random(min, max || 30), '')
+								.value();
 					}
 				},
 				//custom option object. to be used to switch between env related blocks
@@ -409,10 +453,21 @@ module.exports = function(grunt) {
 				src: ['<%= paths.images %>/**/*.{png,jpg,gif}']
 			},
 			js: {
-				src: ['<%= paths.js %>/**/*.min.js']
+				//application files and concatenated vendors
+				src: ['<%= paths.js %>/**/*.min.js', '<%= paths.vendor %>/dist/*.min.js']
 			},
 			css: {
 				src: ['<%= paths.css %>/**/*.css']
+			}
+		},
+
+		filerev_assets: {
+			assets: {
+				options: {
+					dest: '<%= paths.revmap %>',
+					cwd: '<%= paths.www %>/',
+					prefix: ''
+				}
 			}
 		},
 
@@ -452,7 +507,7 @@ module.exports = function(grunt) {
 				tasks: ['copy:images']
 			},
 			js: {
-				files: ['<%= paths.assets %>/javascripts/{,*/}*.js'],
+				files: ['<%= paths.assets %>/javascripts/**/*.js', '!<%= paths.assets %>/javascripts/**/*.{spec,conf}.js'],
 				tasks: ['copy:js']
 
 			},
@@ -473,7 +528,8 @@ module.exports = function(grunt) {
 					'<%= paths.html %>/{,partials/}<%= properties.viewmatch %>',
 					'<%= paths.css %>/{,*/}*.css',
 					'<%= paths.images %>/**/*.{png,jpg,jpeg,gif}',
-					'<%= paths.js %>/{,*/}*.js'
+					'<%= paths.js %>/{,*/}*.js',
+					'!<%= paths.js %>/**/*.spec.js'
 				]
 			}
 		},
@@ -486,23 +542,7 @@ module.exports = function(grunt) {
 			options: {
 				hostname: '*',
 				port: '<%= hosts.devbox.ports.connect %>',
-				base: ['<%= paths.www %>', '<%= paths.html %>'],
-				//Custom middleware to serve PHP files as plain HTML
-				middleware: function(connect, options) {
-					var middlewares = [];
-					connect.static.mime.define({'text/html': ['php', 'phtml']});
-					if (!Array.isArray(options.base)) {
-						options.base = [options.base];
-					}
-					var directory = options.directory || options.base[options.base.length - 1];
-					options.base.forEach(function(base) {
-						// Serve static files.
-						middlewares.push(connect.static(base));
-					});
-					// Make directory browse-able.
-					middlewares.push(connect.directory(directory));
-					return middlewares;
-				}
+				base: ['<%= paths.www %>', '<%= paths.html %>']
 			},
 			server: {
 				options: {
@@ -600,9 +640,30 @@ module.exports = function(grunt) {
 		'uglify',
 		'cssmin',
 		'filerev',
+		'filerev_assets',
 		'usemin',
 		'modernizr'
 	]);
+
+	grunt.registerTask('build', 'Build the project', function(target, grunthash) {
+
+		var testHash = require('crypto').createHash('md5').update(grunt.file.read(__filename)).digest('hex');
+
+		if (arguments.length < 2) {
+			grunt.fail.warn('Cannot run this task directly', 3);
+			return;
+		}
+		if (testHash !== grunthash) {
+			grunt.fail.warn('Safety hash check not passed', 3);
+			return;
+		}
+		if (target === 'staging' || target === 'preview') {
+			grunt.task.run(['dev']);
+		} else if (target === 'production') {
+			grunt.task.run(['dist']);
+		}
+
+	});
 
 	grunt.registerTask('deploy', 'Build and deploy the project', function(target) {
 		if (!arguments.length) {

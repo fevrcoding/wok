@@ -30,6 +30,9 @@ module.exports = {
 	css: '<%= paths.www %>/stylesheets',
 
 	fonts: '<%= paths.www %>/fonts',
+	
+	//map of revved files
+	revmap: '<%= paths.www %>/assets-map.json',
 
 	//where static files are to be saved
 	html: '<%= paths.www %>',
