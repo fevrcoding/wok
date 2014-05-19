@@ -650,8 +650,6 @@ module.exports = function(grunt) {
 
 	if (confProperties.buildOnly) {
 
-
-
 		grunt.registerTask('build', 'Build the project', function(target, grunthash) {
 
 			var testHash = require('crypto').createHash('md5').update(grunt.file.read(__filename)).digest('hex');
