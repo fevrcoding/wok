@@ -4,8 +4,8 @@
 
 Requirements
 
-* Node 0.10+
-* Ruby
+* Node 0.10.25+
+* Ruby 1.9.3+
 * bundler (`gem install bundler`)
 * bower (`sudo npm install -g bower`)
 * grunt-cli (`sudo npm install -g grunt-cli`)
@@ -47,10 +47,16 @@ Project sources are located into `application` folder. Don't edit files in `www`
 	*index*.html #Main views
 	...
 
+**View Partials**
+
+View partials are rendered to `www` folder like every other file. To prevent rendering prepend a `_` to the filename.
+
+**Vendors**
+
+You may use [bower](http://bower.io/) to manage vendors. Anyway it's a good habit to checkin those files on your repository.
+
 
 #DEV & BUILD
-
-
 
 From project root
 `cd build`
@@ -61,4 +67,7 @@ Other Grunt tasks:
 * `dev` (just development)
 * `dist` (production ready build)
 * `deploy:[staging|production]` (development / production build and deploy with rsync)
+
+**Note**: when working with Phing remeber to set `buildOnly: false` in `build/grunt-config/properties` to delegate deploy tasks to Phing.
+
 
