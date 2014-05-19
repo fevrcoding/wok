@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html class="no-js" lang="">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,15 +9,24 @@
         <!-- mobile meta (hooray!) -->
         <meta name="HandheldFriendly" content="True" />
         <meta name="MobileOptimized" content="320" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <!-- ref:js /vendor/modernizr/modernizr.min.js -->
         <script src="/vendor/modernizr/modernizr.js"></script>
         <!-- endref -->
 
-        <!-- build:css /stylesheets/application.css -->
-        <link rel="stylesheet" href="/stylesheets/application.css" type="text/css" />
+
+        <!-- media queries for supporting devices and IE mobile (since it's mobile first) -->
+        <!--[if (gt IE 8) | (IEMobile)]><!-->
+        <!-- build:css /stylesheets/application.min.css -->
+            <link rel="stylesheet" href="/stylesheets/application.css" />
         <!-- endbuild -->
+        <!--<![endif]-->
+
+        <!-- Fixed width style -->
+        <!-- build:css /stylesheets/application-ie.min.css --><!--[if (lt IE 9) & (!IEMobile)]>
+            <link rel="stylesheet" href="/stylesheets/application-ie.css" type="text/css" />
+        <![endif]--><!-- endbuild -->
 
     </head>
 <!--[if lt IE 7]> <body class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
