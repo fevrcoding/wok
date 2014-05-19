@@ -12,7 +12,6 @@
 
 .l-container
   margin: 0 auto
-  width: $container-width
 
 
 /* Containers
@@ -51,50 +50,3 @@
 /* vertically stacked */
 .l-stacked > *
   display: block
-
-
-@if $column-num > 0
-  .l-row
-    @include pie-clearfix
-    margin:
-      left: -$column-gutter
-      right: -$column-gutter
-
-
-  %l-col
-    position: relative
-    float: left
-    min-height: 1px
-    padding:
-      left: $column-gutter
-      right: $column-gutter
-
-  @for $column-idx from 1 through $column-num
-    .l-col-#{$column-idx}
-      @extend %l-col
-      width: percentage($column-idx / $column-num)
-
-
-/* Inner pages content
-   ========================================================================== */
-
-.l-content
-  width: $content-width
-
-.l-aside
-
-  margin-left: $content-width  + 5
-  width: $aside-width
-
-  .l-aside-widget + .l-aside-widget
-
-  .widget-title
-
-
-
-.l-content,
-.l-aside
-
-
-/* content children styles */
-.l-content

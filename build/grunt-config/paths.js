@@ -30,7 +30,7 @@ module.exports = {
 	css: '<%= paths.www %>/stylesheets',
 
 	fonts: '<%= paths.www %>/fonts',
-	
+
 	//map of revved files
 	revmap: '<%= paths.www %>/assets-map.json',
 
@@ -43,6 +43,7 @@ module.exports = {
 	//don't use grunt templates here
 	rsync: 'www',
 
+	//overrode by .bowerc if available
 	vendor: '<%= paths.www %>/vendor',
 
 	tmp: 'var/tmp'

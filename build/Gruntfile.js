@@ -20,6 +20,10 @@ module.exports = function(grunt) {
 		grunt.file.setBase(grunt.option('base'));
 	}
 
+	if (grunt.file.exists('.bowerrc')) {
+		confPaths.vendor = grunt.file.readJSON('.bowerrc').directory;
+	}
+
 
 	//forcing `--gruntfile` flag to current Gruntfile.js
 	//since using `.setBase` changes working folder and
@@ -135,7 +139,7 @@ module.exports = function(grunt) {
 
 			options: {
 				config: path.normalize(process.cwd() + '/build/compass.rb'),
-        		bundleExec: grunt.file.exists(path.normalize(process.cwd() + 'Gemfile'))
+				bundleExec: grunt.file.exists(path.normalize(process.cwd() + 'Gemfile'))
 			},
 
 			watch: {
@@ -174,7 +178,7 @@ module.exports = function(grunt) {
 				},
 				files: []
 
-			
+
 			}
 		},
 
@@ -257,7 +261,7 @@ module.exports = function(grunt) {
 
 		/**
 		 * Find replace based on env vars
-		 * DEPRECATED?
+		 * DEPRECATED
 		 * ===============================
 		 */
 		/*preprocess: {
@@ -369,57 +373,62 @@ module.exports = function(grunt) {
 		 */
 		modernizr: {
 
-			// [REQUIRED] Path to the build you're using for development.
-			devFile: '<%= paths.vendor %>/modernizr/modernizr.js',
+			dist: {
 
-			// [REQUIRED] Path to save out the built file.
-			outputFile: '<%= paths.vendor %>/modernizr/modernizr.min.js',
+				// [REQUIRED] Path to the build you're using for development.
+				devFile: '<%= paths.vendor %>/modernizr/modernizr.js',
 
-			// Based on default settings on http://modernizr.com/download/
-			extra: {
-				shiv: true,
-				printshiv: false,
-				load: true,
-				mq: false,
-				cssclasses: true
-			},
+				// [REQUIRED] Path to save out the built file.
+				outputFile: '<%= paths.vendor %>/modernizr/modernizr.min.js',
 
-			// Based on default settings on http://modernizr.com/download/
-			extensibility: {
-				addtest: false,
-				prefixed: false,
-				teststyles: false,
-				testprops: false,
-				testallprops: false,
-				hasevents: false,
-				prefixes: false,
-				domprefixes: false
-			},
+				// Based on default settings on http://modernizr.com/download/
+				extra: {
+					shiv: true,
+					printshiv: false,
+					load: true,
+					mq: false,
+					cssclasses: true
+				},
 
-			// By default, source is uglified before saving
-			uglify: true,
+				// Based on default settings on http://modernizr.com/download/
+				extensibility: {
+					addtest: false,
+					prefixed: false,
+					teststyles: false,
+					testprops: false,
+					testallprops: false,
+					hasevents: false,
+					prefixes: false,
+					domprefixes: false
+				},
 
-			// Define any tests you want to impliticly include.
-			tests: ['touch'],
+				// By default, source is uglified before saving
+				uglify: true,
 
-			// By default, this task will crawl your project for references to Modernizr tests.
-			// Set to false to disable.
-			parseFiles: true,
+				// Define any tests you want to impliticly include.
+				tests: ['touch'],
 
-			// When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
-			// You can override this by defining a 'files' array below.
-			files : [
-				'<%= paths.js %>/**/*.js',
-				'!<%= paths.js %>/**/*.min.js',
-				'<%= paths.css %>/application.css'
-			],
+				// By default, this task will crawl your project for references to Modernizr tests.
+				// Set to false to disable.
+				parseFiles: true,
 
-			// When parseFiles = true, matchCommunityTests = true will attempt to
-			// match user-contributed tests.
-			matchCommunityTests: false,
+				// When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
+				// You can override this by defining a 'files' array below.
+				files : {
+					src: [
+						'<%= paths.js %>/**/*.js',
+						'!<%= paths.js %>/**/*.min.js',
+						'<%= paths.css %>/application{,-ie}.css'
+					]
+				},
 
-			// Have custom Modernizr tests? Add paths to their location here.
-			customTests: []
+				// When parseFiles = true, matchCommunityTests = true will attempt to
+				// match user-contributed tests.
+				matchCommunityTests: false,
+
+				// Have custom Modernizr tests? Add paths to their location here.
+				customTests: []
+			}
 		},
 
 
@@ -584,36 +593,29 @@ module.exports = function(grunt) {
 
 
 	grunt.registerTask('default', 'Default task', function () {
-		var tasks = ['dev'],
-			args = grunt.util.toArray(arguments);
-			//renderOptions = grunt.config.get('render.options');
+		var tasks = ['dev'];
 
-		//enable livereload script in footer by default
-		//renderOptions.env.livereload = true;
-
-		args.forEach(function (arg) {
+		Array.prototype.forEach.call(arguments, function (arg) {
 
 			if (arg === 'weinre') {
+
 				var concurrent = grunt.config.get('concurrent.dev');
 
-				//renderOptions.env.weinre = true;
-
 				concurrent.push('weinre:dev');
-
 				grunt.config.set('concurrent.dev', concurrent);
 
 			}
+
 			if (arg === 'server') {
 				tasks.push('connect:dev');
 			}
 
 		});
-		//save modified render task configuration
-		//grunt.config.set('render.options', renderOptions);
 
 		//this always comes last
 		tasks.push('concurrent:dev');
 		grunt.task.run(tasks);
+
 	});
 
 	grunt.registerTask('dev',[
@@ -645,34 +647,45 @@ module.exports = function(grunt) {
 		'modernizr'
 	]);
 
-	grunt.registerTask('build', 'Build the project', function(target, grunthash) {
 
-		var testHash = require('crypto').createHash('md5').update(grunt.file.read(__filename)).digest('hex');
+	if (confProperties.buildOnly) {
 
-		if (arguments.length < 2) {
-			grunt.fail.warn('Cannot run this task directly', 3);
-			return;
-		}
-		if (testHash !== grunthash) {
-			grunt.fail.warn('Safety hash check not passed', 3);
-			return;
-		}
-		if (target === 'staging' || target === 'preview') {
-			grunt.task.run(['dev']);
-		} else if (target === 'production') {
-			grunt.task.run(['dist']);
-		}
 
-	});
 
-	grunt.registerTask('deploy', 'Build and deploy the project', function(target) {
-		if (!arguments.length) {
-			grunt.fail.warn('Deploy target not specified: either staging or production', 3);
-		} else if (target === 'staging') {
-			grunt.task.run(['dev', 'rsync:staging']);
-		} else if (target === 'production') {
-			grunt.task.run(['dist', 'rsync:production']);
-		}
+		grunt.registerTask('build', 'Build the project', function(target, grunthash) {
 
-	});
+			var testHash = require('crypto').createHash('md5').update(grunt.file.read(__filename)).digest('hex');
+
+			if (arguments.length < 2) {
+				grunt.fail.warn('Cannot run this task directly', 3);
+				return;
+			}
+			if (testHash !== grunthash) {
+				grunt.fail.warn('Safety hash check not passed', 3);
+				return;
+			}
+			if (target === 'staging' || target === 'preview') {
+				grunt.task.run(['dev']);
+			} else if (target === 'production') {
+				grunt.task.run(['dist']);
+			}
+
+		});
+
+	} else {
+
+		grunt.registerTask('deploy', 'Build and deploy the project', function(target) {
+			if (!arguments.length) {
+				grunt.fail.warn('Deploy target not specified: either staging or production', 3);
+			} else if (target === 'staging') {
+				grunt.task.run(['dev', 'rsync:staging']);
+			} else if (target === 'production') {
+				grunt.task.run(['dist', 'rsync:production']);
+			}
+
+		});
+
+	}
+
+
 };
