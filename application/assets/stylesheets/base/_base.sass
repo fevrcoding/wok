@@ -30,12 +30,13 @@ select,
 textarea
   color: $color-text
 
+html
+  font-size: $font-size-default
+  line-height: ($font-lheight-default/$font-size-default)
 
 body
   background: $color-bg
   color: $color-text
-  font-size: $font-size-default
-  line-height: ($font-lheight-default/$font-size-default)
   font-family: $font-family-base
   min-width: 320px
 
@@ -65,7 +66,7 @@ hr
   height: 1px
   border: 0
   border-top: 1px solid $color-border
-  margin: 1em 0
+  margin: rem(1rem) 0
   padding: 0
 
 
@@ -104,12 +105,11 @@ textarea
   @include inline-block
 
 %headings
+  @include rem-font-size($font-size-h, $font-lheight-h)
   margin: 0 0 0.2em
   color: $color-text
   font-family: $font-family-h
-  font-size: $font-size-h
   font-weight: bold
-  line-height: 1
 
 %img-responsive
   display: block
@@ -128,23 +128,23 @@ textarea
 
 
 h1, .h1
-  font-size: em($font-size-h1)
+  @include rem-font-size($font-size-h1, $font-lheight-h)
 
 h2, .h2
-  font-size: em($font-size-h2)
+  @include rem-font-size($font-size-h2, $font-lheight-h)
 
 h3, .h3
-  font-size: em($font-size-h3)
+  @include rem-font-size($font-size-h3, $font-lheight-h)
 
 
 h4, .h4,
-  font-size: em($font-size-h4)
+  @include rem-font-size($font-size-h4, $font-lheight-h)
 
 h5, .h5
-  font-size: em($font-size-h5)
+  @include rem-font-size($font-size-h5, $font-lheight-h)
 
 h6, .h6
-  font-size: em($font-size-h6)
+  @include rem-font-size($font-size-h6, $font-lheight-h)
 
 
 a
@@ -154,18 +154,3 @@ a
   &:hover
     color: $color-link
     text-decoration: none
-
-/* Typographic Helpers
-   ========================================================================== */
-
-.fsize-xs
-  font-size: em($font-size-xs)
-
-.fsize-s
-  font-size: em($font-size-s)
-
-.fsize-l
-  font-size: em($font-size-l)
-
-.fsize-xl
-  font-size: em($font-size-xl)
