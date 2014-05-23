@@ -12,41 +12,35 @@ module.exports = function(grunt) {
 		confProperties = require('./grunt-config/properties.js');
 
 
-	if (!grunt.option('base')) {
-		//if working directory hasn't been set (--base option)
-		//then jump to the project root folder
-		grunt.file.setBase('../');
-	} else {
-		grunt.file.setBase(grunt.option('base'));
-	}
+	//up a folder to the project root
+	grunt.file.setBase(path.resolve(__dirname, '..'));
+
 
 	if (grunt.file.exists('.bowerrc')) {
 		confPaths.vendor = grunt.file.readJSON('.bowerrc').directory;
 	}
-
 
 	//forcing `--gruntfile` flag to current Gruntfile.js
 	//since using `.setBase` changes working folder and
 	//concurrent tasks won't find Gruntfile.js anymore
 	grunt.option('gruntfile', __filename);
 
+	//require all the thing
+	require('time-grunt')(grunt);
+	require('load-grunt-tasks')(grunt);
+	grunt.loadNpmTasks('sassdown');
+
+	//if `--base` argument is passed in
+	//switch to the build folder
+	//cannot be done earlier since when working on Phing etc
+	//node_modules aren't checked in nor installed
+	if (grunt.option('base')) {
+		grunt.file.setBase(grunt.option('base'));
+	}
+
 	//make rsync path absolute
 	if (confPaths.hasOwnProperty('rsync')) {
 		confPaths.rsync = path.join(process.cwd(), confPaths.rsync);
-	}
-
-	//This is needed when building with Phing, since npm modules aren't downloaded
-	//at build time
-	if (grunt.option('base')) {
-		//if base is different,
-		//change it for a moment and load npm modules
-		process.chdir(path.join(__dirname, '..'));
-		require('load-grunt-tasks')(grunt);
-		grunt.loadNpmTasks('sassdown');
-		process.chdir( grunt.option('base') );
-	} else {
-		require('load-grunt-tasks')(grunt);
-		grunt.loadNpmTasks('sassdown');
 	}
 
 	// Project configuration.
