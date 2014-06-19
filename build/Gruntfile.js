@@ -9,7 +9,8 @@ module.exports = function(grunt) {
 		//load configurations
 		confPaths = require('./grunt-config/paths.js'),
 		confHosts = require('./grunt-config/hosts.js'),
-		confProperties = require('./grunt-config/properties.js');
+		confProperties = require('./grunt-config/properties.js'),
+		loremIpsum = require('lorem-ipsum');
 
 
 	//up a folder to the project root
@@ -221,16 +222,16 @@ module.exports = function(grunt) {
 
 						return assetPath.replace(regexp, '/') + relPath;
 					},
-					lorem: function (lorem, min, max) {
-						var str = this.data.lorem[lorem];
+					lorem: function (min, max, config) {
 						var _ = this._;
+						var count = max ? _.random(min, max) : min;
+						var defaults = {
+							units: 'words',
+							count: count
+						};
+						var conf = _.defaults(config || {}, defaults);
 
-						return _( str.slice( _.random(0, 50) ) )
-								.chain()
-								.trim(' ,')
-								.capitalize()
-								.prune(_.random(min, max || 30), '')
-								.value();
+						return loremIpsum(conf);
 					}
 				},
 				//custom option object. to be used to switch between env related blocks
@@ -247,7 +248,7 @@ module.exports = function(grunt) {
 				],
 				options: {
 					data: ['<%= paths.fixtures %>/{,*/}*.json'],
-					partialPaths: ['<%= paths.documents %>']
+					partialPaths: ['<%= paths.documents %>', '<%= paths.views %>/partials']
 				}
 			}
 		},
@@ -486,7 +487,7 @@ module.exports = function(grunt) {
 				excludeMissing: true,
 				readme: 'README.md',
 				baseUrl: '/styleguide/',
-				commentStart: /\/\* (?:[=]{4,}\n[ ]+|(?!\n))/,
+				commentStart: /\/\* (?:[=]{4,}\n+[ ]+|(?!\n))/,
 				commentEnd: /[ ]+[=]{4,} \*\//
 			},
 			styleguide: {
@@ -506,21 +507,21 @@ module.exports = function(grunt) {
 		 */
 		watch: {
 			images: {
-				files: ['<%= paths.assets %>/images/**/*.{png,jpg,jpeg,gif}'],
-				tasks: ['copy:images']
+				files: ['<%= paths.assets %>/images/{,*/}*.{png,jpg,jpeg,gif}'],
+				tasks: ['newer:copy:images']
 			},
 			js: {
-				files: ['<%= paths.assets %>/javascripts/**/*.js', '!<%= paths.assets %>/javascripts/**/*.{spec,conf}.js'],
-				tasks: ['copy:js']
+				files: ['<%= paths.assets %>/javascripts/{,*/}*.js', '!<%= paths.assets %>/javascripts/{,*/}*.{spec,conf}.js'],
+				tasks: ['newer:copy:js']
 
 			},
 			fonts: {
-				files: ['<%= paths.assets %>/fonts/**/*.{eot,svg,ttf,woff}'],
-				tasks: ['copy:fonts']
+				files: ['<%= paths.assets %>/fonts/{,*/}*.{eot,svg,ttf,woff}'],
+				tasks: ['newer:copy:fonts']
 
 			},
 			app: {
-				files: ['<%= paths.documents %>/*.md', '<%= paths.views %>/**/<%= properties.viewmatch %>', '<%= paths.fixtures %>/*.json'],
+				files: ['<%= paths.documents %>/*.md', '<%= paths.views %>/{,*/}<%= properties.viewmatch %>', '<%= paths.fixtures %>/*.json'],
 				tasks: ['render']
 			},
 			livereload: {
@@ -530,9 +531,10 @@ module.exports = function(grunt) {
 				files: [
 					'<%= paths.html %>/{,partials/}<%= properties.viewmatch %>',
 					'<%= paths.css %>/{,*/}*.css',
-					'<%= paths.images %>/**/*.{png,jpg,jpeg,gif}',
+					'<%= paths.images %>/{,*/}*.{png,jpg,jpeg,gif}',
+					'!<%= paths.images %>/rgbapng/*.png',
 					'<%= paths.js %>/{,*/}*.js',
-					'!<%= paths.js %>/**/*.spec.js'
+					'!<%= paths.js %>/{,*/}*.spec.js'
 				]
 			}
 		},

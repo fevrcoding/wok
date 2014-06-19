@@ -23,22 +23,29 @@
   ul
     margin-top: 0.1em
     padding-left: 1.5em
+    overflow: hidden //see http://stackoverflow.com/questions/710158/why-do-my-list-item-bullets-overlap-floating-elements
 
 
   img
+    display: block
     max-width: 100%
     height: auto
+    margin:
+      right: auto
+      bottom: 1em
+      left: auto
 
 
   table
     @include table-scaffolding
-
     margin-bottom: 2em
+    overflow-x: auto
 
     td,
     th
       border-bottom: 1px solid $color-border
       padding: 0.2em 0.5em
+      text-align: left
 
 
 

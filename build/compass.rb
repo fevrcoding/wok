@@ -63,7 +63,22 @@ Sass::Script::Number.precision = 10
 module Sass::Script::Functions
   def list_files(path)
 
-  	full_path = Compass.configuration.project_path + "/" + path.value
+  	full_path = File.join(Compass.configuration.project_path, path.value)
+    return Sass::Script::List.new(
+      Dir.glob(full_path).map! { |x| Sass::Script::String.new(File.basename(x, '.*')) },
+      :comma
+    )
+  end
+end
+
+module Sass::Script::Functions
+  def list_images(relpath)
+
+    if Compass.configuration.images_path
+      full_path = File.join(Compass.configuration.images_path, relpath.value)
+    else
+      full_path = File.join(Compass.configuration.project_path, relpath.value)
+    end
     return Sass::Script::List.new(
       Dir.glob(full_path).map! { |x| Sass::Script::String.new(File.basename(x, '.*')) },
       :comma
