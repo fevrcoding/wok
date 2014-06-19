@@ -81,6 +81,12 @@
   background-size: ceil(image-width($image-url) * $ratio) auto
 
 
+@mixin img-responsive($display: block)
+  display: $display
+  max-width: 100% // Part 1: Set a maximum relative to the parent
+  height: auto // Part 2: Scale the height according to the width, otherwise you get stretching
+
+
 //see https://github.com/tinganho/compass-placeholder
 @mixin placeholder
   &::-webkit-input-placeholder
@@ -109,6 +115,67 @@ $classed-headings-uid: 0
     $current-heading: nth($headings,$i)
     h#{$current-heading}, .h#{$current-heading}
       @extend %tmp-heading-#{$classed-headings-uid}
+
+
+@mixin triangle ($color: #000, $size: '5px', $direction: 'up')
+  width: 0
+  height: 0
+
+  @if $direction == 'up'
+    border-right: $size solid transparent
+    border-left: $size solid transparent
+    border-bottom: $size solid $color
+
+  @if $direction == 'down'
+    border-right: $size solid transparent
+    border-left: $size solid transparent
+    border-top: $size solid $color
+
+  @if $direction == 'right'
+    border-top: $size solid transparent
+    border-bottom: $size solid transparent
+    border-left: $size solid $color
+
+  @if $direction == 'left'
+    border-top: $size solid transparent
+    border-bottom: $size solid transparent
+    border-right: $size solid $color
+
+
+@mixin transparent-bg($color, $alpha)
+  $rgba: rgba($color, $alpha)
+  $ie-hex-str: ie-hex-str($rgba)
+  background-color: transparent
+  background-color: $rgba
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#{$ie-hex-str},endColorstr=#{$ie-hex-str})
+  zoom: 1
+
+
+// CSS Animations
+//
+// http://joshbroton.com/quick-fix-sass-mixins-for-css-keyframe-animations/
+// ==========================================================================
+@mixin animation($animate...)
+  $max: length($animate)
+  $animations: ''
+  @for $i from 1 through $max
+    $animations: #{$animations + nth($animate, $i)}
+    @if $i < $max
+      $animations: #{$animations + ", "}
+  @include experimental(animation, $animations, -webkit, -moz, not -o, not -ms, official)
+
+@mixin keyframes($animationName)
+  @-webkit-keyframes #{$animationName}
+    @content
+
+  @-moz-keyframes #{$animationName}
+    @content
+
+  @-o-keyframes #{$animationName}
+    @content
+
+  @keyframes #{$animationName}
+    @content
 
 
 
