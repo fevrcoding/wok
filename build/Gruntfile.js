@@ -255,35 +255,6 @@ module.exports = function(grunt) {
 
 
 		/**
-		 * Find replace based on env vars
-		 * DEPRECATED
-		 * ===============================
-		 */
-		/*preprocess: {
-
-			dev: {
-				files: [
-					{
-						expand: true,
-						cwd: '<%= paths.tmp %>/',
-						src: ['<%= properties.viewmatch %>'],
-						dest: '<%= paths.html %>'
-					}
-				]
-			},
-
-			dist: {
-				options: {
-					context: {
-						PRODUCTION: true
-					}
-				},
-				files: '<%= preprocess.dev.files %>'
-			}
-		},*/
-
-
-		/**
 		 * Replace/remove refs to development resources
 		 * Overwrites source files
 		 * ===============================
@@ -619,7 +590,6 @@ module.exports = function(grunt) {
 		'copy',
 		'compass:dev',
 		'render',
-		//'preprocess:dev',
 		'sassdown'
 	]);
 
@@ -631,7 +601,6 @@ module.exports = function(grunt) {
 		'imagemin',
 		'compass:dist',
 		'render',
-		//'preprocess:dist',
 		'htmlrefs:dist',
 		'useminPrepare',
 		'concat',
