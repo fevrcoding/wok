@@ -110,5 +110,7 @@ lib
 www/*
 #share vendors
 !www/vendor
+!www/.htaccess
+!www/htaccess
 Gemfile.lock
 var/tmp
