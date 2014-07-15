@@ -24,9 +24,9 @@
     "grunt-contrib-imagemin": "~0.7.1",
     "grunt-contrib-uglify": "~0.5.0",
     "grunt-contrib-watch": "~0.6.1",
-    "grunt-ejs-render": "~0.2.5",
+    "grunt-ejs-render": "~0.2.6",
     "grunt-filerev": "~0.2.1",
-    "grunt-filerev-assets": "^0.3.1",
+    "grunt-filerev-assets": "^0.3.2",
     "grunt-htmlrefs": "^0.5.0",
     "grunt-modernizr": "~0.5.2",
     "grunt-newer": "^0.7.0",
@@ -37,6 +37,6 @@
     "load-grunt-tasks": "~0.6.0",
     "lorem-ipsum": "^1.0.1",
     "sassdown": "0.2.6",
-    "time-grunt": "^0.3.2"
+    "time-grunt": "^0.4.0"
   }
 }
