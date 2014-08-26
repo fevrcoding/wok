@@ -134,7 +134,7 @@ module.exports = function(grunt) {
 
 			options: {
 				config: path.normalize(process.cwd() + '/build/compass.rb'),
-				bundleExec: grunt.file.exists(path.normalize(process.cwd() + 'Gemfile'))
+				bundleExec: grunt.file.exists(path.join(process.cwd(), 'Gemfile'))
 			},
 
 			watch: {
@@ -419,6 +419,30 @@ module.exports = function(grunt) {
 		},
 
 
+
+        /**
+         * Shrink SVGs
+         * ===============================
+         */
+        svgmin: {
+            options: {
+                plugins: [{
+                    removeViewBox: false
+                }]
+            },
+            dist: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= paths.images %>/',
+                        src: ['**/*.svg'],
+                        dest: '<%= paths.images %>/'
+                    }
+                ]
+            }
+        },
+
+
 		/**
 		 * Add revision number to static resources
 		 * ===============================
@@ -479,7 +503,7 @@ module.exports = function(grunt) {
 		watch: {
 			images: {
 				files: ['<%= paths.assets %>/images/{,*/}*.{png,jpg,jpeg,gif}'],
-				tasks: ['newer:copy:images']
+				tasks: ['copy:images']
 			},
 			js: {
 				files: ['<%= paths.assets %>/javascripts/{,*/}*.js', '!<%= paths.assets %>/javascripts/{,*/}*.{spec,conf}.js'],
@@ -555,37 +579,26 @@ module.exports = function(grunt) {
 				logConcurrentOutput: true
 			},
 			dev: ['watch', 'compass:watch']
-		}
+		},
 
 
-	});
+        /**
+         * Package Data Management Tasks
+         * ===============================
+         */
+        bumpup: {
+            options: {
+                updateProps: {
+                    pkg: 'package.json'
+                }
+            },
+            files: ['package.json', 'bower.json']
+        }
 
 
-	grunt.registerTask('default', 'Default task', function () {
-		var tasks = ['dev'];
-
-		Array.prototype.forEach.call(arguments, function (arg) {
-
-			if (arg === 'weinre') {
-
-				var concurrent = grunt.config.get('concurrent.dev');
-
-				concurrent.push('weinre:dev');
-				grunt.config.set('concurrent.dev', concurrent);
-
-			}
-
-			if (arg === 'server') {
-				tasks.push('connect:dev');
-			}
 
 		});
 
-		//this always comes last
-		tasks.push('concurrent:dev');
-		grunt.task.run(tasks);
-
-	});
 
 	grunt.registerTask('dev',[
 		'clean',
@@ -613,6 +626,34 @@ module.exports = function(grunt) {
 		'usemin',
 		'modernizr'
 	]);
+
+    grunt.registerTask('default', 'Default task', function () {
+        var tasks = ['dev'];
+
+        Array.prototype.forEach.call(arguments, function (arg) {
+
+            if (arg === 'weinre') {
+
+                var concurrent = grunt.config.get('concurrent.dev');
+
+                concurrent.push('weinre:dev');
+                grunt.config.set('concurrent.dev', concurrent);
+
+            }
+
+            if (arg === 'server') {
+                tasks.push('connect:dev');
+            }
+
+        });
+
+        //this always comes last
+        tasks.push('concurrent:dev');
+        grunt.task.run(tasks);
+
+    });
+
+    grunt.registerTask('serve', ['default:server']);
 
 
 	if (confProperties.buildOnly) {

@@ -55,6 +55,7 @@ Session.vim
 
 nbproject
 .idea
+.externalToolBuilders
 
 #################
 ## OS generated

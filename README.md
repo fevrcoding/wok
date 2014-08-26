@@ -64,6 +64,7 @@ From project root
 
 Other Grunt tasks: 
 
+* `serve` (same as default, also runs a static server on port 8000)
 * `dev` (just development)
 * `dist` (production ready build)
 * `deploy:[staging|production]` (development / production build and deploy with rsync)
