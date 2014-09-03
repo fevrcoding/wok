@@ -43,6 +43,8 @@ module.exports = {
 	//don't use grunt templates here
 	rsync: 'www',
 
+    backup: 'var/backups',
+
 	//overrode by .bowerc if available
 	vendor: '<%= paths.www %>/vendor',
 

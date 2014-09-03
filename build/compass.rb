@@ -3,6 +3,7 @@ require 'bundler/setup'
 require 'json'
 require 'ostruct'
 require 'fileutils'
+require 'compass/import-once/activate'
 require 'sass-css-importer' #gem install --pre sass-css-importer
 require 'sass-globbing'
 require 'rgbapng'
@@ -38,6 +39,11 @@ fonts_dir =  'fonts'
 if environment == :production
 	asset_cache_buster :none
 	output_style = :expanded #there's an external task to minify css
+end
+
+#sourcemaps support
+if environment != :production
+  sourcemap = true
 end
 
 #import sass vendors

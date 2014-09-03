@@ -20,8 +20,7 @@
 
 
 @mixin ie-fallback($ie-version: 8)
-
-  @if $legacy-support-for-ie and ($ie-version <= 8)
+  @if index($supported-browsers, 'ie') and map-get($browser-minimum-versions, 'ie') == '7' and ($ie-version <= 8)
     $ie-version: $ie-version + 1
     .lt-ie#{$ie-version} &
       @content
@@ -89,24 +88,17 @@
 
 //see https://github.com/tinganho/compass-placeholder
 @mixin placeholder
-  &::-webkit-input-placeholder
+  @warn 'placeholder mixin is deprecated. Use input-placeholder instead'
+  @include input-placeholder
     @content
-
-  // Firefox 18-
-  &:-moz-placeholder
-    @content
-
-  // Firefox 19+
-  &::-moz-placeholder
-    @content
-
-  &:-ms-input-placeholder
-    @content
-
 
 $classed-headings-uid: 0
-@mixin classed-headings ($headings: $font-typography-headings)
-  $classed-headings-uid: $classed-headings-uid + 1
+@mixin classed-headings ($headings...)
+
+  @if length($headings) == 0
+    $headings: $font-typography-headings
+
+  $classed-headings-uid: $classed-headings-uid + 1 !global
 
   %tmp-heading-#{$classed-headings-uid}
     @content
@@ -149,34 +141,6 @@ $classed-headings-uid: 0
   background-color: $rgba
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#{$ie-hex-str},endColorstr=#{$ie-hex-str})
   zoom: 1
-
-
-// CSS Animations
-//
-// http://joshbroton.com/quick-fix-sass-mixins-for-css-keyframe-animations/
-// ==========================================================================
-@mixin animation($animate...)
-  $max: length($animate)
-  $animations: ''
-  @for $i from 1 through $max
-    $animations: #{$animations + nth($animate, $i)}
-    @if $i < $max
-      $animations: #{$animations + ", "}
-  @include experimental(animation, $animations, -webkit, -moz, not -o, not -ms, official)
-
-@mixin keyframes($animationName)
-  @-webkit-keyframes #{$animationName}
-    @content
-
-  @-moz-keyframes #{$animationName}
-    @content
-
-  @-o-keyframes #{$animationName}
-    @content
-
-  @keyframes #{$animationName}
-    @content
-
 
 
 // Typography
@@ -237,8 +201,3 @@ $classed-headings-uid: 0
       line-height: $line-height
     @else
       line-height: ceil($font-size / $line-height) * ($line-height / $font-size)
-
-
-//uncomment to use custom grid
-//@import 'mixins-grid'
-

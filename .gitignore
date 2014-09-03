@@ -55,6 +55,7 @@ Session.vim
 
 nbproject
 .idea
+.externalToolBuilders
 
 #################
 ## OS generated
@@ -110,5 +111,7 @@ lib
 www/*
 #share vendors
 !www/vendor
+!www/.htaccess
+!www/htaccess
 Gemfile.lock
 var/tmp
