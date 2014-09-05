@@ -604,6 +604,18 @@ module.exports = function(grunt) {
         },
 
 
+        browserSync: {
+            dev: {
+                bsFiles: {
+                    src : '<%= watch.livereload.files %>'
+                },
+                options: {
+                    watchTask: true
+                }
+            }
+        },
+
+
         /**
          * Concurrent Tasks
          * ===============================
@@ -662,6 +674,11 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', 'Default task', function () {
         var tasks = ['dev'];
+
+        if (grunt.config.get('properties.sync') === true) {
+            grunt.config.set('watch.livereload.options.livereload', false);
+            tasks.push('browserSync');
+        }
 
         Array.prototype.forEach.call(arguments, function (arg) {
 
