@@ -29,22 +29,22 @@ On a static-only project the default configuration should be fine. On other setu
 
 _Note: compass and grunt configs are kept separate to allow standalone usage._
 
-#WORKING WITH SOURCES 
+#WORKING WITH SOURCES
 
 Project sources are located into `application` folder. Don't edit files in `www` since they will be overwritten during build process.
 
 **Application Structure**
 
-	assets 
+	assets
 		+ fonts #Web Fonts
 		+ images #Images
 		+ javascripts #JavaScript files
 		+ stylesheets #SASS files
 	documents #Markdown files or any other txt-like file to be included in HTMLs
-	fixtures #JSON files 
+	fixtures #JSON files
 	views #HTML files
 		+	partials #View partials
-	*index*.html #Main views
+	index.html #Main views
 	...
 
 **View Partials**
@@ -62,13 +62,14 @@ From project root
 `cd build`
 `grunt` (builds in development mode and watches for change)
 
-Other Grunt tasks: 
+Other Grunt tasks:
 
-* `serve` (same as default, also runs a static server on port 8000)
-* `dev` (just development)
-* `dist` (production ready build)
-* `deploy:[staging|production]` (development / production build and deploy with rsync)
+* `serve`: same as default, also runs a static server on port 8000
+* `dev`: just development
+* `dist`: production ready build
+* `deploy:[staging|production]`: development / production build and deploy with rsync. A backup of the deploy target folder (`paths.www`) will be stored in `paths.backup`.
+* `rollback:[staging|production]`: restores the latest backup (if available)
 
-**Note**: when working with Phing remeber to set `buildOnly: false` in `build/grunt-config/properties` to delegate deploy tasks to Phing.
+**Note**: when paired with Phing, remember to set `buildOnly: false` in `build/grunt-config/properties` to delegate deploy tasks to Phing.
 
 
