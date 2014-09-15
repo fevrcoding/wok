@@ -8,6 +8,7 @@ require 'sass-css-importer' #gem install --pre sass-css-importer
 require 'sass-globbing'
 require 'rgbapng'
 require 'breakpoint'
+require 'jacket'
 #require 'bootstrap-sass'
 
 
@@ -47,9 +48,9 @@ if environment != :production
 end
 
 #import sass vendors
-add_import_path File.expand_path(File.join(project_path, 'www', 'vendor'))
+add_import_path File.expand_path(File.join(project_path, generated_assets_path, 'vendor'))
 #import plain css
-add_import_path Sass::CssImporter::Importer.new(File.join(project_path, 'www', 'vendor'))
+add_import_path Sass::CssImporter::Importer.new(File.join(project_path, generated_assets_path, 'vendor'))
 
 # use this hook when `css_path` is different from `project_path`
 # to move style.css to the theme root
