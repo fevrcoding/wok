@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'bundler/setup'
-require 'json'
+#require 'json' todo remove
+require 'yaml'
+require 'erb'
 require 'ostruct'
 require 'fileutils'
 require 'compass/import-once/activate'
@@ -15,27 +17,43 @@ require 'jacket'
 #environment = :development --> this is default!
 #environment = :production
 
+if File.exists?(File.join(File.dirname(__FILE__), 'grunt-config', 'paths.yml'))
+	paths = YAML::load_file(File.join(File.dirname(__FILE__), 'grunt-config', 'paths.yml'))
+else
+  paths = {
+    sass: 'application/assets/stylesheets',
+    www: 'www',
+    css: '<%= www %>/stylesheets',
+    images: '<%= www %>/images',
+    fonts: '<%= www %>/fonts',
+    vendor: '<%= www %>/vendor',
+    tmp: 'var/tmp'
+  }
+end
+paths_namespace = OpenStruct.new paths
+paths.each do |k,v|
+  path_parsed = ERB.new(v.gsub('paths.', '')).result(paths_namespace.instance_eval { binding })
+  paths_namespace[k] = path_parsed
+end
+
 #custom variables
 project_path = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-relative_images_path = 'images'
-generated_assets_path = 'www'
 
-
-sass_dir = 'application/assets/stylesheets'
+sass_dir = paths_namespace.sass
 # this setting enforces the compilation of `style.css` in the theme root folder
-css_dir = generated_assets_path + '/stylesheets'
-images_dir = generated_assets_path + '/' + relative_images_path
+css_dir = paths_namespace.css
+images_dir = paths_namespace.images
 
 #Place a common cache folder in the project path
-cache_path = File.expand_path(File.join(project_path, 'var', 'tmp', '.sass-cache'))
+cache_path = File.expand_path(File.join(project_path, paths_namespace.tmp, '.sass-cache'))
 
 #http_stylesheets_path = project_url
-http_images_path = '/' + relative_images_path
-http_generated_images_path =  '/' + relative_images_path
+http_images_path = paths_namespace.images.gsub(paths_namespace.www, '')
+http_generated_images_path =  paths_namespace.images.gsub(paths_namespace.www, '')
 
 #path of font folder
-fonts_path =  generated_assets_path + '/fonts'
-fonts_dir =  'fonts'
+fonts_path =  paths_namespace.fonts
+fonts_dir =  paths_namespace.fonts.gsub(paths_namespace.www, '')
 
 if environment == :production
 	asset_cache_buster :none
@@ -48,9 +66,9 @@ if environment != :production
 end
 
 #import sass vendors
-add_import_path File.expand_path(File.join(project_path, generated_assets_path, 'vendor'))
+add_import_path File.expand_path(File.join(project_path, paths_namespace.vendor))
 #import plain css
-add_import_path Sass::CssImporter::Importer.new(File.join(project_path, generated_assets_path, 'vendor'))
+add_import_path Sass::CssImporter::Importer.new(File.join(project_path, paths_namespace.vendor))
 
 # use this hook when `css_path` is different from `project_path`
 # to move style.css to the theme root

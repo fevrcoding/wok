@@ -7,9 +7,12 @@ module.exports = function(grunt) {
 
     var path = require('path'),
         //load configurations
-        confPaths = require('./grunt-config/paths.js'),
-        confHosts = require('./grunt-config/hosts.js'),
-        confProperties = require('./grunt-config/properties.js'),
+        //confPaths = require('./grunt-config/paths.js'),
+        //confHosts = require('./grunt-config/hosts.js'),
+        //confProperties = require('./grunt-config/properties.js'),
+        confPaths = grunt.file.readYAML('./grunt-config/paths.yml'),
+        confHosts = grunt.file.readYAML('./grunt-config/hosts.yml'),
+        confProperties = grunt.file.readYAML('./grunt-config/properties.yml'),
         loremIpsum = require('lorem-ipsum');
 
 
@@ -174,8 +177,6 @@ module.exports = function(grunt) {
                     banner: '<%= meta.vendorBanner %>'
                 },
                 files: []
-
-
             }
         },
 

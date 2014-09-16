@@ -1,0 +1,41 @@
+---
+
+#NOTE: folders are relative to project root folder
+
+application: application
+
+assets: <%= paths.application %>/assets
+
+fixtures: <%= paths.application %>/fixtures
+
+sass: <%= paths.assets %>/stylesheets
+
+documents: <%= paths.application %>/documents
+
+views: <%= paths.application %>/views
+
+partials: <%= paths.views %>/partials
+
+www: www
+
+images: <%= paths.www %>/images #images folder name
+
+js: <%= paths.www %>/javascripts #where to store built files
+
+css: <%= paths.www %>/stylesheets
+
+fonts: <%= paths.www %>/fonts
+
+revmap: <%= paths.www %>/assets-map.json #map of revved files
+
+html: <%= paths.www %> #where static files are to be saved
+
+usemin: <%= paths.html %> #path to views to be processed by usemin/htmlrefs
+
+rsync: www #dont use grunt templates here
+
+backup: var/backups
+
+vendor: <%= paths.www %>/vendor #overrode by .bowerc if available
+
+tmp: var/tmp
