@@ -7,9 +7,12 @@ module.exports = function(grunt) {
 
     var path = require('path'),
         //load configurations
-        confPaths = require('./grunt-config/paths.js'),
-        confHosts = require('./grunt-config/hosts.js'),
-        confProperties = require('./grunt-config/properties.js'),
+        //confPaths = require('./grunt-config/paths.js'),
+        //confHosts = require('./grunt-config/hosts.js'),
+        //confProperties = require('./grunt-config/properties.js'),
+        confPaths = grunt.file.readYAML('./grunt-config/paths.yml'),
+        confHosts = grunt.file.readYAML('./grunt-config/hosts.yml'),
+        confProperties = grunt.file.readYAML('./grunt-config/properties.yml'),
         loremIpsum = require('lorem-ipsum');
 
 
@@ -95,7 +98,8 @@ module.exports = function(grunt) {
             fonts: ['<%= paths.fonts %>'],
             html: ['<%= paths.html %>/<%= properties.viewmatch %>', '<%= paths.html %>/partials'], //html in root and whole partials folder
             revmap: ['<%= paths.revmap %>'],
-            styleguide: ['<%= paths.www %>/styleguide']
+            styleguide: ['<%= paths.www %>/styleguide'],
+            vendor: ['<%= paths.vendor %>/vendor.min{,.*}.js']
         },
 
 
@@ -173,8 +177,6 @@ module.exports = function(grunt) {
                     banner: '<%= meta.vendorBanner %>'
                 },
                 files: []
-
-
             }
         },
 
@@ -342,9 +344,9 @@ module.exports = function(grunt) {
             backup: {
                 command: [
                     'mkdir -p <%= paths.backup %>',
-                    'filecount=$(ls -t <%= paths.backup %> | wc -l)',
+                    'filecount=$(ls -t <%= paths.backup %> | grep .tgz | wc -l)',
                     'if [ $filecount -gt 2 ];' +
-                        'then for file in $(ls -t <%= paths.backup %> | tail -n $(($filecount-2)));' +
+                        'then for file in $(ls -t <%= paths.backup %> | grep .tgz | tail -n $(($filecount-2)));' +
                             'do rm <%= paths.backup %>/$file;' +
                             'done;' +
                     'fi',
@@ -676,13 +678,14 @@ module.exports = function(grunt) {
         var tasks = ['dev'];
 
         if (grunt.config.get('properties.sync') === true) {
+            grunt.config.set('properties.livereload', false);
             grunt.config.set('watch.livereload.options.livereload', false);
             tasks.push('browserSync');
         }
 
         Array.prototype.forEach.call(arguments, function (arg) {
 
-            if (arg === 'weinre') {
+            if (arg === 'weinre' || grunt.config.get('properties.remoteDebug') === true) {
 
                 var concurrent = grunt.config.get('concurrent.dev');
 
@@ -733,7 +736,18 @@ module.exports = function(grunt) {
         grunt.registerTask('deploy', 'Build and deploy the project', function(target) {
             if (!arguments.length) {
                 grunt.fail.warn('Deploy target not specified: either staging or production', 3);
-            } else if (target === 'staging') {
+                return;
+            }
+            //don't print livereload/browsersync/weinre scripts
+            grunt.config.merge({
+                'properties': {
+                    'sync': false,
+                    'livereload': false,
+                    'remoteDebug': false
+                }
+            });
+
+            if (target === 'staging') {
 
                 grunt.config.set('sshexec.backup.options', grunt.config.get('hosts.staging'));
                 grunt.config.set('sshexec.backup.command', 'cd <%= hosts.staging.path %>; ' + grunt.config.get('sshexec.backup.command'));

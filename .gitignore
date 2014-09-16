@@ -111,7 +111,10 @@ lib
 www/*
 #share vendors
 !www/vendor
+www/vendor/vendor.min.*
+www/vendor/modernizr/modernizr.min.*
 !www/.htaccess
 !www/htaccess
+!www/favicon.ico
 Gemfile.lock
 var/tmp

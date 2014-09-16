@@ -1,0 +1,11 @@
+---
+
+livereload: true #set to `true` to enable livereload
+
+sync: false #set to `true` to enable browsersync (will override livereload config)
+
+remoteDebug: false #enable remote debug via weinre
+
+buildOnly: false #set to `true` when paired with Phing
+
+viewmatch: '*.html' #for php projects use: '*.{html,php,phtml}'

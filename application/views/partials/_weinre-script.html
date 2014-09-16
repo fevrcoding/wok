@@ -1,3 +1,4 @@
+<% if (helpers.getConfig('properties.weinre')) { %>
 <script>
     (function () {
         var w = document.createElement('script');
@@ -8,3 +9,4 @@
         s.parentNode.insertBefore(w, s);
     }());
 </script>
+<% } %>

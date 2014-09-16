@@ -7,4 +7,5 @@ gem "compass" , "~>1.0.1"
 gem 'compass-import-once', :require => 'compass/import-once/activate'
 gem "compass-rgbapng", ">=0.2"
 gem "breakpoint" , "~>2.5.0"
+gem "jacket" , "~>1.1.0"
 #gem 'bootstrap-sass', "~> 3.1"
