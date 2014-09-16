@@ -33,7 +33,7 @@ end
 paths_namespace = OpenStruct.new paths
 paths.each do |k,v|
   path_parsed = ERB.new(v.gsub('paths.', '')).result(paths_namespace.instance_eval { binding })
-  paths_namespace[k] = path_parsed
+  paths_namespace.send(k +"=", path_parsed)
 end
 
 #custom variables
