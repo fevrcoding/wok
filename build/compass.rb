@@ -19,6 +19,7 @@ require 'jacket'
 
 if File.exists?(File.join(File.dirname(__FILE__), 'grunt-config', 'paths.yml'))
 	paths = YAML::load_file(File.join(File.dirname(__FILE__), 'grunt-config', 'paths.yml'))
+  puts paths.class
 else
   paths = {
     sass: 'application/assets/stylesheets',

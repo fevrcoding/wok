@@ -287,14 +287,29 @@ module.exports = function(grunt) {
             options: {
                 root: '<%= paths.www %>',
                 dest: '<%= paths.www %>',
-                staging: '<%= paths.tmp %>'
+                staging: '<%= paths.tmp %>',
+                flow: {
+                    // i'm using this config for all targets, not only 'html'
+                    steps: {
+                        vendorjs: ['concat'],
+                        js: ['concat', 'uglifyjs'],
+                        css: ['concat', 'cssmin']
+                    },
+                    // also you MUST define 'post' field to something not null
+                    post: {}
+                }
             },
             html: ['<%= paths.usemin %>/**/<%= properties.viewmatch %>']
         },
 
         usemin: {
             options: {
-                assetsDirs: ['<%= paths.www %>']
+                assetsDirs: ['<%= paths.www %>'],
+                blockReplacements: {
+                    vendorjs: function (block) {
+                        return '<script src="' + block.dest + '"></script>';
+                    }
+                }
             },
             html: ['<%= paths.usemin %>/**/<%= properties.viewmatch %>'],
             css: ['<%= paths.css %>/{,*/}*.css']
