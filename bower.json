@@ -1,10 +1,11 @@
 {
-  "name": "static-boilerplate",
+  "name": "wok",
   "version": "0.6.0",
   "authors": [
-    "Marco Solazzi <marco.solazzi@intesys.it>"
+    "Marco Solazzi <marco.solazzi@intesys.it>",
+    "Matteo Guidotto <matteo.guidotto@intesys.it>"
   ],
-  "license": "(c) Intesys",
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
