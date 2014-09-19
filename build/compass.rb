@@ -19,16 +19,15 @@ require 'jacket'
 
 if File.exists?(File.join(File.dirname(__FILE__), 'grunt-config', 'paths.yml'))
 	paths = YAML::load_file(File.join(File.dirname(__FILE__), 'grunt-config', 'paths.yml'))
-  puts paths.class
 else
   paths = {
-    sass: 'application/assets/stylesheets',
-    www: 'www',
-    css: '<%= www %>/stylesheets',
-    images: '<%= www %>/images',
-    fonts: '<%= www %>/fonts',
-    vendor: '<%= www %>/vendor',
-    tmp: 'var/tmp'
+    'sass' => 'application/assets/stylesheets',
+    'www' => 'www',
+    'css' => '<%= www %>/stylesheets',
+    'images' => '<%= www %>/images',
+    'fonts' => '<%= www %>/fonts',
+    'vendor' => '<%= www %>/vendor',
+    'tmp' => 'var/tmp'
   }
 end
 paths_namespace = OpenStruct.new paths
