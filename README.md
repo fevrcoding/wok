@@ -29,7 +29,7 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 
 Clone this repo:
 
-	git clone git://github.com/dwightjack/grunt-email-boilerplate.git
+	git clone git://github.com/intesys/wok.git
 
 From project root:
 
