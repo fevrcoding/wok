@@ -1,2 +1,0 @@
---errors=duplicate-properties,empty-rules,errors,known-properties,vendor-prefix,box-model,display-property-grouping
---warnings=adjoining-classes,box-sizing,compatible-vendor-prefixes,duplicate-background-images,fallback-colors,floats,font-faces,font-sizes,gradients,ids,import,important,outline-none,overqualified-elements,qualified-headings,regex-selectors,rules-count,shorthand,star-property-hack,text-indent,underscore-property-hack,unique-headings,universal-selector,zero-units

@@ -7,9 +7,6 @@ module.exports = function(grunt) {
 
     var path = require('path'),
         //load configurations
-        //confPaths = require('./grunt-config/paths.js'),
-        //confHosts = require('./grunt-config/hosts.js'),
-        //confProperties = require('./grunt-config/properties.js'),
         confPaths = grunt.file.readYAML('./grunt-config/paths.yml'),
         confHosts = grunt.file.readYAML('./grunt-config/hosts.yml'),
         confProperties = grunt.file.readYAML('./grunt-config/properties.yml'),
@@ -48,6 +45,8 @@ module.exports = function(grunt) {
         confPaths.rsync = path.join(process.cwd(), confPaths.rsync);
     }
 
+
+
     // Project configuration.
     grunt.initConfig({
 
@@ -60,8 +59,8 @@ module.exports = function(grunt) {
          * ===============================
          */
         meta: {
-            banner: '/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today("yyyy") %> <%= pkg.author.company %> */\n',
-            vendorBanner: '/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n',
+            banner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.company %> */\n",
+            vendorBanner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n"
         },
 
         properties: confProperties,
