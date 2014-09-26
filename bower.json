@@ -3,7 +3,8 @@
   "version": "0.6.0",
   "authors": [
     "Marco Solazzi <marco.solazzi@intesys.it>",
-    "Matteo Guidotto <matteo.guidotto@intesys.it>"
+    "Matteo Guidotto <matteo.guidotto@intesys.it>",
+    "Umberto Quintarelli <umberto.quintarelli@intesys.it>"
   ],
   "license": "MIT",
   "ignore": [

@@ -45,6 +45,8 @@ module.exports = function(grunt) {
         confPaths.rsync = path.join(process.cwd(), confPaths.rsync);
     }
 
+
+
     // Project configuration.
     grunt.initConfig({
 
@@ -57,8 +59,8 @@ module.exports = function(grunt) {
          * ===============================
          */
         meta: {
-            banner: '/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today("yyyy") %> <%= pkg.author.company %> */\n',
-            vendorBanner: '/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n',
+            banner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.company %> */\n",
+            vendorBanner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n"
         },
 
         properties: confProperties,
