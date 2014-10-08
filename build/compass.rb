@@ -52,8 +52,11 @@ http_images_path = paths_namespace.images.gsub(paths_namespace.www, '')
 http_generated_images_path =  paths_namespace.images.gsub(paths_namespace.www, '')
 
 #path of font folder
-fonts_path =  paths_namespace.fonts
-fonts_dir =  paths_namespace.fonts.gsub(paths_namespace.www, '')
+fonts_dir =  paths_namespace.fonts
+#enforce this setting
+fonts_path =  File.join(project_path, fonts_dir)
+http_fonts_path = paths_namespace.fonts.gsub(paths_namespace.www, '')
+
 
 if environment == :production
 	asset_cache_buster :none
