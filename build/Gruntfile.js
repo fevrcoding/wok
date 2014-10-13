@@ -93,13 +93,13 @@ module.exports = function(grunt) {
             //@see https://github.com/rafalgalka/grunt-usemin/commit/c59840e87841dc608340623c939ec74172e34241
             tmp: ['<%= paths.tmp %>', '.tmp'],
             images: ['<%= paths.images %>'],
-            js: ['<%= paths.js %>', '<%= paths.vendor %>/dist'],
+            js: ['<%= paths.js %>'],
             css: ['<%= paths.css %>'],
             fonts: ['<%= paths.fonts %>'],
             html: ['<%= paths.html %>/<%= properties.viewmatch %>', '<%= paths.html %>/partials'], //html in root and whole partials folder
             revmap: ['<%= paths.revmap %>'],
             styleguide: ['<%= paths.www %>/styleguide'],
-            vendor: ['<%= paths.vendor %>/vendor.min{,.*}.js']
+            vendor: ['<%= paths.vendor %>/vendor.min{,.*}.js',  '<%= paths.vendor %>/dist']
         },
 
 
@@ -291,7 +291,7 @@ module.exports = function(grunt) {
                 flow: {
                     // i'm using this config for all targets, not only 'html'
                     steps: {
-                        vendorjs: ['concat'],
+                        concat: ['concat'],
                         js: ['concat', 'uglifyjs'],
                         css: ['concat', 'cssmin']
                     },
@@ -306,7 +306,7 @@ module.exports = function(grunt) {
             options: {
                 assetsDirs: ['<%= paths.www %>'],
                 blockReplacements: {
-                    vendorjs: function (block) {
+                    concat: function (block) {
                         return '<script src="' + block.dest + '"></script>';
                     }
                 }
@@ -397,7 +397,7 @@ module.exports = function(grunt) {
                 devFile: '<%= paths.vendor %>/modernizr/modernizr.js',
 
                 // [REQUIRED] Path to save out the built file.
-                outputFile: '<%= paths.vendor %>/modernizr/modernizr.min.js',
+                outputFile: '<%= paths.vendor %>/dist/modernizr.min.js',
 
                 // Based on default settings on http://modernizr.com/download/
                 extra: {
@@ -505,7 +505,7 @@ module.exports = function(grunt) {
             },
             js: {
                 //application files and concatenated vendors
-                src: ['<%= paths.js %>/**/*.min.js', '<%= paths.vendor %>/dist/*.min.js']
+                src: ['<%= paths.js %>/**/*.min.js', '<%= paths.vendor %>/dist/*.min.js', '<%= paths.vendor %>/vendor.min.js']
             },
             css: {
                 src: ['<%= paths.css %>/**/*.css']
@@ -670,24 +670,34 @@ module.exports = function(grunt) {
         'sassdown'
     ]);
 
-    grunt.registerTask('dist', [
-        'clean',
-        'copy:js',
-        'copy:fonts',
-        'copy:images',
-        'imagemin',
-        'compass:dist',
-        'render',
-        'htmlrefs:dist',
-        'useminPrepare',
-        'concat',
-        'uglify',
-        'cssmin',
-        'filerev',
-        'filerev_assets',
-        'usemin',
-        'modernizr'
-    ]);
+    grunt.registerTask('dist', function () {
+        //don't print livereload/browsersync/weinre scripts
+        grunt.config.merge({
+            'properties': {
+                'sync': false,
+                'livereload': false,
+                'remoteDebug': false
+            }
+        });
+        grunt.task.run([
+            'clean',
+            'copy:js',
+            'copy:fonts',
+            'copy:images',
+            'imagemin',
+            'compass:dist',
+            'render',
+            'htmlrefs:dist',
+            'useminPrepare',
+            'concat',
+            'uglify',
+            'cssmin',
+            'modernizr',
+            'filerev',
+            'filerev_assets',
+            'usemin'
+        ]);
+    });
 
     grunt.registerTask('default', 'Default task', function () {
         var tasks = ['dev'];
