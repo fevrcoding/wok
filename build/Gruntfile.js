@@ -7,15 +7,14 @@ module.exports = function(grunt) {
 
     var path = require('path'),
         //load configurations
-        confPaths = grunt.file.readYAML('./grunt-config/paths.yml'),
-        confHosts = grunt.file.readYAML('./grunt-config/hosts.yml'),
-        confProperties = grunt.file.readYAML('./grunt-config/properties.yml'),
+        confPaths = grunt.file.readYAML(path.join(__dirname, 'grunt-config/paths.yml')),
+        confHosts = grunt.file.readYAML(path.join(__dirname, 'grunt-config/hosts.yml')),
+        confProperties = grunt.file.readYAML(path.join(__dirname, 'grunt-config/properties.yml')),
         loremIpsum = require('lorem-ipsum');
 
 
     //up a folder to the project root
     grunt.file.setBase(path.resolve(__dirname, '..'));
-
 
     if (grunt.file.exists('.bowerrc')) {
         confPaths.vendor = grunt.file.readJSON('.bowerrc').directory;
