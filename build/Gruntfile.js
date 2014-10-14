@@ -58,8 +58,10 @@ module.exports = function(grunt) {
          * ===============================
          */
         meta: {
+            // jscs:disable
             banner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.company %> */\n",
             vendorBanner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n"
+            // jscs:enable
         },
 
         properties: confProperties,
@@ -224,13 +226,13 @@ module.exports = function(grunt) {
                         return assetPath.replace(regexp, '/') + relPath;
                     },
                     lorem: function (min, max, config) {
-                        var _ = this._;
-                        var count = max ? _.random(min, max) : min;
-                        var defaults = {
+                        var _ = this._,
+                            count = max ? _.random(min, max) : min,
+                            defaults = {
                             units: 'words',
                             count: count
-                        };
-                        var conf = _.defaults(config || {}, defaults);
+                            },
+                            conf = _.defaults(config || {}, defaults);
 
                         return loremIpsum(conf);
                     }
@@ -671,10 +673,10 @@ module.exports = function(grunt) {
     grunt.registerTask('dist', function () {
         //don't print livereload/browsersync/weinre scripts
         grunt.config.merge({
-            'properties': {
-                'sync': false,
-                'livereload': false,
-                'remoteDebug': false
+            properties: {
+                sync: false,
+                livereload: false,
+                remoteDebug: false
             }
         });
         grunt.task.run([
@@ -763,10 +765,10 @@ module.exports = function(grunt) {
             }
             //don't print livereload/browsersync/weinre scripts
             grunt.config.merge({
-                'properties': {
-                    'sync': false,
-                    'livereload': false,
-                    'remoteDebug': false
+                properties: {
+                    sync: false,
+                    livereload: false,
+                    remoteDebug: false
                 }
             });
 
