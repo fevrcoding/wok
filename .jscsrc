@@ -4,5 +4,6 @@
     "validateIndentation": 4,
     "disallowSpacesInAnonymousFunctionExpression": null,
     "disallowSpacesInFunctionExpression": null,
+	"disallowMultipleLineBreaks": null,
     "excludeFiles": ["node_modules/**"]
 }
