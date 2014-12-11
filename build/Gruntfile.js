@@ -602,6 +602,7 @@ module.exports = function(grunt) {
             options: {
                 hostname: '*',
                 port: '<%= hosts.devbox.ports.connect %>',
+                useAvailablePort: true,
                 base: ['<%= paths.www %>', '<%= paths.html %>']
             },
             server: {
@@ -609,7 +610,9 @@ module.exports = function(grunt) {
                     keepalive: true
                 }
             },
-            dev: {}
+            dev: {
+                options: {}
+            }
         },
 
 
@@ -624,18 +627,6 @@ module.exports = function(grunt) {
                     boundHost: '-all-',
                     httpPort: '<%= hosts.devbox.ports.weinre %>',
                     verbose: true
-                }
-            }
-        },
-
-
-        browserSync: {
-            dev: {
-                bsFiles: {
-                    src : '<%= watch.livereload.files %>'
-                },
-                options: {
-                    watchTask: true
                 }
             }
         },
@@ -670,7 +661,7 @@ module.exports = function(grunt) {
     });
 
 
-    grunt.registerTask('dev',[
+    grunt.registerTask('dev', [
         'clean',
         'copy',
         'compass:dev',
@@ -678,60 +669,81 @@ module.exports = function(grunt) {
         'sassdown'
     ]);
 
-    grunt.registerTask('dist', function () {
-        //don't print livereload/browsersync/weinre scripts
-        grunt.config.merge({
-            properties: {
-                sync: false,
-                livereload: false,
-                remoteDebug: false
-            }
-        });
-        grunt.task.run([
-            'clean',
-            'copy:js',
-            'copy:fonts',
-            'copy:images',
-            'imagemin',
-            'compass:dist',
-            'render',
-            'htmlrefs:dist',
-            'useminPrepare',
-            'concat',
-            'uglify',
-            'cssmin',
-            'modernizr',
-            'filerev',
-            'filerev_assets',
-            'usemin'
-        ]);
-    });
+    grunt.registerTask('dist', [
+        'clean',
+        'copy:js',
+        'copy:fonts',
+        'copy:images',
+        'imagemin',
+        'compass:dist',
+        'render',
+        'htmlrefs:dist',
+        'useminPrepare',
+        'concat',
+        'uglify',
+        'cssmin',
+        'modernizr',
+        'filerev',
+        'filerev_assets',
+        'usemin'
+    ]);
 
-    grunt.registerTask('default', 'Default task', function () {
-        var tasks = ['dev'];
+    grunt.registerTask('default', 'Default task', function (server) {
+        var tasks = ['dev'],
+            connectDev = grunt.config.get('connect.dev');
+
+        function pushMiddleware(middlewareConf, middlewareFn) {
+            if (typeof middlewareConf === 'function') {
+                var _oldMiddleWares = middlewareConf;
+                return function(connect, options, middlewares) {
+                    var mids = _oldMiddleWares(connect, options, middlewares);
+                    // inject a custom middlewareConf into the array of default middlewares
+                    mids.unshift(middlewareFn);
+                    return mids;
+                };
+            } else if (Array.isArray(middlewareConf)) {
+                middlewareConf.unshift(middlewareFn);
+                return middlewareConf;
+            } else {
+                return function(connect, options, middlewares) {
+                    // inject a custom middlewareConf into the array of default middlewares
+                    middlewares.unshift(middlewareFn);
+                    return middlewares;
+                };
+            }
+        }
 
         if (grunt.config.get('properties.sync') === true) {
             grunt.config.set('properties.livereload', false);
             grunt.config.set('watch.livereload.options.livereload', false);
-            tasks.push('browserSync');
+
+            var bs = require('browser-sync').init(grunt.config.get('watch.livereload.files'), {logSnippet: false});
+            var browserSyncMiddleware = require('connect-browser-sync')(bs);
+            connectDev.options.middleware = pushMiddleware(connectDev.options.middleware, browserSyncMiddleware);
+            grunt.config.set('connect.dev', connectDev);
+
+        } else if (grunt.config.get('properties.livereload') === true) {
+            connectDev.options.livereload = '<%= hosts.devbox.ports.livereload %>';
+            grunt.config.set('connect.dev', connectDev);
         }
 
-        Array.prototype.forEach.call(arguments, function (arg) {
+        if (grunt.config.get('properties.remoteDebug') === true) {
 
-            if (arg === 'weinre' || grunt.config.get('properties.remoteDebug') === true) {
+            //add weinre to the concurrent tasks list
+            grunt.config.set('concurrent.dev', (grunt.config.get('concurrent.dev') || []).concat(['weinre:dev']));
 
-                var concurrent = grunt.config.get('concurrent.dev');
+            connectDev.options.middleware = pushMiddleware(connectDev.options.middleware, require('connect-weinre-injector')({
+                port: grunt.config.get('hosts.devbox.ports.weinre')
+            }));
+            grunt.config.set('connect.dev', connectDev);
 
-                concurrent.push('weinre:dev');
-                grunt.config.set('concurrent.dev', concurrent);
 
-            }
+        }
 
-            if (arg === 'server') {
-                tasks.push('connect:dev');
-            }
+        if (server === 'server') {
+            tasks.push('connect:dev');
+        }
 
-        });
 
         //this always comes last
         tasks.push('concurrent:dev');
@@ -771,14 +783,6 @@ module.exports = function(grunt) {
                 grunt.fail.warn('Deploy target not specified: either staging or production', 3);
                 return;
             }
-            //don't print livereload/browsersync/weinre scripts
-            grunt.config.merge({
-                properties: {
-                    sync: false,
-                    livereload: false,
-                    remoteDebug: false
-                }
-            });
 
             if (target === 'staging') {
 
