@@ -714,17 +714,13 @@ module.exports = function(grunt) {
         }
 
         if (grunt.config.get('properties.sync') === true) {
-            grunt.config.set('properties.livereload', false);
-            grunt.config.set('watch.livereload.options.livereload', false);
-
-            var bs = require('browser-sync').init(grunt.config.get('watch.livereload.files'), {logSnippet: false});
+            var bs = require('browser-sync').init([], { logSnippet: false, port: grunt.config.get('hosts.devbox.ports.browsersync') });
             var browserSyncMiddleware = require('connect-browser-sync')(bs);
             connectDev.options.middleware = pushMiddleware(connectDev.options.middleware, browserSyncMiddleware);
-            grunt.config.set('connect.dev', connectDev);
+        }
 
-        } else if (grunt.config.get('properties.livereload') === true) {
-            connectDev.options.livereload = '<%= hosts.devbox.ports.livereload %>';
-            grunt.config.set('connect.dev', connectDev);
+        if (grunt.config.get('properties.livereload') === true) {
+            connectDev.options.livereload = grunt.config.get('hosts.devbox.ports.livereload');
         }
 
         if (grunt.config.get('properties.remoteDebug') === true) {
@@ -735,10 +731,9 @@ module.exports = function(grunt) {
             connectDev.options.middleware = pushMiddleware(connectDev.options.middleware, require('connect-weinre-injector')({
                 port: grunt.config.get('hosts.devbox.ports.weinre')
             }));
-            grunt.config.set('connect.dev', connectDev);
-
-
         }
+
+        grunt.config.set('connect.dev', connectDev);
 
         if (server === 'server') {
             tasks.push('connect:dev');
