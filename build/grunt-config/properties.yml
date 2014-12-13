@@ -2,7 +2,7 @@
 
 livereload: true #set to `true` to enable livereload
 
-sync: false #set to `true` to enable browsersync (will override livereload config)
+sync: false #set to `true` to enable browsersync
 
 remoteDebug: false #enable remote debug via weinre
 
