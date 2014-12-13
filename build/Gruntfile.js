@@ -125,7 +125,7 @@ module.exports = function(grunt) {
             fonts: {
                 expand: true,
                 cwd: '<%= paths.assets %>/fonts/',
-                src: '**/*.{eot,svg,ttf,woff}',
+                src: '**/*.{eot,svg,ttf,woff,woff2}',
                 dest: '<%= paths.fonts %>/'
             }
         },
@@ -440,11 +440,11 @@ module.exports = function(grunt) {
 
                 // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
                 // You can override this by defining a 'files' array below.
-                files : {
+                files: {
                     src: [
                         '<%= paths.js %>/**/*.js',
                         '!<%= paths.js %>/**/*.min.js',
-                        '<%= paths.css %>/application{,-ie}.css'
+                        '<%= paths.css %>/**/*.css'
                     ]
                 },
 
@@ -509,7 +509,7 @@ module.exports = function(grunt) {
          */
         filerev: {
             images: {
-                src: ['<%= paths.images %>/**/*.{png,jpg,gif}']
+                src: ['<%= paths.images %>/**/*.{png,jpg,gif,svg,webp}']
             },
             js: {
                 //application files and concatenated vendors
@@ -562,7 +562,7 @@ module.exports = function(grunt) {
          */
         watch: {
             images: {
-                files: ['<%= paths.assets %>/images/{,*/}*.{png,jpg,jpeg,gif}'],
+                files: ['<%= paths.assets %>/images/{,*/}*.{png,jpg,jpeg,gif,svg,webp}'],
                 tasks: ['copy:images']
             },
             js: {
@@ -571,7 +571,7 @@ module.exports = function(grunt) {
 
             },
             fonts: {
-                files: ['<%= paths.assets %>/fonts/{,*/}*.{eot,svg,ttf,woff}'],
+                files: ['<%= paths.assets %>/fonts/{,*/}*.{eot,svg,ttf,woff,woff2}'],
                 tasks: ['newer:copy:fonts']
 
             },
@@ -586,7 +586,8 @@ module.exports = function(grunt) {
                 files: [
                     '<%= paths.html %>/{,partials/}<%= properties.viewmatch %>',
                     '<%= paths.css %>/{,*/}*.css',
-                    '<%= paths.images %>/{,*/}*.{png,jpg,jpeg,gif}',
+                    '<%= paths.fonts %>/{,*/}*.{eot,svg,ttf,woff,woff2}',
+                    '<%= paths.images %>/{,*/}*.{png,jpg,jpeg,gif,svg,webp}',
                     '!<%= paths.images %>/rgbapng/*.png',
                     '<%= paths.js %>/{,*/}*.js',
                     '!<%= paths.js %>/{,*/}*.spec.js'
@@ -671,9 +672,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('dist', [
         'clean',
-        'copy:js',
-        'copy:fonts',
-        'copy:images',
+        'copy',
         'imagemin',
         'compass:dist',
         'render',
