@@ -1,7 +1,7 @@
 {
   "name": "wok",
   "description": "A Static Website Boilerplate",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "license": "MIT",
   "author": {
     "name": "Marco Solazzi",
@@ -26,8 +26,10 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "browser-sync": "^1.7.2",
+    "connect-browser-sync": "^1.0.2",
+    "connect-weinre-injector": "dwightjack/connect-weinre-injector",
     "grunt": "^0.4.5",
-    "grunt-browser-sync": "^1.5.2",
     "grunt-bumpup": "^0.6.1",
     "grunt-concurrent": "~1.0.0",
     "grunt-contrib-clean": "~0.6.0",
