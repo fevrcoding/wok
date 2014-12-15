@@ -32,7 +32,43 @@
 /* ==========================================================================
    ##Box model helpers
    ========================================================================== */
+%clearfix
+  @include clearfix
 
+.u-clearfix,
+.clearfix
+  @extend %clearfix
+
+.u-clear
+  clear: both
+
+.u-centered
+  margin:
+    right: auto
+    left: auto
+
+.u-float,
+.u-float--left
+  float: left
+
+.u-float--right
+  float: right
+
+%u-inline
+  @include inline-block
+
+/* inline children */
+.u-inline > *
+  @extend %u-inline
+
+/* vertically stacked */
+.u-stacked > *
+  display: block
+
+/* inline */
+.u-inline--baseline > *
+  @extend %u-inline
+  vertical-align: baseline
 
 
 /* ==========================================================================
@@ -56,15 +92,7 @@
     display: none
 
 
-%clearfix
-  @include clearfix
 
-.u-clearfix,
-.clearfix
-  @extend %clearfix
-
-.u-clear
-  clear: both
 
 
 
