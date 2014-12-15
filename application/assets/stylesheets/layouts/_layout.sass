@@ -44,35 +44,30 @@
 
 
 /* ==========================================================================
-   ##Containers
+   ##Containers (DEPRECATED keep until 0.10.0)
    ========================================================================== */
 
 
 
-%l-inline
-  @include inline-block
-
 /* inline children */
 .l-inline > *
-  @extend %l-inline
+  @extend %u-inline
 
 /* inline */
 .l-inline--baseline > *
-  @extend %l-inline
+  @extend %u-inline
   vertical-align: baseline
 
 
 .l-centered
-  margin:
-    right: auto
-    left: auto
+  @extend .u-centered
 
 .l-float,
 .l-float--left
-  float: left
+  @extend .u-float
 
 .l-float--right
-  float: right
+  @extend .u-float--right
 
 /* vertically stacked */
 .l-stacked > *
