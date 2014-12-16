@@ -411,7 +411,7 @@ module.exports = function(grunt) {
                 extra: {
                     shiv: true,
                     printshiv: false,
-                    load: true,
+                    load: false, //excude yepnope
                     mq: false,
                     cssclasses: true
                 },

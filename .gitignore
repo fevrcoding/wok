@@ -111,6 +111,7 @@ lib
 www/*
 #share vendors
 !www/vendor
+www/vendor/dist
 www/vendor/vendor.min.*
 www/vendor/modernizr/modernizr.min.*
 !www/.htaccess
