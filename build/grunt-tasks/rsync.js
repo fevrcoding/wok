@@ -1,3 +1,8 @@
+/**
+ * Rsync Deploy
+ * ===============================
+ */
+/*jshint node:true, camelcase:false */
 module.exports = {
     options: {
         src: '<%= paths.rsync %>',

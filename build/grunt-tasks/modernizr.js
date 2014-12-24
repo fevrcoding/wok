@@ -1,3 +1,8 @@
+/**
+ * Modernizr Custom Build
+ * ===============================
+ */
+/*jshint node:true, camelcase:false */
 module.exports = {
 
     dist: {

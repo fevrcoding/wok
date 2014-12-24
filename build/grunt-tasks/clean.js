@@ -2,6 +2,7 @@
  * Clean Task
  * ===============================
  */
+/*jshint node:true, camelcase:false */
 module.exports = {
     options: {
         force: true

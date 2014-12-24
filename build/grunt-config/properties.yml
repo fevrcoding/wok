@@ -9,3 +9,9 @@ remoteDebug: false #enable remote debug via weinre
 buildOnly: false #set to `true` when paired with Phing
 
 viewmatch: '*.html' #for php projects use: '*.{html,php,phtml}'
+
+#Toolchain options
+engines:
+  views: ejs
+  stylesheets: compass
+

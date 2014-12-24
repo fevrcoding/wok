@@ -1,3 +1,8 @@
+/**
+ * Asset Revving
+ * ===============================
+ */
+/*jshint node:true, camelcase:false */
 module.exports = {
     images: {
         src: ['<%= paths.images %>/**/*.{png,jpg,gif,svg,webp}']

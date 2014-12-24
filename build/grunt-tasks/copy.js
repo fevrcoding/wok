@@ -2,6 +2,7 @@
  * Copy Task
  * ===============================
  */
+/*jshint node:true, camelcase:false */
 module.exports = {
     //dev only
     js: {

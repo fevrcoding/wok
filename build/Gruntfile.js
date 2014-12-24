@@ -29,7 +29,12 @@ module.exports = function(grunt) {
     //require all the thing
     require('time-grunt')(grunt);
     require('load-grunt-tasks')(grunt);
-    grunt.loadNpmTasks('sassdown');
+    try {
+        //sassdown might be unavailable...
+        require.resolve('sassdown') && grunt.loadNpmTasks('sassdown');
+    } catch (e) {
+
+    }
 
     //if `--base` argument is passed in
     //switch to the build folder
@@ -88,22 +93,29 @@ module.exports = function(grunt) {
 
     }));
 
-    grunt.registerTask('default', 'Default task', function (server) {
+    ['views', 'stylesheets'].forEach(function (buildSection) {
+        var engine = confProperties.engines[buildSection];
+        grunt.registerTask('_' + buildSection, function (target) {
+            grunt.task.run(engine + ':' + target || 'dev');
+        });
+    });
+
+    grunt.registerTask('default', 'Default task', function (target) {
         var tasks = ['dev'],
-            connectDev = grunt.config.get('connect.dev');
+            properties = grunt.config.get('properties'),
+            connectOpts = grunt.config.get('connect.dev.options'),
+            ports = grunt.config.get('hosts.devbox.ports');
 
         function pushMiddleware(middlewareConf, middlewareFn) {
-            if (typeof middlewareConf === 'function') {
-                var _oldMiddleWares = middlewareConf;
-                return function(connect, options, middlewares) {
-                    var mids = _oldMiddleWares(connect, options, middlewares);
+            if (_.isFunction(middlewareConf)) {
+                return _.wrap(middlewareConf, function(oldMiddleWares) {
+                    var mids = oldMiddleWares.apply(oldMiddleWares, _.toArray(arguments).slice(1));
                     // inject a custom middlewareConf into the array of default middlewares
                     mids.unshift(middlewareFn);
                     return mids;
-                };
+                });
             } else if (Array.isArray(middlewareConf)) {
-                middlewareConf.unshift(middlewareFn);
-                return middlewareConf;
+                return [middlewareFn].concat(middlewareConf);
             } else {
                 return function(connect, options, middlewares) {
                     // inject a custom middlewareConf into the array of default middlewares
@@ -113,32 +125,28 @@ module.exports = function(grunt) {
             }
         }
 
-        if (grunt.config.get('properties.sync') === true) {
-            var bs = require('browser-sync').init([], { logSnippet: false, port: grunt.config.get('hosts.devbox.ports.browsersync') });
+        if (properties.sync) {
+            var bs = require('browser-sync').init([], { logSnippet: false, port: ports.browsersync });
             var browserSyncMiddleware = require('connect-browser-sync')(bs);
-            connectDev.options.middleware = pushMiddleware(connectDev.options.middleware, browserSyncMiddleware);
+            connectOpts.middleware = pushMiddleware(connectOpts.middleware, browserSyncMiddleware);
         }
 
-        if (grunt.config.get('properties.livereload') === true) {
-            connectDev.options.livereload = grunt.config.get('hosts.devbox.ports.livereload');
+        if (properties.livereload) {
+            connectOpts.livereload = ports.livereload;
         }
-
-        if (grunt.config.get('properties.remoteDebug') === true) {
-
+        if (properties.remoteDebug) {
             //add weinre to the concurrent tasks list
             grunt.config.set('concurrent.dev', (grunt.config.get('concurrent.dev') || []).concat(['weinre:dev']));
-
-            connectDev.options.middleware = pushMiddleware(connectDev.options.middleware, require('connect-weinre-injector')({
-                port: grunt.config.get('hosts.devbox.ports.weinre')
+            connectOpts.middleware = pushMiddleware(connectOpts.middleware, require('connect-weinre-injector')({
+                port: ports.weinre
             }));
         }
 
-        grunt.config.set('connect.dev', connectDev);
+        grunt.config.set('connect.dev.options', connectOpts);
 
-        if (server === 'server') {
+        if (target === 'server') {
             tasks.push('connect:dev');
         }
-
 
         //this always comes last
         tasks.push('concurrent:dev');
@@ -170,43 +178,31 @@ module.exports = function(grunt) {
 
     } else {
 
-        grunt.registerTask('deploy', 'Build and deploy the project', function(target) {
+        grunt.registerTask('remoteexec', function (command, target) {
+            var tasks = {
+                    'deploy:staging': ['dev', 'sshexec:backup', 'rsync:staging'],
+                    'deploy:production': ['dist', 'sshexec:backup', 'rsync:production'],
+                    'rollback:staging': ['sshexec:rollback'],
+                    'rollback:production': ['sshexec:rollback']
+                },
+                execTarget = 'sshexec.' + (command === 'deploy' ? 'backup' : 'rollback');
+
             if (!arguments.length) {
-                grunt.fail.warn('Deploy target not specified: either staging or production', 3);
+                grunt.fail.warn('Target for command `' + command + '`not specified: either staging or production', 3);
                 return;
             }
 
-            if (target === 'staging') {
-
-                grunt.config.set('sshexec.backup.options', grunt.config.get('hosts.staging'));
-                grunt.config.set('sshexec.backup.command', 'cd <%= hosts.staging.path %>; ' + grunt.config.get('sshexec.backup.command'));
-                grunt.task.run(['dev', 'sshexec:backup', 'rsync:staging']);
-
-            } else if (target === 'production') {
-
-                grunt.config.set('sshexec.backup.options', grunt.config.get('hosts.production'));
-                grunt.config.set('sshexec.backup.command', 'cd <%= hosts.production.path %>; ' + grunt.config.get('sshexec.backup.command'));
-                grunt.task.run(['dist', 'sshexec:backup', 'rsync:production']);
-
-            }
+            grunt.config.set(execTarget + '.options', grunt.config.get('hosts.' + target));
+            grunt.config.set(execTarget + '.command', 'cd <%= hosts.' + target + '.path %>; ' + grunt.config.get(execTarget + '.command'));
+            grunt.task.run(tasks[command + ':' + target]);
 
         });
 
-        grunt.registerTask('rollback', 'Restores the previous version of the application', function(target) {
-            if (!arguments.length) {
-                grunt.fail.warn('Rollback target not specified: either staging or production', 3);
-            } else if (target === 'staging') {
-
-                grunt.config.set('sshexec.rollback.options', grunt.config.get('hosts.staging'));
-                grunt.config.set('sshexec.rollback.command', 'cd <%= hosts.staging.path %>; ' + grunt.config.get('sshexec.rollback.command'));
-
-            } else if (target === 'production') {
-
-                grunt.config.set('sshexec.rollback.options', grunt.config.get('hosts.production'));
-                grunt.config.set('sshexec.rollback.command', 'cd <%= hosts.production.path %>; ' + grunt.config.get('sshexec.rollback.command'));
-            }
-            grunt.task.run(['sshexec:rollback']);
-
+        grunt.registerTask('deploy', function(target) {
+            grunt.task.run(['remoteexec:deploy:' + target]);
+        });
+        grunt.registerTask('rollback', function(target) {
+            grunt.task.run(['remoteexec:rollback:' + target]);
         });
 
     }

@@ -2,6 +2,7 @@
  * Standalone Static Server
  * ===============================
  */
+/*jshint node:true, camelcase:false */
 module.exports = {
     options: {
         hostname: '*',

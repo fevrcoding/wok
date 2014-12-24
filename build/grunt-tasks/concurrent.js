@@ -1,3 +1,7 @@
+/**
+ * Concurrency Management
+ * ===============================
+ */
 /*jshint node:true, camelcase:false */
 module.exports = {
 	'options': {

@@ -1,8 +1,9 @@
+/**
+ * Shrink SVGs
+ * ===============================
+ */
+/*jshint node:true, camelcase:false */
 module.exports = {
-    /**
-     * Shrink SVGs
-     * ===============================
-     */
     options: {
         plugins: [{
             removeViewBox: false

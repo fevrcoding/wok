@@ -1,3 +1,8 @@
+/**
+ * Asset Concatenation and Minification
+ * ===============================
+ */
+/*jshint node:true, camelcase:false */
 module.exports = {
     options: {
         root: '<%= paths.www %>',

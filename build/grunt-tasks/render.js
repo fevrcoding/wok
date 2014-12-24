@@ -3,9 +3,13 @@
  * ===============================
  */
 /*jshint node:true, camelcase:false */
+
+var loremIpsum = require('lorem-ipsum');
+
 module.exports = function (grunt) {
 
-    var loremIpsum = require('lorem-ipsum');
+    //setup ejs alias
+    grunt.registerTask('ejs', function(target) { grunt.task.run(['render:' + target || 'dev']); });
 
     return {
         options: {
@@ -35,7 +39,7 @@ module.exports = function (grunt) {
             //custom option object. to be used to switch between env related blocks
             env: {}
         },
-        html: {
+        dev: {
             files: [
                 {
                     expand: true,
@@ -48,6 +52,9 @@ module.exports = function (grunt) {
                 data: ['<%= paths.fixtures %>/{,*/}*.json'],
                     partialPaths: ['<%= paths.documents %>', '<%= paths.views %>/*']
             }
+        },
+        dist: {
+            files: '<%= render.dev.files %>'
         }
     };
 };

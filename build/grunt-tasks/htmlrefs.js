@@ -3,6 +3,7 @@
  * Overwrites source files
  * ===============================
  */
+/*jshint node:true, camelcase:false */
 module.exports = {
     dist: {
         files: [

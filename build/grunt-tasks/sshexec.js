@@ -1,3 +1,8 @@
+/**
+ * SSH Commands
+ * ===============================
+ */
+/*jshint node:true, camelcase:false */
 module.exports = {
     backup: {
         command: [

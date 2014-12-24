@@ -1,7 +1,8 @@
 /**
- * Live styleguide generation
+ * Live Styleguide Generation
  * ===============================
  */
+/*jshint node:true, camelcase:false */
 module.exports = {
     options: {
         assets: ['<%= paths.css %>/**/*.css'],
