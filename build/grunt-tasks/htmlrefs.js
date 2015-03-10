@@ -6,6 +6,9 @@
 /*jshint node:true, camelcase:false */
 module.exports = {
     dist: {
+        options: {
+            includes: {}
+        },
         files: [
             {
                 expand: true,
@@ -13,9 +16,6 @@ module.exports = {
                 src: ['**/<%= properties.viewmatch %>'],
                 dest: '<%= paths.usemin %>'
             }
-        ],
-            options: {
-            includes: {}
-        }
+        ]
     }
 };

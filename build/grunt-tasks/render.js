@@ -14,12 +14,12 @@ module.exports = function (grunt) {
     return {
         options: {
             helpers: {
-                getConfig : function (prop) {
+                getConfig: function (prop) {
                     return grunt.config.get(prop);
                 },
                 getAsset: function (relPath, type) {
                     var www = grunt.config.get('paths.www'),
-                        regexp = new RegExp('^' +(www || 'www') + '\\\/'),
+                        regexp = new RegExp('^' + (www || 'www') + '\\\/'),
                         assetPath = grunt.config.get('paths.' + (type || 'images')) || '';
 
                     return assetPath.replace(regexp, '/') + relPath;
@@ -36,6 +36,8 @@ module.exports = function (grunt) {
                     return loremIpsum(conf);
                 }
             },
+            data: ['<%= paths.fixtures %>/{,*/}*.json'],
+            partialPaths: ['<%= paths.documents %>', '<%= paths.views %>/*'],
             //custom option object. to be used to switch between env related blocks
             env: {}
         },
@@ -47,11 +49,7 @@ module.exports = function (grunt) {
                     src: ['{,*/}<%= properties.viewmatch %>', '!{,*/}_*.*'], //render all views except those starting with `_` ala SASS
                     dest: '<%= paths.html %>'
                 }
-            ],
-                options: {
-                data: ['<%= paths.fixtures %>/{,*/}*.json'],
-                    partialPaths: ['<%= paths.documents %>', '<%= paths.views %>/*']
-            }
+            ]
         },
         dist: {
             files: '<%= render.dev.files %>'

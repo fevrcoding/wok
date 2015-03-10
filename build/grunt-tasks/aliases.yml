@@ -1,6 +1,7 @@
 dev:
   - clean
   - copy
+  - imagemin:svg #always optimize svgs since optimization may break something
   - _stylesheets:dev
   - _views:dev
   - sassdown
@@ -9,7 +10,6 @@ dist:
   - clean
   - copy
   - imagemin
-  - svgmin
   - _stylesheets:dist
   - _views:dist
   - htmlrefs:dist

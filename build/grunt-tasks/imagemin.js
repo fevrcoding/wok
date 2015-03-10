@@ -16,5 +16,21 @@ module.exports = {
                 dest: '<%= paths.images %>/' // Destination path prefix
             }
         ]
+    },
+    svg: {
+        options: {
+            svgoPlugins: [{
+                cleanupIDs: false,
+                removeViewBox: false
+            }]
+        },
+        files: [
+            {
+                expand: true,
+                cwd: '<%= paths.images %>/',
+                src: ['**/*.svg'],
+                dest: '<%= paths.images %>/'
+            }
+        ]
     }
 };

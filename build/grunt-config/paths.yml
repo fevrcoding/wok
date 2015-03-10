@@ -20,6 +20,8 @@ www: www
 
 images: <%= paths.www %>/images #images folder name
 
+media: <%= paths.www %>/media #audio/video folder name
+
 js: <%= paths.www %>/javascripts #where to store built files
 
 css: <%= paths.www %>/stylesheets

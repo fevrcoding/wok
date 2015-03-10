@@ -6,11 +6,11 @@
 module.exports = {
     options: {
         src: '<%= paths.rsync %>',
-            recursive: true,
-            compareMode: 'checksum',
-            syncDestIgnoreExcl: true,
-            args: ['--verbose', '--progress', '--cvs-exclude'],
-            exclude: [
+        recursive: true,
+        compareMode: 'checksum',
+        syncDestIgnoreExcl: true,
+        args: ['--verbose', '--progress', '--cvs-exclude'],
+        exclude: [
             '.svn*',
             '.tmp*',
             '.sass-cache*',
@@ -21,14 +21,14 @@ module.exports = {
     staging: {
         options: {
             dest: '<%= hosts.staging.path %>',
-                host: '<%= hosts.staging.username %>@<%= hosts.staging.host %>'
+            host: '<%= hosts.staging.username %>@<%= hosts.staging.host %>'
         }
     },
 
     production: {
         options: {
             dest: '<%= hosts.production.path %>',
-                host: '<%= hosts.production.username %>@<%= hosts.production.host %>'
+            host: '<%= hosts.production.username %>@<%= hosts.production.host %>'
         }
     }
 };

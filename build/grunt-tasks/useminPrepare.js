@@ -6,9 +6,9 @@
 module.exports = {
     options: {
         root: '<%= paths.www %>',
-            dest: '<%= paths.www %>',
-            staging: '<%= paths.tmp %>',
-            flow: {
+        dest: '<%= paths.www %>',
+        staging: '<%= paths.tmp %>',
+        flow: {
             // i'm using this config for all targets, not only 'html'
             steps: {
                 concat: ['concat'],

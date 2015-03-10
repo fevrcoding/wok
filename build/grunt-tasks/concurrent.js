@@ -4,9 +4,9 @@
  */
 /*jshint node:true, camelcase:false */
 module.exports = {
-	'options': {
-		'limit': 3,
-		'logConcurrentOutput': true
+	options: {
+		limit: 3,
+		logConcurrentOutput: true
 	},
-	'dev': ['watch', 'compass:watch']
+	dev: ['watch', 'compass:watch']
 };

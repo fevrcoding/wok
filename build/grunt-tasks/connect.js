@@ -6,9 +6,9 @@
 module.exports = {
     options: {
         hostname: '*',
-            port: '<%= hosts.devbox.ports.connect %>',
-            useAvailablePort: true,
-            base: ['<%= paths.www %>', '<%= paths.html %>']
+        port: '<%= hosts.devbox.ports.connect %>',
+        useAvailablePort: true,
+        base: ['<%= paths.www %>', '<%= paths.html %>']
     },
     server: {
         options: {

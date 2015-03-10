@@ -7,8 +7,8 @@ module.exports = {
     dev: {
         options: {
             boundHost: '-all-',
-                httpPort: '<%= hosts.devbox.ports.weinre %>',
-                verbose: true
+            httpPort: '<%= hosts.devbox.ports.weinre %>',
+            verbose: true
         }
     }
 };

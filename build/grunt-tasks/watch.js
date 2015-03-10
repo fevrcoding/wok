@@ -8,7 +8,7 @@ module.exports = function (grunt) {
 	return {
 		images: {
 			files: ['<%= paths.assets %>/images/{,*/}*.{png,jpg,jpeg,gif,svg,webp}'],
-			tasks: ['copy:images']
+			tasks: ['newer:copy:images', 'newer:imagemin:svg']
 		},
 		js: {
 			files: [
@@ -21,6 +21,10 @@ module.exports = function (grunt) {
 			files: ['<%= paths.assets %>/fonts/{,*/}*.{eot,svg,ttf,woff,woff2}'],
 			tasks: ['newer:copy:fonts']
 		},
+        media: {
+            files: ['<%= paths.assets %>/media/{,*/}*.*'],
+            tasks: ['newer:copy:media']
+        },
 		app: {
 			files: [
 				'<%= paths.documents %>/*.md',

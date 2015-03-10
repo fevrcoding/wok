@@ -2,7 +2,7 @@
   "name": "wok",
   "version": "0.9.1",
   "authors": [
-    "Marco Solazzi <marco.solazzi@intesys.it>",
+    "Marco Solazzi <marco.solazzi@gmail.com>",
     "Matteo Guidotto <matteo.guidotto@intesys.it>",
     "Umberto Quintarelli <umberto.quintarelli@intesys.it>"
   ],
@@ -16,7 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "normalize-css": "~3.0.1",
+    "normalize-css": "~3.0.2",
     "modernizr": "~2.8.3"
   }
 }

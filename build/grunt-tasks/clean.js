@@ -7,10 +7,11 @@ module.exports = {
     options: {
         force: true
     },
-    //.tmp ensures usemin defaut staging folder is removed
+    //.tmp ensures usemin default staging folder is removed
     //@see https://github.com/rafalgalka/grunt-usemin/commit/c59840e87841dc608340623c939ec74172e34241
     tmp: ['<%= paths.tmp %>', '.tmp'],
     images: ['<%= paths.images %>'],
+    media: ['<%= paths.media %>'],
     js: ['<%= paths.js %>'],
     css: ['<%= paths.css %>'],
     fonts: ['<%= paths.fonts %>'],

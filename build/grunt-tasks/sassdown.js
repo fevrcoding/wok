@@ -6,11 +6,11 @@
 module.exports = {
     options: {
         assets: ['<%= paths.css %>/**/*.css'],
-            excludeMissing: true,
-            readme: 'README.md',
-            baseUrl: '/styleguide/',
-            commentStart: /\/\* (?:[=]{4,}\n+[ ]+|(?!\n))/,
-            commentEnd: /[ ]+[=]{4,} \*\//
+        excludeMissing: true,
+        readme: 'README.md',
+        baseUrl: '/styleguide/',
+        commentStart: /\/\* (?:[=]{4,}\n+[ ]+|(?!\n))/,
+        commentEnd: /[ ]+[=]{4,} \*\//
     },
     styleguide: {
         files: [{
