@@ -20,7 +20,7 @@
         method = methods[length];
 
         // Only stub undefined methods.
-        if (!console[method] || typeof console[method] !== 'function' ) {
+        if (!console[method] || typeof console[method] !== 'function') {
             console[method] = noop;
         }
     }
@@ -31,11 +31,11 @@
 //see http://getbootstrap.com/getting-started/#ie-10-width
 //see http://timkadlec.com/2013/01/windows-phone-8-and-device-width/
 if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
-	var msViewportStyle = document.createElement('style');
-	msViewportStyle.appendChild(
-		document.createTextNode('@-ms-viewport{width:auto!important}')
-	);
-	document.getElementsByTagName('head')[0].appendChild(msViewportStyle);
+    var msViewportStyle = document.createElement('style');
+    msViewportStyle.appendChild(
+        document.createTextNode('@-ms-viewport{width:auto!important}')
+    );
+    document.getElementsByTagName('head')[0].appendChild(msViewportStyle);
 }
 
 // Place any jQuery/helper plugins in here.
