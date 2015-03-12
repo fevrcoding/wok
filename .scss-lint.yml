@@ -1,0 +1,29 @@
+# Default application configuration that all configurations inherit from.
+
+scss_files: "application/stylesheets/**/*.scss"
+
+linters:
+
+  Comment:
+    enabled: false
+
+  FinalNewline:
+    enabled: false
+
+  MergeableSelector:
+    enabled: false
+
+  Indentation:
+    enabled: true
+    character: space # or 'tab'
+    width: 4
+
+  SelectorFormat:
+    enabled: true
+    class_convention: hyphenated_BEM
+
+  PropertySortOrder:
+    enabled: false
+
+  LeadingZero:
+    style: include_zero
