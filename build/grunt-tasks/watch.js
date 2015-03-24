@@ -18,6 +18,10 @@ module.exports = function (grunt, options) {
 			],
 			tasks: ['newer:copy:js']
 		},
+        css: {
+            files: ['<%= paths.sass %>/{,*/}*.{scss,sass}'],
+            tasks: ['_stylesheets:dev']
+        },
 		fonts: {
 			files: ['<%= paths.assets %>/fonts/{,*/}*.{eot,svg,ttf,woff,woff2}'],
 			tasks: ['newer:copy:fonts']
