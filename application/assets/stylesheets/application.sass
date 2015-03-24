@@ -5,38 +5,36 @@
 
 
 //plugins
-@import "breakpoint"
-@import "jacket"
-@import "rgbapng"
+@import "sass-mq/mq"
+@import "jacket/stylesheets/jacket"
+//@import "rgbapng" DEPRECATED
 
 
-//compass modules
-@import "compass/utilities/general/clearfix"
-@import "compass/utilities/tables/scaffolding"
-@import "compass/typography/text/nowrap"
-@import "compass/typography/links/hover-link"
-@import "compass/typography/vertical_rhythm"
-
-@import "compass/css3"
-@import "compass/css3/user-interface"
-@import "compass/css3/animation"
+//compass modules DEPRECATED
+//@import "compass/utilities/general/clearfix"
+//@import "compass/utilities/tables/scaffolding"
+//@import "compass/typography/text/nowrap"
+//@import "compass/typography/links/hover-link"
+//@import "compass/typography/vertical_rhythm"
+//@import "compass/css3"
+//@import "compass/css3/user-interface"
+//@import "compass/css3/animation"
 
 //base styles and mixins
-@import "CSS:normalize-css/normalize"
+@import "normalize-scss/normalize"
 @import "base/mixins"
 //uncomment to use custom grid
 @import "base/mixins-grid"
+@import "base/base"
 @import "base/utility"
 @import "base/content-typography"
-
-@import "base/base"
 @import "layouts/layout"
 @import "layouts/header"
 @import "layouts/footer"
 
 
 //modules here
-@import "modules/*.*"
+//@import "modules/*.*" NOTE: import modules manually
 
 
 //states and themes

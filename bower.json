@@ -16,7 +16,9 @@
     "tests"
   ],
   "dependencies": {
-    "normalize-css": "~3.0.2",
-    "modernizr": "~2.8.3"
+    "modernizr": "~2.8.3",
+    "jacket": "~1.1.1",
+    "sass-mq": "~3.1.2",
+    "normalize-scss": "~3.0.2"
   }
 }

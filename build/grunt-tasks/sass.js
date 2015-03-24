@@ -1,3 +1,11 @@
+/**
+ * Node-Sass Task
+ * ===============================
+ */
+
+//NOTE: `functions` option won't work until node-sass 3.0.x is released
+
+/*jshint node:true, camelcase:false */
 module.exports = {
 
     options: {
@@ -9,19 +17,30 @@ module.exports = {
 
     dev: {
         options: {
-            sourceMap: true
+            sourceMap: true,
+            functions: {
+                'build-env()': function () {
+                    return 'development';
+                }
+            }
         },
         files: [{
             expand: true,
             cwd: '<%= paths.sass %>/',
             src: ['**/*.{sass,scss}'],
-            dest: '<%= paths.css %>'
+            dest: '<%= paths.css %>',
+            ext: '.css'
         }]
     },
 
     dist: {
         options: {
-            sourceMap: false
+            sourceMap: false,
+            functions: {
+                'build-env()': function () {
+                    return 'production';
+                }
+            }
         },
         files: '<%= sass.dev.files %>'
     }

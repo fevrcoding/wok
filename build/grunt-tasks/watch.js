@@ -3,7 +3,8 @@
  * ===============================
  */
 /*jshint node:true, camelcase:false */
-module.exports = function (grunt) {
+module.exports = function (grunt, options) {
+
 
 	return {
 		images: {

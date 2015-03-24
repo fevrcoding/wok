@@ -37,19 +37,23 @@
 
 
   table
-    @include table-scaffolding
     margin-bottom: 2em
     overflow-x: auto
+
+    &.table--large
+      width: 100%
 
     td,
     th
       border-bottom: 1px solid $color-border
       padding: 0.2em 0.5em
       text-align: left
+      &.numeric
+        text-align: right
 
-    &.table--large
-      width: 100%
-
+    th
+      text-align: center
+      font-weight: bold
 
 
 

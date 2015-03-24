@@ -22,8 +22,6 @@
 *,
 *:before,
 *:after
-  -webkit-box-sizing: border-box
-  -moz-box-sizing: border-box
   box-sizing: border-box
 
 html,
@@ -112,7 +110,7 @@ textarea
    ========================================================================== */
 
 %inline-block
-  @include inline-block
+  display: inline-block
 
 %headings
   @include rem-font-size($font-size-h, $font-lheight-h)

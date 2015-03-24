@@ -75,17 +75,17 @@ $container-lg: $container-large-desktop !default
   padding-right: ($gutter / 2)
 
 @mixin make-xs-column-offset($columns)
-  @include breakpoint($screen-xs-min)
+  @include mq(xs)
     margin-left: percentage(($columns / $grid-columns))
 
 
 @mixin make-xs-column-push($columns)
-  @include breakpoint($screen-xs-min)
+  @include mq(xs)
     left: percentage(($columns / $grid-columns))
 
 
 @mixin make-xs-column-pull($columns)
-  @include breakpoint($screen-xs-min)
+  @include mq(xs)
     right: percentage(($columns / $grid-columns))
 
 
@@ -98,20 +98,20 @@ $container-lg: $container-large-desktop !default
   padding-left:  ($gutter / 2)
   padding-right: ($gutter / 2)
 
-  @include breakpoint($screen-sm-min)
+  @include mq(sm)
     float: left
     width: percentage(($columns / $grid-columns))
 
 @mixin make-sm-column-offset($columns)
-  @include breakpoint($screen-sm-min)
+  @include mq(sm)
     margin-left: percentage(($columns / $grid-columns))
 
 @mixin make-sm-column-push($columns)
-  @include breakpoint($screen-sm-min)
+  @include mq(sm)
     left: percentage(($columns / $grid-columns))
 
 @mixin make-sm-column-pull($columns)
-  @include breakpoint($screen-sm-min)
+  @include mq(sm)
     right: percentage(($columns / $grid-columns))
 
 
@@ -123,20 +123,20 @@ $container-lg: $container-large-desktop !default
   padding-left:  ($gutter / 2)
   padding-right: ($gutter / 2)
 
-  @include breakpoint($screen-md-min)
+  @include mq(md)
     float: left
     width: percentage(($columns / $grid-columns))
 
 @mixin make-md-column-offset($columns)
-  @include breakpoint($screen-md-min)
+  @include mq(md)
     margin-left: percentage(($columns / $grid-columns))
 
 @mixin make-md-column-push($columns)
-  @include breakpoint($screen-md-min)
+  @include mq(md)
     left: percentage(($columns / $grid-columns))
 
 @mixin make-md-column-pull($columns)
-  @include breakpoint($screen-md-min)
+  @include mq(md)
     right: percentage(($columns / $grid-columns))
 
 
@@ -148,20 +148,20 @@ $container-lg: $container-large-desktop !default
   padding-left:  ($gutter / 2)
   padding-right: ($gutter / 2)
 
-  @include breakpoint($screen-lg-min)
+  @include mq(lg)
     float: left
     width: percentage(($columns / $grid-columns))
 
 @mixin make-lg-column-offset($columns)
-  @include breakpoint($screen-lg-min)
+  @include mq(lg)
     margin-left: percentage(($columns / $grid-columns))
 
 @mixin make-lg-column-push($columns)
-  @include breakpoint($screen-lg-min)
+  @include mq(lg)
     left: percentage(($columns / $grid-columns))
 
 @mixin make-lg-column-pull($columns)
-  @include breakpoint($screen-lg-min)
+  @include mq(lg)
     right: percentage(($columns / $grid-columns))
 
 

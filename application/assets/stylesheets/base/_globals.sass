@@ -3,15 +3,16 @@ $rem-to-px-fallback: false !default
 
 $jacket: modern !default
 
-@if variable-exists(legacy-ie-support) and $legacy-ie-support == true
-  $supported-browsers: ("ie") !global
-  $browser-minimum-versions: ("ie": "7") !global
-
-//breakpoint configs
-$breakpoint-to-ems: true
+//@if variable-exists(legacy-ie-support) and $legacy-ie-support == true
+//  $supported-browsers: ("ie") !global
+//  $browser-minimum-versions: ("ie": "7") !global
 
 //use custom grid
 $grid-enabled: true
 
-//compass unit fallback
-$rem-with-px-fallback: $rem-to-px-fallback
+
+
+$mq-responsive: true !default
+
+
+$mq-breakpoints: (xs: 480px, sm: 768px, md: 992px, lg: 1200px)

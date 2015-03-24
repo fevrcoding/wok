@@ -2,13 +2,11 @@
 
 $jacket: legacy, ie8 '.lt-ie9', ie7 '.lt-ie8', ie6 '.lt-ie7'
 
-$legacy-ie-support: true
+//$legacy-ie-support: true DEPRECATED
 
 // Convert rem to px
 $rem-to-px-fallback: true
 
-
-// Will not print media queries
-$breakpoint-no-queries: true
-// Will print No Query Fallbacks
-$breakpoint-no-query-fallbacks: true
+//sass mq fallback
+$mq-responsive: false
+$mq-static-breakpoint: lg
