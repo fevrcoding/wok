@@ -80,7 +80,8 @@
   border: 0
   overflow: hidden
   // IE 6/7 fallback
-  *text-indent: -9999px
+  @include jacket(legacy)
+    *text-indent: -9999px
 
   &:before
     content: ""
