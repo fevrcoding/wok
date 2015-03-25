@@ -19,6 +19,12 @@
   @return $value / ($value * 0 + 1)
 
 
+@function font-size($size)
+  @if map-has-key($font-sizes, $size)
+    @return map-get($font-sizes, $size)
+  @else
+    @warn "Size #{$size} undefined"
+
 //@mixin ie-fallback($ie-version: 8)
 //  @if index($supported-browsers, 'ie') and map-get($browser-minimum-versions, 'ie') == '7' and ($ie-version <= 8)
 //    $ie-version: $ie-version + 1
@@ -122,7 +128,7 @@ $classed-headings-uid: 0
 @mixin classed-headings ($headings...)
 
   @if length($headings) == 0
-    $headings: $font-typography-headings
+    $headings: map-keys($font-sizes-headings)
 
   $classed-headings-uid: $classed-headings-uid + 1 !global
 

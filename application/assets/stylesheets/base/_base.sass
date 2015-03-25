@@ -133,26 +133,9 @@ textarea
 @include classed-headings
   @extend %headings
 
-
-h1, .h1
-  @include rem-font-size($font-size-h1, $font-lheight-h)
-
-h2, .h2
-  @include rem-font-size($font-size-h2, $font-lheight-h)
-
-h3, .h3
-  @include rem-font-size($font-size-h3, $font-lheight-h)
-
-
-h4, .h4
-  @include rem-font-size($font-size-h4, $font-lheight-h)
-
-h5, .h5
-  @include rem-font-size($font-size-h5, $font-lheight-h)
-
-h6, .h6
-  @include rem-font-size($font-size-h6, $font-lheight-h)
-
+@each $font-head-num, $font-head-size in $font-sizes-headings
+  h#{$font-head-num}, .h#{$font-head-num}
+    @include rem-font-size($font-head-size, $font-lheight-h)
 
 a
   color: $color-link

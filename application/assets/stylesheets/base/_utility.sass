@@ -100,17 +100,9 @@
    ##Typographic Helpers
    ========================================================================== */
 
-.u-type--xs
-  font-size: rem($font-size-xs)
-
-.u-type--s
-  font-size: rem($font-size-s)
-
-.u-type--l
-  font-size: rem($font-size-l)
-
-.u-type--xl
-  font-size: rem($font-size-xl)
+@each $font-size-key, $font-size-value in $font-sizes
+  .u-type--#{$font-size-key}
+    font-size: rem($font-size-value)
 
 .u-type--default
   font-size: rem($font-size-default)
