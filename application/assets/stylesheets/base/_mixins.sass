@@ -168,11 +168,12 @@ $classed-headings-uid: 0
 
 @mixin transparent-bg($color, $alpha)
   $rgba: rgba($color, $alpha)
-  $ie-hex-str: ie-hex-str($rgba)
-  background-color: transparent
-  background-color: $rgba
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#{$ie-hex-str},endColorstr=#{$ie-hex-str})
-  zoom: 1
+  @include jacket(modern)
+    background-color: $rgba
+  @include jacket(legacy)
+    $ie-hex-str: ie-hex-str($rgba)
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#{$ie-hex-str},endColorstr=#{$ie-hex-str})
+    zoom: 1
 
 
 // Typography
