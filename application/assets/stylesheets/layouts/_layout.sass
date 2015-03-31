@@ -29,17 +29,17 @@
       max-width: $container-lg
     @else
       //no need for breakpoint fallbacks, since it's explicitly set below!
-      @include breakpoint($screen-sm)
+      @include mq(sm)
         width: $container-sm
 
-      @include breakpoint($screen-md)
+      @include mq(md)
         width: $container-md
 
-      @include breakpoint($screen-lg)
+      @include mq(lg)
         width: 100%
         max-width: $container-lg
 
-    @include ie-fallback(8)
+    @include jacket(ie8)
       width: $container-lg
 
 
@@ -109,7 +109,7 @@
   // Columns, offsets, pushes, and pulls for the small device range, from phones
   // to tablets.
 
-  @include breakpoint($screen-sm-min)
+  @include mq(sm)
     @include make-grid-columns-float(sm)
     @include make-grid($grid-columns, sm, width)
     @include make-grid($grid-columns, sm, pull)
@@ -122,7 +122,7 @@
   //
   // Columns, offsets, pushes, and pulls for the desktop device range.
 
-  @include breakpoint($screen-md-min)
+  @include mq(md)
     @include make-grid-columns-float(md)
     @include make-grid($grid-columns, md, width)
     @include make-grid($grid-columns, md, pull)
@@ -135,7 +135,7 @@
   //
   // Columns, offsets, pushes, and pulls for the large desktop device range.
 
-  @include breakpoint($screen-lg-min)
+  @include mq(lg)
     @include make-grid-columns-float(lg)
     @include make-grid($grid-columns, lg, width)
     @include make-grid($grid-columns, lg, pull)
@@ -148,39 +148,39 @@
 /* MQ Relative Visibility
    ========================================================================== */
 @if $grid-enabled
-  @include breakpoint ($screen-xs-min)
+  @include mq(xs)
     .l-hidden--from-xs
       display: none !important
 
-  @include breakpoint ($screen-sm-min)
+  @include mq(sm)
     .l-hidden--from-sm
       display: none !important
 
-  @include breakpoint ($screen-md-min)
+  @include mq(md)
     .l-hidden--from-md
       display: none !important
 
-  @include breakpoint ($screen-lg-min)
+  @include mq(lg)
     .l-hidden--from-lg
       display: none !important
 
-  @include breakpoint (max-width ($screen-xs - 1 ))
+  @include mq($until: xs)
     .l-hidden--until-xs
       display: none !important
 
-  @include breakpoint (max-width $screen-xs-max)
+  @include mq($until: sm)
     .l-hidden--until-sm
       display: none !important
 
-  @include breakpoint (max-width $screen-sm-max)
+  @include mq($until: md)
     .l-hidden--until-md
       display: none !important
 
-  @include breakpoint (max-width $screen-md-max)
+  @include mq ($until: lg)
     .l-hidden--until-lg
       display: none !important
 
 
 
 /* Shared Layout Styles
-   ========================================================================== */
+   -========================================================================== */

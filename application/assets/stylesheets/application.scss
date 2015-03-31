@@ -1,14 +1,13 @@
 //variables
-@import "base/globals"
-@import "base/colors"
-@import "base/fonts"
-
+@import "base/globals";
+@import "base/colors";
+@import "base/fonts";
 
 //plugins
-@import "sass-mq/mq"
-@import "jacket/stylesheets/jacket"
-//@import "rgbapng" DEPRECATED
+@import "sass-mq/mq";
+@import "jacket/stylesheets/jacket";
 
+//@import "rgbapng" DEPRECATED
 
 //compass modules DEPRECATED
 //@import "compass/utilities/general/clearfix"
@@ -21,27 +20,27 @@
 //@import "compass/css3/animation"
 
 //base styles and mixins
-@import "normalize-scss/normalize"
-@import "base/mixins"
-//uncomment to use custom grid
-@import "base/mixins-grid"
-@import "base/base"
-@import "base/utility"
-@import "base/content-typography"
-@import "layouts/layout"
-@import "layouts/header"
-@import "layouts/footer"
+@import "normalize-scss/normalize";
+@import "base/mixins";
 
+//uncomment to use custom grid
+@import "base/mixins-grid";
+@import "base/base";
+@import "base/utility";
+@import "base/content-typography";
+@import "layouts/layout";
+@import "layouts/header";
+@import "layouts/footer";
 
 //modules here
 //@import "modules/*.*" NOTE: import modules manually
 
-
 //states and themes
-@import "layouts/states"
+@import "layouts/states";
+
 //@import "layouts/themes"
 //@import "layouts/swatches"
 
 //utility styles
-@import "base/print"
-@import "base/dev"
+@import "base/print";
+@import "base/dev";

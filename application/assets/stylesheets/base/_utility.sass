@@ -55,7 +55,7 @@
   float: right
 
 %u-inline
-  @include inline-block
+  display: inline-block
 
 /* inline children */
 .u-inline > *
@@ -80,7 +80,8 @@
   border: 0
   overflow: hidden
   // IE 6/7 fallback
-  *text-indent: -9999px
+  @include jacket(legacy)
+    *text-indent: -9999px
 
   &:before
     content: ""
@@ -100,17 +101,9 @@
    ##Typographic Helpers
    ========================================================================== */
 
-.u-type--xs
-  font-size: rem($font-size-xs)
-
-.u-type--s
-  font-size: rem($font-size-s)
-
-.u-type--l
-  font-size: rem($font-size-l)
-
-.u-type--xl
-  font-size: rem($font-size-xl)
+@each $font-size-key, $font-size-value in $font-sizes
+  .u-type--#{$font-size-key}
+    font-size: rem($font-size-value)
 
 .u-type--default
   font-size: rem($font-size-default)
