@@ -13,5 +13,5 @@ viewmatch: '*.html' #for php projects use: '*.{html,php,phtml}'
 #Toolchain options
 engines:
   views: ejs
-  stylesheets: compass
+  stylesheets: [sass, postcss]
 
