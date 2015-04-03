@@ -3,9 +3,10 @@
  * ===============================
  */
 
-//NOTE: `functions` option won't work until node-sass 3.0.x is released
-
 /*jshint node:true, camelcase:false */
+
+var types = require('grunt-sass/node_modules/node-sass').types;
+
 module.exports = {
 
     options: {
@@ -20,7 +21,7 @@ module.exports = {
             sourceMap: true,
             functions: {
                 'build-env()': function () {
-                    return 'development';
+                    return new types.String('development');
                 }
             }
         },
@@ -38,7 +39,7 @@ module.exports = {
             sourceMap: false,
             functions: {
                 'build-env()': function () {
-                    return 'production';
+                    return new types.String('production');
                 }
             }
         },

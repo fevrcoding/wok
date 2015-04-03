@@ -49,7 +49,7 @@
     "grunt-newer": "^1.1.0",
     "grunt-postcss": "^0.3.0",
     "grunt-rsync": "~0.6.2",
-    "grunt-sass": "^0.18.1",
+    "grunt-sass": "git://github.com/sindresorhus/grunt-sass",
     "grunt-ssh": "^0.12.1",
     "grunt-usemin": "~3.0.0",
     "grunt-weinre": "0.0.3",
