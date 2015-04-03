@@ -1,0 +1,142 @@
+/* ==========================================================================
+ *
+ * Non-Semantic Helper Classes
+ * ====
+ *
+ * ========================================================================== */
+
+/* ==========================================================================
+ * ##Text helpers
+ * ========================================================================== */
+
+.u-text--left {
+  text-align: left;
+}
+
+.u-text--right {
+  text-align: right;
+}
+
+.u-text--center {
+  text-align: center;
+}
+
+//@see bootstrap
+.u-text--hide {
+  font: 0 / 0 a;
+  font-size: 0.1px;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+/* ==========================================================================
+ * ##Box model helpers
+ * ========================================================================== */
+%clearfix {
+  @include clearfix;
+}
+
+.u-clearfix,
+.clearfix {
+  @extend %clearfix;
+}
+
+.u-clear {
+  clear: both;
+}
+
+.u-centered {
+  margin: {
+    right: auto;
+    left: auto;
+  };
+}
+
+.u-float,
+.u-float--left {
+  float: left;
+}
+
+.u-float--right {
+  float: right;
+}
+
+%u-inline {
+  display: inline-block;
+}
+
+/* inline children */
+.u-inline > * {
+  @extend %u-inline;
+}
+
+/* vertically stacked */
+.u-stacked > * {
+  display: block;
+}
+
+/* inline */
+.u-inline--baseline > * {
+  @extend %u-inline;
+  vertical-align: baseline;
+}
+
+/* ==========================================================================
+ * ##Image Replacement
+ * ========================================================================== */
+
+.u-ir {
+  background-color: transparent;
+  border: 0;
+  overflow: hidden;
+  // IE 6/7 fallback
+  @include jacket(legacy) {
+    *text-indent: -9999px;
+  }
+
+  &:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 150%;
+  }
+  br {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+ * ##Typographic Helpers
+ * ========================================================================== */
+
+@each $font-size-key, $font-size-value in $font-sizes {
+  .u-type--#{$font-size-key} {
+    font-size: rem($font-size-value);
+  }
+}
+
+.u-type--default {
+  font-size: rem($font-size-default);
+}
+
+.u-type--smaller {
+  font-size: 85%;
+}
+
+.u-type--bigger {
+  font-size: 115%;
+}
+
+.u-weight--strong {
+  font-weight: bold !important;
+}
+
+.u-weight--medium {
+  font-weight: normal !important;
+}
+
+.u-weight--light {
+  font-weight: 300 !important;
+}

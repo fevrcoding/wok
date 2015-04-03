@@ -1,0 +1,23 @@
+//colors by name
+$color-light-blue: #0076d6;
+$color-light-gray: #cccccc;
+$color-gray: #3d3d3d;
+$color-gray-mid: #626262;
+$color-red: #aa321e;
+$color-dark: #000;
+$color-light: #fff;
+$color-light-yellow: #ffffd6;
+$color-light-green: #def98b;
+
+//colors by function
+$color-text: $color-dark;
+$color-bg: $color-light;
+$color-link: $color-light-blue;
+$color-link-hover: lighten($color-light-blue, 20%);
+$color-border: $color-light-gray;
+$color-text-selection: $color-light-blue;
+$color-highlight: $color-light-yellow;
+
+$color-notice: $color-light-yellow;
+$color-error: $color-red;
+$color-success: $color-light-green;

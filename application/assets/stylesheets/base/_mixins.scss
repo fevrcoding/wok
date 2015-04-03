@@ -1,0 +1,264 @@
+// ==========================================================================
+// Mixins and functions
+//
+// Note: always put function at the beginning of the sub-section
+// ==========================================================================
+
+// Generic
+// ==========================================================================
+
+@function perc($width, $container-width: $container-width) {
+  @return percentage($width / $container-width);
+}
+
+@function perc-image-width($image-src, $container-width: $container-width) {
+  @return percentage(image-width($image-src) / $container-width);
+}
+
+@function strip-units($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+@function font-size($size) {
+  @if map-has-key($font-sizes, $size) {
+    @return map-get($font-sizes, $size);
+  }
+  @else {
+    @warn "Size #{$size} undefined";
+  }
+}
+
+//@mixin ie-fallback($ie-version: 8)
+//  @if index($supported-browsers, 'ie') and map-get($browser-minimum-versions, 'ie') == '7' and ($ie-version <= 8)
+//    $ie-version: $ie-version + 1
+//    .lt-ie#{$ie-version} &
+//      @content
+
+// Elements
+// ==========================================================================
+
+//proxy method to postcss-asset function
+@function image-url($image-path) {
+  @return resolve($image-path);
+}
+
+//proxy method to postcss-asset function
+@function image-width($image-path) {
+  @return width($image-path);
+}
+
+//proxy method to postcss-asset function
+@function image-height($image-path) {
+  @return height($image-path);
+}
+
+//proxy method to postcss-asset function
+@function inline-image($image-path) {
+  @return inline($image-path);
+}
+
+@mixin clearfix {
+  *zoom: 1;
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin ir($image-url, $context: false) {
+  background-image: image-url($image-url);
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: 0 0;
+  height: image-height($image-url);
+  width: image-width($image-url);
+}
+
+@mixin pseudo-img($image-url, $width: false, $height: false) {
+  content: " ";
+  display: block;
+  background: image-url($image-url) no-repeat 0 0;
+  @if $height {
+    height: $height;
+  }
+  @else {
+    height: image-height($image-url);
+  }
+  @if $width {
+    width: $width;
+  }
+  @else {
+    width: image-width($image-url);
+  }
+}
+
+@mixin fit-background-image($image-url, $inline: false, $ratio: 1, $line-height: false) {
+  @if $line-height {
+    line-height: ceil(image-height($image-url) * $ratio);
+  }
+  @else {
+    height: ceil(image-height($image-url) * $ratio);
+    width: ceil(image-width($image-url) * $ratio);
+  }
+  @if $inline {
+    background-image: inline-image($image-url);
+    background-position: 0 0;
+    background-repeat: no-repeat;
+  }
+  @else {
+    background: image-url($image-url) no-repeat 0 0;
+  }
+  @if $ratio != 1 {
+    background-size: ceil(image-width($image-url) * $ratio) auto;
+  }
+}
+
+@mixin img-responsive($display: block) {
+  display: $display;
+  max-width: 100%;
+  height: auto;
+}
+
+//see https://github.com/tinganho/compass-placeholder
+@mixin placeholder {
+  &::-webkit-input-placeholder {
+    @content;
+  }
+  &:-moz-placeholder {
+    @content;
+  }
+  &::-moz-placeholder {
+    @content;
+  }
+  &:-ms-input-placeholder {
+    @content;
+  }
+}
+
+$classed-headings-uid: 0;
+
+@mixin classed-headings($headings...) {
+  @if length($headings) == 0 {
+    $headings: map-keys($font-sizes-headings);
+  }
+  $classed-headings-uid: $classed-headings-uid + 1 !global;
+  %tmp-heading-#{$classed-headings-uid} {
+    @content;
+  }
+  @each $i in $headings {
+    $current-heading: nth($headings, $i);
+    h#{$current-heading}, .h#{$current-heading} {
+      @extend %tmp-heading-#{$classed-headings-uid};
+    }
+  }
+}
+
+@mixin triangle($color: #000, $size: "5px", $direction: "up") {
+  width: 0;
+  height: 0;
+  @if $direction == "up" {
+    border-right: $size solid transparent;
+    border-left: $size solid transparent;
+    border-bottom: $size solid $color;
+  }
+  @if $direction == "down" {
+    border-right: $size solid transparent;
+    border-left: $size solid transparent;
+    border-top: $size solid $color;
+  }
+  @if $direction == "right" {
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: $size solid $color;
+  }
+  @if $direction == "left" {
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-right: $size solid $color;
+  }
+}
+
+@mixin transparent-bg($color, $alpha) {
+  $rgba: rgba($color, $alpha);
+  @include jacket(legacy);
+  background-color: jacket(legacy) transparent;
+  background-color: $rgba;
+  @include jacket(legacy) {
+    $ie-hex-str: ie-hex-str($rgba);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#{$ie-hex-str},endColorstr=#{$ie-hex-str});
+    zoom: 1;
+  }
+}
+
+// Typography
+//
+// Adapted from https://github.com/csswizardry/typecsset
+// ==========================================================================
+
+//see http://davidwalsh.name/rem-px-browser-function-sass
+@function em($target, $context: $font-size-default) {
+  @if $target == 0 {
+    @return 0;
+  }
+  @else {
+    @return $target / $context + 0em;
+  }
+}
+
+//see http://davidwalsh.name/rem-px-browser-function-sass
+@function rem($values) {
+  $rem-list: ();
+  @each $value in $values {
+    $rem-unit: unit($value);
+    $rem-val: strip-units($value);
+    @if $rem-to-px-fallback and $rem-unit == "rem" {
+      //convert rem to px
+      $rem-list: append($rem-list, $rem-val * strip-units($font-size-default) + px);
+    }
+    @else if $rem-to-px-fallback == false and $rem-unit == "px" {
+      //convert everything to rem units.
+      //use $value since we need units
+      $rem-list: append($rem-list, $value / $font-size-default * 1rem);
+    }
+    @else if $rem-unit == "px" or $rem-unit == "rem" {
+      //either case, just add it if it's px or rem
+      $rem-list: append($rem-list, $value);
+    }
+    @else if $rem-unit != "" {
+      @warn "There is no unit conversion for #{$rem-val} #{$rem-unit}";
+    }
+  }
+  @return $rem-list();
+}
+
+@mixin reset-typography($font-weight: normal, $line-height: inherit) {
+  font-weight: $font-weight;
+  font-size: $font-size-default;
+  line-height: $line-height;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+// Quickly generate a font-size in rems, with a pixel fallback, based on the
+// value we pass into the mixin, e.g.:
+//
+// h1
+//     @include typecsset-font-size(24px)
+//
+//
+@mixin rem-font-size($font-size, $line-height: $font-lheight-default) {
+  font-size: rem($font-size);
+  @if $line-height != false {
+    $lh-unit: unit($line-height);
+    @if $lh-unit == "" {
+      line-height: $line-height;
+    }
+    @else {
+      line-height: ceil($font-size / $line-height) * $line-height / $font-size;
+    }
+  }
+}
