@@ -90,6 +90,12 @@ module.exports = function(grunt) {
     });
 
 
+
+    if (confProperties.notify) {
+        grunt.task.run('notify_hooks');
+    }
+
+
     ['views', 'stylesheets'].forEach(function (buildSection) {
         var engine = confProperties.engines[buildSection];
         grunt.registerTask('_' + buildSection, function (target) {
@@ -149,6 +155,8 @@ module.exports = function(grunt) {
 
         grunt.config.set('connect.dev.options', connectOpts);
 
+
+        console.log(grunt.config.get('connect.dev.options'));
         if (target === 'server') {
             tasks.push('connect:dev');
         }

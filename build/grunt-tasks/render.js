@@ -39,7 +39,7 @@ module.exports = function (grunt) {
         };
 
     //setup ejs alias
-    grunt.registerTask('ejs', function(target) { grunt.task.run(['render:' + target || 'dev']); });
+    grunt.registerTask('ejs', function(target) { grunt.task.run(['render:' + (target || 'dev')]); });
 
     return {
         options: {

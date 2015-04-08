@@ -6,6 +6,8 @@ sync: false #set to `true` to enable browsersync
 
 remoteDebug: false #enable remote debug via weinre
 
+notify: true #enable system notifications
+
 buildOnly: false #set to `true` when paired with Phing
 
 viewmatch: '*.html' #for php projects use: '*.{html,php,phtml}'
