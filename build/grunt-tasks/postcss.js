@@ -27,7 +27,7 @@ module.exports = function (grunt, options) {
     return {
         dev: {
             options: {
-                map: true,
+                map: false,
                 processors: [
                     autoprefixer(autoPrefixerConf).postcss,
                     assets(_.assign({cachebuster: true}, assetsConf))

@@ -9,34 +9,29 @@
 //see http://getbootstrap.com/getting-started/#ie-10-width
 //see http://timkadlec.com/2013/01/windows-phone-8-and-device-width/
 @-webkit-viewport {
-  width: device-width;
+    width: device-width;
 }
-
 
 @-moz-viewport {
-  width: device-width;
+    width: device-width;
 }
-
 
 @-ms-viewport {
-  width: device-width;
+    width: device-width;
 }
-
 
 @-o-viewport {
-  width: device-width;
+    width: device-width;
 }
-
 
 @viewport {
-  width: device-width;
+    width: device-width;
 }
-
 
 *,
 *:before,
 *:after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html,
@@ -44,20 +39,20 @@ button,
 input,
 select,
 textarea {
-  color: $color-text;
+    color: $color-text;
 }
 
 html,
 body {
-  font-size: $font-size-default;
-  line-height: $font-lheight-default / $font-size-default;
+    font-size: $font-size-default;
+    line-height: $font-lheight-default / $font-size-default;
 }
 
 body {
-  background: $color-bg;
-  color: $color-text;
-  font-family: $font-family-base;
-  min-width: 320px;
+    background: $color-bg;
+    color: $color-text;
+    font-family: $font-family-base;
+    min-width: 320px;
 }
 
 /* Remove text-shadow in selection highlight: h5bp.com/i
@@ -66,25 +61,25 @@ body {
  */
 
 ::-moz-selection {
-  color: $color-text-selection;
-  text-shadow: none;
+    color: $color-text-selection;
+    text-shadow: none;
 }
 
 ::selection {
-  color: $color-text-selection;
-  text-shadow: none;
+    color: $color-text-selection;
+    text-shadow: none;
 }
 
 /* A better looking default horizontal rule
  */
 
 hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid $color-border;
-  margin: rem(1rem) 0;
-  padding: 0;
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid $color-border;
+    margin: rem(1rem) 0;
+    padding: 0;
 }
 
 /* Remove the gap between images and the bottom of their containers: h5bp.com/i/440
@@ -96,23 +91,23 @@ iframe,
 svg,
 video,
 img {
-  vertical-align: middle;
+    vertical-align: middle;
 }
 
 /* Remove default fieldset styles.
  */
 
 fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
 
 /* Allow only vertical resizing of textareas.
  */
 
 textarea {
-  resize: vertical;
+    resize: vertical;
 }
 
 /* ==========================================================================
@@ -120,21 +115,13 @@ textarea {
  * ========================================================================== */
 
 %inline-block {
-  display: inline-block;
-}
-
-%headings {
-  @include rem-font-size($font-size-h, $font-lheight-h);
-  margin: 0 0 0.2em;
-  //color: $color-text
-  font-family: $font-family-h;
-  font-weight: bold;
+    display: inline-block;
 }
 
 %img-responsive {
-  display: block;
-  height: auto;
-  max-width: 100%;
+    display: block;
+    height: auto;
+    max-width: 100%;
 }
 
 /* ==========================================================================
@@ -142,22 +129,25 @@ textarea {
  * ========================================================================== */
 
 @include classed-headings {
-  @extend %headings;
+    @include rem-font-size($font-size-h, $font-lheight-h);
+    margin: 0 0 0.2em;
+    //color: $color-text
+    font-family: $font-family-h;
+    font-weight: bold;
 }
 
-
 @each $font-head-num, $font-head-size in $font-sizes-headings {
-  h#{$font-head-num}, .h#{$font-head-num} {
-    @include rem-font-size($font-head-size, $font-lheight-h);
-  }
+    h#{$font-head-num}, .h#{$font-head-num} {
+        @include rem-font-size($font-head-size, $font-lheight-h);
+    }
 }
 
 a {
-  color: $color-link;
-  text-decoration: underline;
-  &:hover {
-    //set to important so that hover is hardly overwritten by other styles
-    color: $color-link-hover !important;
-    text-decoration: none;
-  }
+    color: $color-link;
+    text-decoration: underline;
+    &:hover {
+        //set to important so that hover is hardly overwritten by other styles
+        color: $color-link-hover !important;
+        text-decoration: none;
+    }
 }

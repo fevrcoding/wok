@@ -23,7 +23,7 @@ linters:
     class_convention: hyphenated_BEM
 
   PropertySortOrder:
-    enabled: false
+    order: smacss
 
   LeadingZero:
     style: include_zero

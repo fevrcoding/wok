@@ -10,42 +10,40 @@
  * ========================================================================== */
 
 .l-wrapper {
-  @extend %clearfix;
-  position: relative;
+    @extend %clearfix;
+    position: relative;
 }
 
 .l-container {
-  @extend %clearfix;
-  margin: {
-    right: auto;
-    left: auto;
-  };
-  @if $grid-enabled {
-    padding-left: $grid-gutter-width / 2;
-    padding-right: $grid-gutter-width / 2;
-    @if $grid-fluid-breakpoints {
-      //fluid layout till max width
-      max-width: $container-lg;
-    }
-    @else {
-      //no need for breakpoint fallbacks, since it's explicitly set below!
-      @include mq(sm) {
-        width: $container-sm;
-      }
+    @extend %clearfix;
+    margin-right: auto;
+    margin-left: auto;
 
-      @include mq(md) {
-        width: $container-md;
-      }
+    @if $grid-enabled {
+        padding-left: $grid-gutter-width / 2;
+        padding-right: $grid-gutter-width / 2;
+        @if $grid-fluid-breakpoints {
+            //fluid layout till max width
+            max-width: $container-lg;
+        } @else {
+            //no need for breakpoint fallbacks, since it's explicitly set below!
+            @include mq(sm) {
+                width: $container-sm;
+            }
 
-      @include mq(lg) {
-        width: 100%;
-        max-width: $container-lg;
-      }
+            @include mq(md) {
+                width: $container-md;
+            }
+
+            @include mq(lg) {
+                width: 100%;
+                max-width: $container-lg;
+            }
+        }
+        @include jacket(ie8) {
+            width: $container-lg;
+        }
     }
-    @include jacket(ie8) {
-      width: $container-lg;
-    }
-  }
 }
 
 /* ==========================================================================
@@ -54,31 +52,31 @@
 
 /* inline children */
 .l-inline > * {
-  @extend %u-inline;
+    @extend %u-inline;
 }
 
 /* inline */
 .l-inline--baseline > * {
-  @extend %u-inline;
-  vertical-align: baseline;
+    @extend %u-inline;
+    vertical-align: baseline;
 }
 
 .l-centered {
-  @extend .u-centered;
+    @extend .u-centered;
 }
 
 .l-float,
 .l-float--left {
-  @extend .u-float;
+    @extend .u-float;
 }
 
 .l-float--right {
-  @extend .u-float--right;
+    @extend .u-float--right;
 }
 
 /* vertically stacked */
 .l-stacked > * {
-  display: block;
+    display: block;
 }
 
 /* Responsive Grid System
@@ -87,110 +85,110 @@
  * ========================================================================== */
 
 @if $grid-enabled {
-  @-ms-viewport {
-    width: device-width;
-  }
+    @-ms-viewport {
+        width: device-width;
+    }
 
-  .l-row {
-    @extend %clearfix;
-    margin-left: $grid-gutter-width / -2;
-    margin-right: $grid-gutter-width / -2;
-  }
-  @include make-grid-columns;
-  // Extra small grid
-  //
-  // Columns, offsets, pushes, and pulls for extra small devices like
-  // smartphones.
-  @include make-grid-columns-float(xs);
-  @include make-grid($grid-columns, xs, width);
-  @include make-grid($grid-columns, xs, pull);
-  @include make-grid($grid-columns, xs, push);
-  @include make-grid($grid-columns, xs, offset);
-  // Small grid
-  //
-  // Columns, offsets, pushes, and pulls for the small device range, from phones
-  // to tablets.
-  @include mq(sm) {
-    @include make-grid-columns-float(sm);
-    @include make-grid($grid-columns, sm, width);
-    @include make-grid($grid-columns, sm, pull);
-    @include make-grid($grid-columns, sm, push);
-    @include make-grid($grid-columns, sm, offset);
-  }
+    .l-row {
+        @extend %clearfix;
+        margin-left: $grid-gutter-width / -2;
+        margin-right: $grid-gutter-width / -2;
+    }
+    @include make-grid-columns;
+    // Extra small grid
+    //
+    // Columns, offsets, pushes, and pulls for extra small devices like
+    // smartphones.
+    @include make-grid-columns-float(xs);
+    @include make-grid($grid-columns, xs, width);
+    @include make-grid($grid-columns, xs, pull);
+    @include make-grid($grid-columns, xs, push);
+    @include make-grid($grid-columns, xs, offset);
+    // Small grid
+    //
+    // Columns, offsets, pushes, and pulls for the small device range, from phones
+    // to tablets.
+    @include mq(sm) {
+        @include make-grid-columns-float(sm);
+        @include make-grid($grid-columns, sm, width);
+        @include make-grid($grid-columns, sm, pull);
+        @include make-grid($grid-columns, sm, push);
+        @include make-grid($grid-columns, sm, offset);
+    }
 
-  // Medium grid
-  //
-  // Columns, offsets, pushes, and pulls for the desktop device range.
-  @include mq(md) {
-    @include make-grid-columns-float(md);
-    @include make-grid($grid-columns, md, width);
-    @include make-grid($grid-columns, md, pull);
-    @include make-grid($grid-columns, md, push);
-    @include make-grid($grid-columns, md, offset);
-  }
+    // Medium grid
+    //
+    // Columns, offsets, pushes, and pulls for the desktop device range.
+    @include mq(md) {
+        @include make-grid-columns-float(md);
+        @include make-grid($grid-columns, md, width);
+        @include make-grid($grid-columns, md, pull);
+        @include make-grid($grid-columns, md, push);
+        @include make-grid($grid-columns, md, offset);
+    }
 
-  // Large grid
-  //
-  // Columns, offsets, pushes, and pulls for the large desktop device range.
-  @include mq(lg) {
-    @include make-grid-columns-float(lg);
-    @include make-grid($grid-columns, lg, width);
-    @include make-grid($grid-columns, lg, pull);
-    @include make-grid($grid-columns, lg, push);
-    @include make-grid($grid-columns, lg, offset);
-  }
+    // Large grid
+    //
+    // Columns, offsets, pushes, and pulls for the large desktop device range.
+    @include mq(lg) {
+        @include make-grid-columns-float(lg);
+        @include make-grid($grid-columns, lg, width);
+        @include make-grid($grid-columns, lg, pull);
+        @include make-grid($grid-columns, lg, push);
+        @include make-grid($grid-columns, lg, offset);
+    }
 }
 
 /* MQ Relative Visibility
  * ========================================================================== */
 @if $grid-enabled {
-  @include mq(xs) {
-    .l-hidden--from-xs {
-      display: none !important;
+    @include mq(xs) {
+        .l-hidden--from-xs {
+            display: none !important;
+        }
     }
-  }
 
-  @include mq(sm) {
-    .l-hidden--from-sm {
-      display: none !important;
+    @include mq(sm) {
+        .l-hidden--from-sm {
+            display: none !important;
+        }
     }
-  }
 
-  @include mq(md) {
-    .l-hidden--from-md {
-      display: none !important;
+    @include mq(md) {
+        .l-hidden--from-md {
+            display: none !important;
+        }
     }
-  }
 
-  @include mq(lg) {
-    .l-hidden--from-lg {
-      display: none !important;
+    @include mq(lg) {
+        .l-hidden--from-lg {
+            display: none !important;
+        }
     }
-  }
 
-  @include mq($until: xs) {
-    .l-hidden--until-xs {
-      display: none !important;
+    @include mq($until: xs) {
+        .l-hidden--until-xs {
+            display: none !important;
+        }
     }
-  }
 
-  @include mq($until: sm) {
-    .l-hidden--until-sm {
-      display: none !important;
+    @include mq($until: sm) {
+        .l-hidden--until-sm {
+            display: none !important;
+        }
     }
-  }
 
-  @include mq($until: md) {
-    .l-hidden--until-md {
-      display: none !important;
+    @include mq($until: md) {
+        .l-hidden--until-md {
+            display: none !important;
+        }
     }
-  }
 
-  @include mq($until: lg) {
-    .l-hidden--until-lg {
-      display: none !important;
+    @include mq($until: lg) {
+        .l-hidden--until-lg {
+            display: none !important;
+        }
     }
-  }
 }
 
 /* Shared Layout Styles

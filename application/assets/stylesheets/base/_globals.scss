@@ -3,10 +3,6 @@ $rem-to-px-fallback: false !default;
 
 $jacket: modern !default;
 
-//@if variable-exists(legacy-ie-support) and $legacy-ie-support == true
-//  $supported-browsers: ("ie") !global
-//  $browser-minimum-versions: ("ie": "7") !global
-
 //use custom grid
 $grid-enabled: true;
 
