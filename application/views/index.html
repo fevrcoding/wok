@@ -38,7 +38,9 @@
 
         <h1>Hello World!</h1>
 
-        <% include partials/_readme.html %>
+        <%- include('partials/_readme.html') %>
+
+        <%- helpers.md(include('../documents/readme.md')) %>
 
         <!-- build:js /javascripts/application.min.js -->
         <script src="/javascripts/base/plugins.js"></script>
