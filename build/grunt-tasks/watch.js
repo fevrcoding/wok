@@ -5,6 +5,13 @@
 /*jshint node:true, camelcase:false */
 module.exports = function (grunt, options) {
 
+    var viewsTasks = [].concat(options.properties.engines.views);
+
+    var stylesheetsTasks = ['_stylesheets:dev'];
+
+    if (options.properties.styleguideDriven) {
+        stylesheetsTasks.push('sassdown');
+    }
 
 	return {
 		images: {
@@ -20,7 +27,7 @@ module.exports = function (grunt, options) {
 		},
         css: {
             files: ['<%= paths.sass %>/{,*/}*.{scss,sass}'],
-            tasks: ['_stylesheets:dev']
+            tasks: stylesheetsTasks
         },
 		fonts: {
 			files: ['<%= paths.assets %>/fonts/{,*/}*.{eot,svg,ttf,woff,woff2}'],
@@ -30,13 +37,13 @@ module.exports = function (grunt, options) {
             files: ['<%= paths.assets %>/media/{,*/}*.*'],
             tasks: ['newer:copy:media']
         },
-		app: {
+		views: {
 			files: [
 				'<%= paths.documents %>/*.md',
 				'<%= paths.views %>/{,*/}*.*',
 				'<%= paths.fixtures %>/*.json'
 			],
-			tasks: [grunt.config('properties.engines.views')]
+			tasks: viewsTasks
 		},
 		livereload: {
 			options: {
