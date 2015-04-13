@@ -14,6 +14,11 @@ module.exports = function (grunt, options) {
     }
 
 	return {
+        options: {
+            //ensure we won't loose gruntfile reference
+            //https://github.com/gruntjs/grunt-contrib-watch/issues/162#issuecomment-21288035
+            cliArgs: ['--gruntfile', require('path').join(__dirname, '..', 'Gruntfile.js')]
+        },
 		images: {
 			files: ['<%= paths.assets %>/images/{,*/}*.{png,jpg,jpeg,gif,svg,webp}'],
 			tasks: ['newer:copy:images', 'newer:imagemin:svg']

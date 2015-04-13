@@ -8,5 +8,5 @@ module.exports = {
 		limit: 3,
 		logConcurrentOutput: true
 	},
-	dev: ['watch'/*, 'compass:watch'*/]
+	dev: ['watch']
 };

@@ -155,14 +155,19 @@ module.exports = function(grunt) {
 
         grunt.config.set('connect.dev.options', connectOpts);
 
-
-        console.log(grunt.config.get('connect.dev.options'));
         if (target === 'server') {
             tasks.push('connect:dev');
         }
 
         //this always comes last
-        tasks.push('concurrent:dev');
+        //also if we are running just one task, we don't need concurrency
+        var concurrentTasks = grunt.config.get('concurrent.dev');
+        if (Array.isArray(concurrentTasks) && concurrentTasks.length === 1) {
+            tasks.push(concurrentTasks[0]);
+        } else {
+	        tasks.push('concurrent:dev');
+        }
+
         grunt.task.run(tasks);
 
     });
