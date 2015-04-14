@@ -2,7 +2,7 @@
  * Package Data Management Tasks
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 module.exports = {
     options: {
         updateProps: {

@@ -2,7 +2,7 @@
  * Weinre Mobile Debug Server Tasks
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 module.exports = {
     dev: {
         options: {

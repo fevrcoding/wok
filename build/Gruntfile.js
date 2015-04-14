@@ -53,51 +53,56 @@ module.exports = function(grunt) {
 
     gruntConfig = require('load-grunt-config')(grunt, {
         configPath: path.join(process.cwd(), 'build', 'grunt-tasks'),
-        init: false
+        data: {
+
+
+            pkg: grunt.file.readJSON('package.json'),
+
+
+            /**
+             * Project Metadata (unused)
+             * ===============================
+             */
+            meta: {},
+
+            properties: confProperties,
+
+
+            /**
+             * Project Paths Configuration
+             * ===============================
+             */
+            paths: confPaths,
+
+
+            /**
+             * Remote Hosts Configuration
+             * ===============================
+             */
+            hosts: confHosts
+
+        }
     });
 
 
 
-    // Project configuration.
-    grunt.initConfig(_.extend(gruntConfig, {
+    if (confProperties.notify) {
+        grunt.task.run('notify_hooks');
+    }
 
-
-        pkg: grunt.file.readJSON('package.json'),
-
-
-        /**
-         * Project Metadata
-         * ===============================
-         */
-        meta: {
-            // jscs:disable
-            banner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.company %> */\n",
-            vendorBanner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n"
-            // jscs:enable
-        },
-
-        properties: confProperties,
-
-
-        /**
-         * Project Paths Configuration
-         * ===============================
-         */
-        paths: confPaths,
-
-
-        /**
-         * Remote Hosts Configuration
-         * ===============================
-         */
-        hosts: confHosts
-
-    }));
 
     ['views', 'stylesheets'].forEach(function (buildSection) {
         var engine = confProperties.engines[buildSection];
         grunt.registerTask('_' + buildSection, function (target) {
-            grunt.task.run(engine + ':' + target || 'dev');
+            var tasks = [];
+            if (Array.isArray(engine)) {
+                tasks = engine.map(function (eng) {
+                    return eng + ':' + (target || 'dev');
+                });
+            } else {
+                tasks = engine + ':' + (target || 'dev');
+            }
+            grunt.task.run(tasks);
         });
     });
 
@@ -150,7 +155,14 @@ module.exports = function(grunt) {
         }
 
         //this always comes last
-        tasks.push('concurrent:dev');
+        //also if we are running just one task, we don't need concurrency
+        var concurrentTasks = grunt.config.get('concurrent.dev');
+        if (Array.isArray(concurrentTasks) && concurrentTasks.length === 1) {
+            tasks.push(concurrentTasks[0]);
+        } else {
+	        tasks.push('concurrent:dev');
+        }
+
         grunt.task.run(tasks);
 
     });

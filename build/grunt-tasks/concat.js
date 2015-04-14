@@ -1,19 +1,16 @@
 /**
  * JS Concatenation Task
- * (just banner other stuff is configured by usemin)
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 module.exports = {
     options: {
-        stripBanners: true,
-            banner: '<%= meta.banner %>'
+        stripBanners: true
     },
 
     vendors: {
         options: {
-            stripBanners: false,
-                banner: '<%= meta.vendorBanner %>'
+            stripBanners: false
         },
         files: []
     }

@@ -1,11 +1,8 @@
 /**
  * JS Compression Task
- * (just banner other stuff is configured by usemin)
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 module.exports = {
-    options: {
-        banner: '<%= meta.banner %>'
-    }
+    options: {}
 };

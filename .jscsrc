@@ -6,5 +6,7 @@
     "disallowSpacesInFunctionExpression": null,
 	"disallowMultipleLineBreaks": null,
 	"requireLineFeedAtFileEnd": null,
+    "requireMultipleVarDecl": "onevar",
+    "disallowMultipleVarDecl": null,
     "excludeFiles": ["node_modules/**", "www/vendor/**"]
 }

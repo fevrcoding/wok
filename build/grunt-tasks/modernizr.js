@@ -2,7 +2,7 @@
  * Modernizr Custom Build
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 module.exports = {
 
     dist: {

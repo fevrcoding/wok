@@ -2,10 +2,23 @@
  * Watch for Changes
  * ===============================
  */
-/*jshint node:true, camelcase:false */
-module.exports = function (grunt) {
+/*jshint node:true */
+module.exports = function (grunt, options) {
+
+    var viewsTasks = [].concat(options.properties.engines.views);
+
+    var stylesheetsTasks = ['_stylesheets:dev'];
+
+    if (options.properties.styleguideDriven) {
+        stylesheetsTasks.push('sassdown');
+    }
 
 	return {
+        options: {
+            //ensure we won't loose gruntfile reference
+            //https://github.com/gruntjs/grunt-contrib-watch/issues/162#issuecomment-21288035
+            cliArgs: ['--gruntfile', require('path').join(__dirname, '..', 'Gruntfile.js')]
+        },
 		images: {
 			files: ['<%= paths.assets %>/images/{,*/}*.{png,jpg,jpeg,gif,svg,webp}'],
 			tasks: ['newer:copy:images', 'newer:imagemin:svg']
@@ -17,6 +30,10 @@ module.exports = function (grunt) {
 			],
 			tasks: ['newer:copy:js']
 		},
+        css: {
+            files: ['<%= paths.sass %>/{,*/}*.{scss,sass}'],
+            tasks: stylesheetsTasks
+        },
 		fonts: {
 			files: ['<%= paths.assets %>/fonts/{,*/}*.{eot,svg,ttf,woff,woff2}'],
 			tasks: ['newer:copy:fonts']
@@ -25,13 +42,13 @@ module.exports = function (grunt) {
             files: ['<%= paths.assets %>/media/{,*/}*.*'],
             tasks: ['newer:copy:media']
         },
-		app: {
+		views: {
 			files: [
 				'<%= paths.documents %>/*.md',
 				'<%= paths.views %>/{,*/}*.*',
 				'<%= paths.fixtures %>/*.json'
 			],
-			tasks: [grunt.config('properties.engines.views')]
+			tasks: viewsTasks
 		},
 		livereload: {
 			options: {

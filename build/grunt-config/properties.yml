@@ -6,6 +6,10 @@ sync: false #set to `true` to enable browsersync
 
 remoteDebug: false #enable remote debug via weinre
 
+notify: true #enable system notifications
+
+styleguideDriven: false #will rebuild the styleguide whenever stylesheets change
+
 buildOnly: false #set to `true` when paired with Phing
 
 viewmatch: '*.html' #for php projects use: '*.{html,php,phtml}'
@@ -13,5 +17,5 @@ viewmatch: '*.html' #for php projects use: '*.{html,php,phtml}'
 #Toolchain options
 engines:
   views: ejs
-  stylesheets: compass
+  stylesheets: [sass, postcss]
 

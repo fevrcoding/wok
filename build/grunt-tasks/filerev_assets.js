@@ -2,7 +2,7 @@
  * Revved Asset Map Creation
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 module.exports = {
     assets: {
         options: {

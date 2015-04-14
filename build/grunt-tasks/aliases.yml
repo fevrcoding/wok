@@ -18,6 +18,7 @@ dist:
   - uglify
   - cssmin
   - modernizr
+  - usebanner
   - filerev
   - filerev_assets
   - usemin
