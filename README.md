@@ -7,9 +7,10 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 ##Features
 
 * [HTML5 Boilerplate](http://html5boilerplate.com/)
-* [Compass](http://compass-style.org/) 1.0+ and [Sass](http://sass-lang.com/) 3.3+
+* Static HTML templating with [EJS](https://github.com/mde/ejs)
+* [Sass](http://sass-lang.com/) 3.2+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
 * [BEM](http://blog.kaelig.fr/post/48196348743/fifty-shades-of-bem)-like naming convention
-* Legacy browsers fallback stylesheet *(rem units conversion, large screen fallback via [Breakpoint](http://breakpoint-sass.com/#no_query_fallback))
+* Legacy browsers fallback stylesheet *(rem units conversion, large screen fallback via [sass-mq](https://github.com/sass-mq/sass-mq#responsive-mode-off))
 * [Grunt.js](http://gruntjs.com/) build and deploy workflow
 * [Bower](http://bower.io/)
 * Asset Live-reload and/or [BrowserSync](http://www.browsersync.io/)
@@ -20,8 +21,6 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 ##Requirements
 
 * Node.js >= 0.10.30 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
-* Ruby >= 1.9.3 ([installers](http://www.ruby-lang.org/en/downloads/))
-* bundler (`gem install bundler`)
 * bower (`sudo npm install -g bower`)
 * grunt-cli (`sudo npm install -g grunt-cli`)
 
@@ -33,22 +32,17 @@ Clone this repo:
 
 From project root:
 
-* `bundle install` (compass deps)
-* `bower install` (vendors, Modernizr is already there [until v3.x](https://github.com/Modernizr/Modernizr/issues/1267))
+* `bower install` (vendors)
 * `npm install` (grunt deps)
 
 ##Configuration
 
-On a plain HTML project, the default configuration should work fine. On other setups you might need to tweek some paths/options:
+On a plain HTML project, the default configuration should work just fine. On other setups you might need to tweak some paths/options:
 
 
 1. customize paths and options in `hosts.yml`, `paths.yml` and `properties.yml` files within the `build/grunt-config` folder
 
-1. if needed customize compass configuration file in `build/compass.rb` 
-
-1. if needed, add/remove tasks by editing `build/Gruntfile.js`
-
-*Note: compass and grunt configs are kept separate to allow standalone usage.*
+1. if needed, edit/add/remove tasks by editing tasks' configuration in `build/grunt-tasks/`. Configuration format are listed on the [load-grunt-config docs](https://github.com/firstandthird/load-grunt-config#grunt-tasks-files)
 
 ##Project Structure
 
@@ -85,11 +79,10 @@ You may use [bower](http://bower.io/) to manage vendors. Installed packages will
 From project root:
 
 1. `cd build`
-2. `grunt` (builds in development mode, watches for change and live-reloads assets)
+2. `grunt serve` (builds in development mode,  runs a static server on port 8000, watches for change and live-reloads assets)
 
 Other Grunt tasks:
 
-* `serve`: same as default, also runs a static server on port 8000
 * `dev`: development build
 * `dist`: production ready build
 * `deploy:[staging|production]`: development / production build and deploy with rsync. A backup of the deploy target folder (`paths.www`) will be stored in `paths.backup`.

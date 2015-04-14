@@ -2,7 +2,7 @@
  * CSS Post processor Task
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 
 
 var autoprefixer = require('autoprefixer-core'),

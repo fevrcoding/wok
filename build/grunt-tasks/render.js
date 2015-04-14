@@ -2,7 +2,7 @@
  * Static EJS Render Task
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 
 var loremIpsum = require('lorem-ipsum'),
     marked = require('marked'),

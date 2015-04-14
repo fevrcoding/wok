@@ -2,7 +2,7 @@
  * Shrink images
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 module.exports = {
     options: {
         progressive: false

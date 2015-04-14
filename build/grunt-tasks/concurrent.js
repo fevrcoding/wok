@@ -2,7 +2,7 @@
  * Concurrency Management
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 module.exports = {
 	options: {
 		limit: 3,

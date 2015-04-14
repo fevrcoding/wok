@@ -3,7 +3,7 @@
  * ===============================
  */
 
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 
 var types = require('grunt-sass/node_modules/node-sass').types;
 

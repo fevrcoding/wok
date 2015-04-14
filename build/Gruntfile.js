@@ -60,15 +60,10 @@ module.exports = function(grunt) {
 
 
             /**
-             * Project Metadata
+             * Project Metadata (unused)
              * ===============================
              */
-            meta: {
-                // jscs:disable
-                banner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.company %> */\n",
-                vendorBanner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n"
-                // jscs:enable
-            },
+            meta: {},
 
             properties: confProperties,
 

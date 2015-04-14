@@ -2,7 +2,7 @@
  * Watch for Changes
  * ===============================
  */
-/*jshint node:true, camelcase:false */
+/*jshint node:true */
 module.exports = function (grunt, options) {
 
     var viewsTasks = [].concat(options.properties.engines.views);
