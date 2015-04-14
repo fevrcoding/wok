@@ -46,39 +46,6 @@
     }
 }
 
-/* ==========================================================================
- * ##Containers (DEPRECATED keep until 0.11.0)
- * ========================================================================== */
-
-/* inline children */
-.l-inline > * {
-    @extend %u-inline;
-}
-
-/* inline */
-.l-inline--baseline > * {
-    @extend %u-inline;
-    vertical-align: baseline;
-}
-
-.l-centered {
-    @extend .u-centered;
-}
-
-.l-float,
-.l-float--left {
-    @extend .u-float;
-}
-
-.l-float--right {
-    @extend .u-float--right;
-}
-
-/* vertically stacked */
-.l-stacked > * {
-    display: block;
-}
-
 /* Responsive Grid System
  *
  * Adapted from [Twitter Bootstrap 3](https://github.com/twbs/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/_grid.scss)
