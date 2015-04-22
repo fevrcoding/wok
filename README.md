@@ -28,7 +28,7 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 
 Clone this repo:
 
-	git clone git://github.com/intesys/wok.git
+	git clone git://github.com/fevrcoding/wok.git
 
 From project root:
 
@@ -95,4 +95,5 @@ Other Grunt tasks:
 WOK was created by [Marco Solazzi](https://github.com/dwightjack) with contributions from [Matteo Guidotto](https://github.com/mguidotto) and [Umberto Quintarelli](ttps://github.com/quincia).
 
 
-Copyright © 2014 Intesys S.r.l., released under the MIT license.
+Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.
+Modified work Copyright © 2015 Marco Solazzi, released under the MIT license.

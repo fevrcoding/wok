@@ -11,7 +11,6 @@ module.exports = {
 
     options: {
         includePaths: ['<%= paths.vendor %>'],
-        //indentedSyntax: false,
         outputStyle: 'nested', //there's an external task to minify css
         precision: 10
     },
