@@ -10,7 +10,7 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 * Static HTML templating with [EJS](https://github.com/mde/ejs)
 * [Sass](http://sass-lang.com/) 3.2+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
 * [BEM](http://blog.kaelig.fr/post/48196348743/fifty-shades-of-bem)-like naming convention
-* Legacy browsers fallback stylesheet *(rem units conversion, large screen fallback via [sass-mq](https://github.com/sass-mq/sass-mq#responsive-mode-off))
+* Legacy browsers fallback stylesheet (rem units conversion, large screen fallback via [sass-mq](https://github.com/sass-mq/sass-mq#responsive-mode-off))
 * [Grunt.js](http://gruntjs.com/) build and deploy workflow
 * [Bower](http://bower.io/)
 * Asset Live-reload and/or [BrowserSync](http://www.browsersync.io/)
@@ -28,7 +28,7 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 
 Clone this repo:
 
-	git clone git://github.com/fevrcoding/wok.git
+    git clone git://github.com/fevrcoding/wok.git
 
 From project root:
 
@@ -46,31 +46,34 @@ On a plain HTML project, the default configuration should work just fine. On oth
 
 ##Project Structure
 
-Project sources are located into `application` folder. Don't edit files in `www` since they will be overwritten during the build process.
+Project sources are located into `application` folder. Don't edit files in `public` since they will be overwritten during the build process.
 
 ###Application Folder Structure
 
-	assets
-		+ fonts #Web Fonts
-		+ images #Images
-		+ javascripts #JavaScript files
-		+ stylesheets #SASS files
-	documents #Markdown files or any other txt-like file to be included in HTMLs
-	fixtures #JSON files
-	views #HTML files
-		+	partials #View partials
-		index.html #Main views
-	...
+    assets
+        + fonts #Web Fonts
+        + images #Images
+        + javascripts #JavaScript files
+        + stylesheets #SASS files
+        + audio #audio files
+        + video #video files
+        + vendors #vendors packages installed by bower
+    documents #Markdown files or any other txt-like file to be included in HTMLs
+    fixtures #JSON files
+    views #HTML files
+        +   partials #View partials
+        index.html #Main views
+    ...
 
 ###View Partials
 
-View partials in `application/views/partials` are rendered to `www` folder like every other file. To prevent rendering prepend a `_` to the filename.
+View partials in `application/views/partials` are rendered to `public` folder like every other file. To prevent rendering prepend a `_` to the filename.
 
 To limit performance issues, nested `partials` subfolders will not be parsed.
 
 ###Vendors
 
-You may use [bower](http://bower.io/) to manage vendors. Installed packages will be stored into the `www/vendor` folder. Anyway, it's a good habit to checkin those files onto your repository.
+You may use [bower](http://bower.io/) to manage vendors. Installed packages will be stored into the `application/assets/vendors` folder. Except for modernizr (which comes with wok by default) it's up to you to provide dev and dist configuration to deploy vendors' files to `public`.
 
 ###*More docs to come...*
 
@@ -78,8 +81,7 @@ You may use [bower](http://bower.io/) to manage vendors. Installed packages will
 
 From project root:
 
-1. `cd build`
-2. `grunt serve` (builds in development mode,  runs a static server on port 8000, watches for change and live-reloads assets)
+`grunt serve` (builds in development mode,  runs a static server on port 8000, watches for change and live-reloads assets)
 
 Other Grunt tasks:
 
