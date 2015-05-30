@@ -11,14 +11,14 @@ var autoprefixer = require('autoprefixer-core'),
 
 module.exports = function (grunt, options) {
 
-    var basePath = grunt.template.process('<%= paths.www %>/', {data: options});
+    var basePath = grunt.template.process('<%= paths.dist.root %>/', {data: options});
 
     var autoPrefixerConf = {
-        browsers: ['> 1%', 'last 2 versions', 'ie 8', 'ie 9']
+        browsers: ['> 1%', 'last 2 versions', 'ie 9']
     };
 
     var assetsConf = {
-        loadPaths: ['<%= paths.fonts %>/', '<%= paths.images %>/'].map(function (path) {
+        loadPaths: ['<%= paths.dist.assets %>/<%= paths.fonts %>/', '<%= paths.dist.assets %>/<%= paths.images %>/'].map(function (path) {
             return grunt.template.process(path, {data: options}).replace(new RegExp('^' + _.escapeRegExp(basePath)), '');
         }),
         basePath: basePath
@@ -29,21 +29,45 @@ module.exports = function (grunt, options) {
             options: {
                 map: true,
                 processors: [
-                    autoprefixer(autoPrefixerConf).postcss,
+                    autoprefixer(autoPrefixerConf),
                     assets(_.assign({cachebuster: true}, assetsConf))
                 ]
             },
-            src: '<%= paths.css %>/**/*.css'
+            src: ['<%= paths.dist.assets %>/<%= paths.css %>/**/*.css', '!<%= paths.dist.assets %>/<%= paths.css %>/**/*-ie.css']
         },
+        legacydev: {
+            options: {
+                map: true,
+                processors: [
+                    autoprefixer({browsers: ['ie 8']}),
+                    require('postcss-pseudoelements')(),
+                    require('postcss-color-rgba-fallback')(),
+                    assets(_.assign({cachebuster: true}, assetsConf))
+                ]
+            },
+            src: '<%= paths.dist.assets %>/<%= paths.css %>/**/*-ie.css'
+        },
+
         dist: {
             options: {
                 map: false,
                 processors: [
-                    autoprefixer(autoPrefixerConf).postcss,
+                    autoprefixer(autoPrefixerConf),
                     assets(assetsConf)
                 ]
             },
-            src: '<%= paths.css %>/**/*.css'
+            src: ['<%= paths.dist.assets %>/<%= paths.css %>/**/*.css', '!<%= paths.dist.assets %>/<%= paths.css %>/**/*-ie.css']
+        },
+        legacydist: {
+            options: {
+                map: false,
+                processors: [
+                    autoprefixer({browsers: ['ie 8']}),
+                    require('postcss-pseudoelements')(),
+                    assets(assetsConf)
+                ]
+            },
+            src: '<%= paths.dist.assets %>/<%= paths.css %>/**/*-ie.css'
         }
     };
 

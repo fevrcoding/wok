@@ -8,7 +8,7 @@ module.exports = {
         hostname: '*',
         port: '<%= hosts.devbox.ports.connect %>',
         useAvailablePort: true,
-        base: ['<%= paths.www %>', '<%= paths.html %>'],
+        base: ['<%= paths.dist.root %>', '<%= paths.dist.views %>'],
         middleware: function (connect, options, middlewares) {
 
             if (require.resolve('../api.js')) {
@@ -24,6 +24,8 @@ module.exports = {
         }
     },
     dev: {
-        options: {}
+        options: {
+            open: true
+        }
     }
 };

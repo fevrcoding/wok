@@ -7,27 +7,6 @@
 $grid-enabled: true !default;
 $grid-fluid-breakpoints: false !default;
 
-// Extra small screen / phone
-$screen-xs: 480px !default;
-$screen-xs-min: $screen-xs, "no-query" true !default;
-
-// Small screen / tablet
-$screen-sm: 768px !default;
-$screen-sm-min: $screen-sm, "no-query" true !default;
-
-// Medium screen / desktop
-$screen-md: 992px !default;
-$screen-md-min: $screen-md, "no-query" true !default;
-
-// Large screen / wide desktop
-$screen-lg: 1200px !default;
-$screen-lg-min: $screen-lg, "no-query" true !default;
-
-// So media queries don't overlap when required, provide a maximum
-$screen-xs-max: $screen-sm - 1 !default;
-$screen-sm-max: $screen-md - 1 !default;
-$screen-md-max: $screen-lg - 1 !default;
-
 //** Number of columns in the grid.
 $grid-columns: 12 !default;
 
@@ -190,7 +169,7 @@ $container-lg: $container-large-desktop !default;
 
 // [converter] Grid converted to use SASS cycles (LESS uses recursive nested mixin defs not supported by SASS)
 @mixin make-grid-columns {
-    $list: "";
+    $list: '';
     $i: 1;
     $list: ".l-col--xs-#{$i}, .l-col--sm-#{$i}, .l-col--md-#{$i}, .l-col--lg-#{$i}";
     @for $i from 2 through $grid-columns {
@@ -201,14 +180,14 @@ $container-lg: $container-large-desktop !default;
         // Prevent columns from collapsing when empty
         min-height: 1px;
         // Inner gutter via padding
-        padding-left: $grid-gutter-width / 2;
         padding-right: $grid-gutter-width / 2;
+        padding-left: $grid-gutter-width / 2;
     }
 }
 
 // [converter] Grid converted to use SASS cycles (LESS uses recursive nested mixin defs not supported by SASS)
 @mixin make-grid-columns-float($class) {
-    $list: "";
+    $list: '';
     $i: 1;
     $list: ".l-col--#{$class}-#{$i}";
     @for $i from 2 through $grid-columns {

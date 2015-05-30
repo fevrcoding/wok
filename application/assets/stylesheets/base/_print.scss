@@ -1,10 +1,12 @@
 /* ==========================================================================
- *
- * Print Styles.
- * ====
- *
- * Inlined to avoid required HTTP connection: h5bp.com/r
- * ========================================================================== */
+
+   Print Styles
+   ====
+
+   ```
+   ```
+
+   ========================================================================== */
 
 @media print {
     * {
@@ -18,19 +20,18 @@
         text-decoration: underline;
         color: #000 !important;
     }
-    a[href]:after {
+    a[href]::after {
         content: " (" attr(href) ")";
         font-size: $font-size-default;
     }
-    abbr[title]:after {
+    abbr[title]::after {
         content: " (" attr(title) ")";
         font-size: $font-size-default;
     }
-    /* Don't show links for images, or javascript/internal links
-     */
-    .ir a:after,
-    a[href^="javascript:"]:after,
-    a[href^="#"]:after {
+    // Don't show links for images, or javascript/internal links
+    .ir a::after,
+    a[href^="javascript:"]::after,
+    a[href^="#"]::after {
         content: "";
     }
     pre,

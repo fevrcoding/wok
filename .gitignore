@@ -108,14 +108,14 @@ node_modules
 bin
 etc
 lib
+assets.json
+public/*
+public/.htaccess
+public/htaccess
+public/favicon.ico
 www/*
-#share vendors
-!www/vendor
-www/vendor/dist
-www/vendor/vendor.min.*
-www/vendor/modernizr/modernizr.min.*
 !www/.htaccess
 !www/htaccess
 !www/favicon.ico
-Gemfile.lock
 var/tmp
+_tmp

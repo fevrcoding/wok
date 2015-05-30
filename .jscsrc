@@ -8,5 +8,5 @@
 	"requireLineFeedAtFileEnd": null,
     "requireMultipleVarDecl": "onevar",
     "disallowMultipleVarDecl": null,
-    "excludeFiles": ["node_modules/**", "www/vendor/**"]
+    "excludeFiles": ["node_modules/**", "application/assets/vendors/**"]
 }

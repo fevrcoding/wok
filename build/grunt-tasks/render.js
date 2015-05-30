@@ -16,13 +16,6 @@ module.exports = function (grunt) {
                 getConfig: function (prop) {
                     return grunt.config.get(prop);
                 },
-                getAsset: function (relPath, type) {
-                    var www = grunt.config.get('paths.www'),
-                        regexp = new RegExp('^' + (www || 'www') + '\\\/'),
-                        assetPath = grunt.config.get('paths.' + (type || 'images')) || '';
-
-                    return assetPath.replace(regexp, '/') + relPath;
-                },
                 lorem: function (min, max, config) {
                     var count = max ? _.random(min, max) : min,
                         defaults = {
@@ -40,7 +33,7 @@ module.exports = function (grunt) {
 
     return {
         options: {
-            data: ['<%= paths.fixtures %>/{,*/}*.json'],
+            data: ['<%= paths.src.fixtures %>/{,*/}*.json'],
             config: {
                 cache: true
             },
@@ -59,9 +52,9 @@ module.exports = function (grunt) {
             files: [
                 {
                     expand: true,
-                    cwd: '<%= paths.views %>/',
+                    cwd: '<%= paths.src.views %>/',
                     src: ['{,*/}<%= properties.viewmatch %>', '!{,*/}_*.*'], //render all views except those starting with `_` ala SASS
-                    dest: '<%= paths.html %>'
+                    dest: '<%= paths.dist.views %>'
                 }
             ]
         },

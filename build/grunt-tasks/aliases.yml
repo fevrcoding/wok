@@ -3,6 +3,7 @@ dev:
   - copy
   - imagemin:svg #always optimize svgs since optimization may break something
   - _stylesheets:dev
+  - postcss:legacydev
   - _views:dev
   - sassdown
 
@@ -11,17 +12,19 @@ dist:
   - copy
   - imagemin
   - _stylesheets:dist
+  - postcss:legacydist
   - _views:dist
   - htmlrefs:dist
   - useminPrepare
+  - modernizr
   - concat
   - uglify
   - cssmin
-  - modernizr
   - usebanner
   - filerev
   - filerev_assets
   - usemin
+  - clean:tmp
 
 serve:
   - default:server
