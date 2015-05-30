@@ -6,8 +6,8 @@
 module.exports = {
     assets: {
         options: {
-            dest: '<%= paths.revmap %>',
-            cwd: '<%= paths.www %>/',
+            dest: '<%= paths.dist.revmap %>',
+            cwd: '<%= paths.dist.root %>/',
             prefix: ''
         }
     }

@@ -5,8 +5,8 @@
 /*jshint node:true */
 module.exports = {
     options: {
-        root: '<%= paths.www %>',
-        dest: '<%= paths.www %>',
+        root: '<%= paths.dist.root %>',
+        dest: '<%= paths.dist.root %>',
         staging: '<%= paths.tmp %>',
         flow: {
             // i'm using this config for all targets, not only 'html'
@@ -19,5 +19,5 @@ module.exports = {
             post: {}
         }
     },
-    html: ['<%= paths.usemin %>/**/<%= properties.viewmatch %>']
+    html: ['<%= paths.dist.usemin %>/**/<%= properties.viewmatch %>']
 };

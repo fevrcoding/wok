@@ -12,9 +12,9 @@ module.exports = {
         files: [
             {
                 expand: true,
-                cwd: '<%= paths.usemin %>/',
+                cwd: '<%= paths.dist.usemin %>/',
                 src: ['**/<%= properties.viewmatch %>'],
-                dest: '<%= paths.usemin %>'
+                dest: '<%= paths.dist.usemin %>'
             }
         ]
     }

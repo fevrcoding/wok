@@ -19,12 +19,8 @@
     @return $value / ($value * 0 + 1);
 }
 
-@function font-size($size) {
-    @if map-has-key($font-sizes, $size) {
-        @return map-get($font-sizes, $size);
-    } @else {
-        @warn "Size #{$size} undefined";
-    }
+@function z-index($level: 'base') {
+    @return map-get($layers, $level);
 }
 
 //@mixin ie-fallback($ie-version: 8)
@@ -54,6 +50,14 @@
 //proxy method to postcss-asset function
 @function inline-image($image-path) {
     @return inline($image-path);
+}
+
+@mixin boost-performance ($translate: true){
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    @if ($translate) {
+        transform: translate3d(0,0,0);
+    }
 }
 
 @mixin clearfix {
@@ -139,7 +143,7 @@
     $selectors: ();
     @each $i in $headings {
         $current-heading: nth($headings, $i);
-        $selector: unquote("h#{$current-heading} .h#{$current-heading}");
+        $selector: unquote("h#{$current-heading}, .h#{$current-heading}");
         $selectors: append($selectors, $selector, comma);
     }
 
@@ -191,13 +195,8 @@
 // Adapted from https://github.com/csswizardry/typecsset
 // ==========================================================================
 
-//see http://davidwalsh.name/rem-px-browser-function-sass
-@function em($target, $context: $font-size-default) {
-    @if $target == 0 {
-        @return 0;
-    } @else {
-        @return $target / $context + 0em;
-    }
+@function em($pixels, $context: $font-size-default) {
+    @return #{$pixels/$context}em;
 }
 
 //see http://davidwalsh.name/rem-px-browser-function-sass
@@ -221,6 +220,28 @@
         }
     }
     @return $rem-list ();
+}
+
+
+@function font-size($size, $rem: true) {
+    $result: $size;
+    @if map-has-key($font-sizes, $size) {
+        $result: map-get($font-sizes, $size);
+    }
+
+    @if $rem == true {
+        @return rem($result);
+    } @else {
+        @return $result
+    }
+}
+
+@function font-weight($weight) {
+    @if map-has-key($font-weights, $weight) {
+        @return map-get($font-weights, $weight);
+    } @else {
+        @warn "Weight #{$weight} undefined";
+    }
 }
 
 @mixin reset-typography($font-weight: normal, $line-height: inherit) {

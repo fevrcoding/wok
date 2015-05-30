@@ -8,10 +8,10 @@ module.exports = {
     dist: {
 
         // [REQUIRED] Path to the build you're using for development.
-        devFile: '<%= paths.vendor %>/modernizr/modernizr.js',
+        devFile: '<%= paths.src.assets %>/<%= paths.vendors %>/modernizr/modernizr.js',
 
         // [REQUIRED] Path to save out the built file.
-        outputFile: '<%= paths.vendor %>/dist/modernizr.min.js',
+        outputFile: '<%= paths.dist.assets %>/<%= paths.vendors %>/modernizr/modernizr.min.js',
 
         // Based on default settings on http://modernizr.com/download/
         extra: {
@@ -48,9 +48,8 @@ module.exports = {
         // You can override this by defining a 'files' array below.
         files: {
             src: [
-                '<%= paths.js %>/**/*.js',
-                '!<%= paths.js %>/**/*.min.js',
-                '<%= paths.css %>/**/*.css'
+                '<%= paths.src.assets %>/<%= paths.js %>/**/*.js',
+                '<%= paths.dist.assets %>/<%= paths.css %>/**/*.css'
             ]
         },
 

@@ -1,9 +1,15 @@
 /* ==========================================================================
- *
- * Base Styles
- * ====
- *
- * ========================================================================== */
+
+   Base Styles
+   ====
+
+
+   Some Basic Styles
+
+   ```
+   ```
+
+   ========================================================================== */
 
 //Fix IE10 on WP8 visualization issues
 //see http://getbootstrap.com/getting-started/#ie-10-width
@@ -29,8 +35,8 @@
 }
 
 *,
-*:before,
-*:after {
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -55,10 +61,9 @@ body {
     min-width: 320px;
 }
 
-/* Remove text-shadow in selection highlight: h5bp.com/i
- * These selection declarations have to be separate.
- * Customize the background color to match your design.
- */
+//Remove text-shadow in selection highlight: h5bp.com/i
+//These selection declarations have to be separate.
+//Customize the background color to match your design.
 
 ::-moz-selection {
     color: $color-text-selection;
@@ -70,8 +75,7 @@ body {
     text-shadow: none;
 }
 
-/* A better looking default horizontal rule
- */
+// A better looking default horizontal rule
 
 hr {
     display: block;
@@ -82,8 +86,7 @@ hr {
     padding: 0;
 }
 
-/* Remove the gap between images and the bottom of their containers: h5bp.com/i/440
- */
+// Remove the gap between images and the bottom of their containers: h5bp.com/i/440
 
 audio,
 canvas,
@@ -94,25 +97,28 @@ img {
     vertical-align: middle;
 }
 
-/* Remove default fieldset styles.
- */
+// Remove default fieldset styles.
 
 fieldset {
-    border: 0;
     margin: 0;
     padding: 0;
+    border: 0;
 }
 
-/* Allow only vertical resizing of textareas.
- */
+// Allow only vertical resizing of textareas.
 
 textarea {
     resize: vertical;
 }
 
 /* ==========================================================================
- * ##Shared Styles
- * ========================================================================== */
+   ##Shared Styles
+
+   Shared placeholder
+
+   ```
+   ```
+   ========================================================================== */
 
 %inline-block {
     display: inline-block;
@@ -120,26 +126,39 @@ textarea {
 
 %img-responsive {
     display: block;
-    height: auto;
     max-width: 100%;
+    height: auto;
 }
 
 /* ==========================================================================
- * ##Headings and Base
- * ========================================================================== */
+   ##Headings and Base
 
-@include classed-headings {
+   1 to 6 heading
+
+   ```
+   ```
+   ========================================================================== */
+
+%heading-base {
     @include rem-font-size($font-size-h, $font-lheight-h);
     margin: 0 0 0.2em;
     //color: $color-text
     font-family: $font-family-h;
-    font-weight: bold;
+    font-weight: font-weight(bold);
+}
+
+@include classed-headings {
+    @extend %heading-base;
 }
 
 @each $font-head-num, $font-head-size in $font-sizes-headings {
     h#{$font-head-num}, .h#{$font-head-num} {
         @include rem-font-size($font-head-size, $font-lheight-h);
     }
+}
+
+p {
+    margin: 0 0 0.2em;
 }
 
 a {

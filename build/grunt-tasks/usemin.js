@@ -5,7 +5,7 @@
 /*jshint node:true */
 module.exports = {
     options: {
-        assetsDirs: ['<%= paths.www %>'],
+        assetsDirs: ['<%= paths.dist.root %>'],
         blockReplacements: {
             concat: function (block) {
                 return '<script src="' + block.dest + '"></script>';
@@ -19,7 +19,7 @@ module.exports = {
             ]
         }
     },
-    html: ['<%= paths.usemin %>/**/<%= properties.viewmatch %>'],
-    css: ['<%= paths.css %>/{,*/}*.css'],
-    js: ['<%= paths.js %>/{,*/}*.js']
+    html: ['<%= paths.dist.usemin %>/**/<%= properties.viewmatch %>'],
+    css: ['<%= paths.dist.assets %>/<%= paths.css %>/{,*/}*.css'],
+    js: ['<%= paths.dist.assets %>/<%= paths.js %>/{,*/}*.js']
 };

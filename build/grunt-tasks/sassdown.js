@@ -5,7 +5,7 @@
 /*jshint node:true */
 module.exports = {
     options: {
-        assets: ['<%= paths.css %>/**/*.css'],
+        assets: ['<%= paths.dist.assets %>/<%= paths.css %>/**/*.css'],
         excludeMissing: true,
         readme: 'README.md',
         baseUrl: '/styleguide/',
@@ -15,9 +15,9 @@ module.exports = {
     styleguide: {
         files: [{
             expand: true,
-            cwd: '<%= paths.sass %>',
+            cwd: '<%= paths.src.assets %>/<%= paths.sass %>',
             src: ['**/*.{sass,scss}'],
-            dest: '<%= paths.www %>/styleguide/'
+            dest: '<%= paths.dist.root %>/styleguide/'
         }]
     }
 };

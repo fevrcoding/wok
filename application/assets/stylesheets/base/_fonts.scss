@@ -21,6 +21,13 @@ $font-sizes: (
     xs: ceil($font-size-default * 0.5)
 );
 
+
+$font-weights: (
+    light: 300,
+    regular: 400,
+    semibold: 600,
+    bold: 700
+);
 //font dimensions by function
 $font-sizes-headings: (
     1: ceil($font-size-default * 2),

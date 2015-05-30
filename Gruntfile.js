@@ -7,19 +7,15 @@ module.exports = function(grunt) {
 
     var path = require('path'),
         //load configurations
-        confPaths = grunt.file.readYAML(path.join(__dirname, 'grunt-config/paths.yml')),
-        confHosts = grunt.file.readYAML(path.join(__dirname, 'grunt-config/hosts.yml')),
-        confProperties = grunt.file.readYAML(path.join(__dirname, 'grunt-config/properties.yml')),
+        confPaths = grunt.file.readYAML(path.join(__dirname, 'build/grunt-config/paths.yml')),
+        confHosts = grunt.file.readYAML(path.join(__dirname, 'build/grunt-config/hosts.yml')),
+        confProperties = grunt.file.readYAML(path.join(__dirname, 'build/grunt-config/properties.yml')),
         _ = require('lodash'),
         gruntConfig;
 
 
-    //up a folder to the project root
-    grunt.file.setBase(path.resolve(__dirname, '..'));
-
-    if (grunt.file.exists('.bowerrc')) {
-        confPaths.vendor = grunt.file.readJSON('.bowerrc').directory;
-    }
+    //force base folder
+    grunt.file.setBase(__dirname);
 
     //forcing `--gruntfile` flag to current Gruntfile.js
     //since using `.setBase` changes working folder and
@@ -28,7 +24,6 @@ module.exports = function(grunt) {
 
     //require all the thing
     require('time-grunt')(grunt);
-    require('load-grunt-tasks')(grunt);
 
     try {
         //sassdown might be unavailable...
@@ -52,6 +47,15 @@ module.exports = function(grunt) {
     }
 
     gruntConfig = require('load-grunt-config')(grunt, {
+
+        jitGrunt: {
+            staticMappings: {
+                notify_hooks: 'grunt-notify',
+                usebanner: 'grunt-banner',
+                useminPrepare: 'grunt-usemin',
+                render: 'grunt-tmpl-render'
+            }
+        },
         configPath: path.join(process.cwd(), 'build', 'grunt-tasks'),
         data: {
 

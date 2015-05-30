@@ -10,8 +10,8 @@ var types = require('grunt-sass/node_modules/node-sass').types;
 module.exports = {
 
     options: {
-        includePaths: ['<%= paths.vendor %>'],
-        outputStyle: 'nested', //there's an external task to minify css
+        includePaths: ['<%= paths.src.assets %>/<%= paths.vendors %>'],
+        outputStyle: 'expanded', //there's an external task to minify css
         precision: 10
     },
 
@@ -26,9 +26,9 @@ module.exports = {
         },
         files: [{
             expand: true,
-            cwd: '<%= paths.sass %>/',
+            cwd: '<%= paths.src.assets %>/<%= paths.sass %>/',
             src: ['**/*.{sass,scss}'],
-            dest: '<%= paths.css %>',
+            dest: '<%= paths.dist.assets %>/<%= paths.css %>',
             ext: '.css'
         }]
     },

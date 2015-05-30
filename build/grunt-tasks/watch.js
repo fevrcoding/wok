@@ -7,46 +7,41 @@ module.exports = function (grunt, options) {
 
     var viewsTasks = [].concat(options.properties.engines.views);
 
-    var stylesheetsTasks = ['_stylesheets:dev'];
+    var stylesheetsTasks = ['_stylesheets:dev', 'postcss:legacydev'];
 
     if (options.properties.styleguideDriven) {
         stylesheetsTasks.push('sassdown');
     }
 
 	return {
-        options: {
-            //ensure we won't loose gruntfile reference
-            //https://github.com/gruntjs/grunt-contrib-watch/issues/162#issuecomment-21288035
-            cliArgs: ['--gruntfile', require('path').join(__dirname, '..', 'Gruntfile.js')]
-        },
 		images: {
-			files: ['<%= paths.assets %>/images/{,*/}*.{png,jpg,jpeg,gif,svg,webp}'],
+			files: ['<%= paths.src.assets %>/<%= paths.images %>/{,*/}*.{png,jpg,jpeg,gif,svg,webp}'],
 			tasks: ['newer:copy:images', 'newer:imagemin:svg']
 		},
 		js: {
 			files: [
-				'<%= paths.assets %>/javascripts/{,*/}*.js',
-				'!<%= paths.assets %>/javascripts/{,*/}*.{spec,conf}.js'
+				'<%= paths.src.assets %>/<%= paths.js %>/{,*/}*.js',
+				'!<%= paths.src.assets %>/<%= paths.js %>/{,*/}*.{spec,conf}.js'
 			],
 			tasks: ['newer:copy:js']
 		},
         css: {
-            files: ['<%= paths.sass %>/{,*/}*.{scss,sass}'],
+            files: ['<%= paths.src.assets %>/<%= paths.sass %>/{,*/}*.{scss,sass}'],
             tasks: stylesheetsTasks
         },
 		fonts: {
-			files: ['<%= paths.assets %>/fonts/{,*/}*.{eot,svg,ttf,woff,woff2}'],
+			files: ['<%= paths.src.assets %>/<%= paths.fonts %>/{,*/}*.{eot,svg,ttf,woff,woff2}'],
 			tasks: ['newer:copy:fonts']
 		},
         media: {
-            files: ['<%= paths.assets %>/media/{,*/}*.*'],
+            files: ['<%= paths.src.assets %>/{audio,video}/{,*/}*.*'],
             tasks: ['newer:copy:media']
         },
 		views: {
 			files: [
-				'<%= paths.documents %>/*.md',
-				'<%= paths.views %>/{,*/}*.*',
-				'<%= paths.fixtures %>/*.json'
+				'<%= paths.src.documents %>/*.md',
+				'<%= paths.src.views %>/{,*/}*.*',
+				'<%= paths.src.fixtures %>/*.json'
 			],
 			tasks: viewsTasks
 		},
@@ -55,13 +50,12 @@ module.exports = function (grunt, options) {
 				livereload: '<%= hosts.devbox.ports.livereload %>'
 			},
 			files: [
-				'<%= paths.html %>/{,*/}<%= properties.viewmatch %>',
-				'<%= paths.css %>/{,*/}*.css',
-				'<%= paths.fonts %>/{,*/}*.{eot,svg,ttf,woff,woff2}',
-				'<%= paths.images %>/{,*/}*.{png,jpg,jpeg,gif,svg,webp}',
-				'!<%= paths.images %>/rgbapng/*.png',
-				'<%= paths.js %>/{,*/}*.js',
-				'!<%= paths.js %>/{,*/}*.spec.js'
+				'<%= paths.dist.views %>/{,*/}<%= properties.viewmatch %>',
+				'<%= paths.dist.assets %>/<%= paths.css %>/{,*/}*.css',
+				'<%= paths.dist.assets %>/<%= paths.fonts %>/{,*/}*.{eot,svg,ttf,woff,woff2}',
+				'<%= paths.dist.assets %>/<%= paths.images %>/{,*/}*.{png,jpg,jpeg,gif,svg,webp}',
+				'<%= paths.dist.assets %>/<%= paths.js %>/{,*/}*.js',
+				'!<%= paths.dist.assets %>/<%= paths.js %>/{,*/}*.spec.js'
 			]
 		}
 	};

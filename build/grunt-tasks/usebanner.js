@@ -8,10 +8,10 @@ module.exports = {
     application: {
         options: {
             // jscs:disable
-            banner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.company %> */",
+            banner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.company %> */"
             // jscs:enable
         },
-        src: ['<%= paths.js %>/**/*.min.js', '<%= paths.css %>/*.min.css']
+        src: ['<%= paths.dist.assets %>/<%= paths.js %>/**/*.min.js', '<%= paths.dist.assets %>/<%= paths.css %>/*.min.css']
     },
     vendors: {
         options: {
@@ -19,6 +19,6 @@ module.exports = {
             banner: "/* <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */"
             // jscs:enable
         },
-        src: ['<%= paths.vendor %>/dist/**/*.min.js']
+        src: ['<%= paths.dist.assets %>/<%= paths.vendors %>/**/*.min.js']
     }
 };

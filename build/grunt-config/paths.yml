@@ -2,42 +2,30 @@
 
 #NOTE: folders are relative to project root folder
 
-application: application
+src:
+  root: application
+  assets: <%= paths.src.root %>/assets
+  fixtures: <%= paths.src.root %>/fixtures
+  documents: <%= paths.src.root %>/documents
+  views: <%= paths.src.root %>/views
+  partials: <%= paths.views %>/partials
 
-assets: <%= paths.application %>/assets
+dist:
+  root: public #where static files are to be saved
+  assets: <%= paths.dist.root %>/assets
+  views: public #when working on with CMS, views may be stored in a diffrent folder
+  revmap: <%= paths.dist.root %>/assets-map.json #map of revved files
+  usemin: <%= paths.dist.views %> #path to views to be processed by usemin/htmlrefs
 
-fixtures: <%= paths.application %>/fixtures
+js: javascripts
+sass: stylesheets
+css: stylesheets
+images: images
+fonts: fonts
+audio: audio
+video: video
+vendors: vendors
 
-sass: <%= paths.assets %>/stylesheets
-
-documents: <%= paths.application %>/documents
-
-views: <%= paths.application %>/views
-
-partials: <%= paths.views %>/partials
-
-www: www
-
-images: <%= paths.www %>/images #images folder name
-
-media: <%= paths.www %>/media #audio/video folder name
-
-js: <%= paths.www %>/javascripts #where to store built files
-
-css: <%= paths.www %>/stylesheets
-
-fonts: <%= paths.www %>/fonts
-
-revmap: <%= paths.www %>/assets-map.json #map of revved files
-
-html: <%= paths.www %> #where static files are to be saved
-
-usemin: <%= paths.html %> #path to views to be processed by usemin/htmlrefs
-
-rsync: www #dont use grunt templates here
-
-backup: var/backups
-
-vendor: <%= paths.www %>/vendor #overrode by .bowerc if available
-
+rsync: <%= paths.dist.root %>
 tmp: var/tmp
+backup: var/backups

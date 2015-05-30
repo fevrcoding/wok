@@ -5,13 +5,13 @@
 /*jshint node:true */
 module.exports = {
     images: {
-        src: ['<%= paths.images %>/**/*.{png,jpg,gif,svg,webp}']
+        src: ['<%= paths.dist.assets %>/<%= paths.images %>/**/*.{png,jpg,gif,svg,webp}']
     },
     js: {
         //application files and concatenated vendors
-        src: ['<%= paths.js %>/**/*.min.js', '<%= paths.vendor %>/dist/*.min.js', '<%= paths.vendor %>/vendor.min.js']
+        src: ['<%= paths.dist.assets %>/<%= paths.js %>/**/*.min.js', '<%= paths.dist.assets %>/<%= paths.vendors %>/**/*.min.js']
     },
     css: {
-        src: ['<%= paths.css %>/**/*.css']
+        src: ['<%= paths.dist.assets %>/<%= paths.css %>/**/*.css']
     }
 };

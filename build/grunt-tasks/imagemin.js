@@ -11,9 +11,9 @@ module.exports = {
         files: [
             {
                 expand: true, // Enable dynamic expansion
-                cwd: '<%= paths.images %>/', // Src matches are relative to this path
+                cwd: '<%= paths.dist.assets %>/<%= paths.images %>/', // Src matches are relative to this path
                 src: ['**/*.{png,jpg,gif}'], // Actual patterns to match
-                dest: '<%= paths.images %>/' // Destination path prefix
+                dest: '<%= paths.dist.assets %>/<%= paths.images %>/' // Destination path prefix
             }
         ]
     },
@@ -27,9 +27,9 @@ module.exports = {
         files: [
             {
                 expand: true,
-                cwd: '<%= paths.images %>/',
+                cwd: '<%= paths.dist.assets %>/<%= paths.images %>/',
                 src: ['**/*.svg'],
-                dest: '<%= paths.images %>/'
+                dest: '<%= paths.dist.assets %>/<%= paths.images %>/'
             }
         ]
     }
