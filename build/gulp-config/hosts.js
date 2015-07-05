@@ -1,0 +1,27 @@
+module.exports = {
+
+    staging: {
+        host: 'staging.host',
+        username: 'username',
+        password: 'fancypassword',
+        path: '/home/httpd/virtualhost'
+    },
+
+    production: {
+        host: 'remote.host',
+        username: 'username',
+        password: 'fancypassword',
+        path: '/home/httpd/virtualhost'
+    },
+
+
+    //remote host of developer box for mobile debug with weinre
+    devbox: {
+        ports: {
+            livereload: 35729,
+            weinre: 8080,
+            browsersync: 3000,
+            connect: 8000 //optional port for standalone static server
+        }
+    }
+};
