@@ -2,12 +2,14 @@
  * Grunt build tasks
  */
 
+/*jshint node:true */
 
 'use strict';
 
 var fs = require('fs'),
     path = require('path'),
     gulp = require('gulp'),
+    runSequence = require('run-sequence'),
     _ = require('lodash'),
     moment = require('moment'),
     $ = require('gulp-load-plugins')(),
@@ -73,4 +75,14 @@ taskList = fs.readdirSync(taskPath).filter(function (taskFile) {
     return path.extname(taskFile) === '.js';
 }).forEach(function (taskFile) {
     require(taskPath + '/' + taskFile)(gulp, $, options);
+});
+
+
+gulp.task('default', ['clean'], function (done) {
+    runSequence(
+        ['images', 'fonts', 'media'],
+        ['styles', 'scripts'],
+        ['views'],
+        done
+    );
 });

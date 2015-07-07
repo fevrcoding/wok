@@ -32,26 +32,6 @@
 // Elements
 // ==========================================================================
 
-//proxy method to postcss-asset function
-@function image-url($image-path) {
-    @return resolve($image-path);
-}
-
-//proxy method to postcss-asset function
-@function image-width($image-path) {
-    @return width($image-path);
-}
-
-//proxy method to postcss-asset function
-@function image-height($image-path) {
-    @return height($image-path);
-}
-
-//proxy method to postcss-asset function
-@function inline-image($image-path) {
-    @return inline($image-path);
-}
-
 @mixin boost-performance ($translate: true){
     backface-visibility: hidden;
     transform-style: preserve-3d;

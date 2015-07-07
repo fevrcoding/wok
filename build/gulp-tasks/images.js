@@ -11,9 +11,11 @@ module.exports = function (gulp, $, options) {
                     removeViewBox: false
                 }]
             })))
+            .pipe($.if(options.production, $.rev()))
             .pipe(
-                gulp.dest(options.assetsPath('dist.css'))
+                gulp.dest(options.assetsPath('dist.images'))
             )
+            .pipe($.if(options.production, $.rev.manifest(options.paths.dist.revmap, {merge: true})))
             .pipe($.size({title: 'images'}));
 
     });
