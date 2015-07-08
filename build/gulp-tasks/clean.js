@@ -3,8 +3,7 @@
  * ===============================
  */
 
-var del = require('del'),
-    _ = require('lodash');
+var del = require('del');
 
 module.exports = function (gulp, $, options) {
 
@@ -13,7 +12,6 @@ module.exports = function (gulp, $, options) {
         folders;
 
     folders = [
-
         paths.tmp,
         '.tmp',
         assetsPath('dist.images'),
@@ -26,8 +24,7 @@ module.exports = function (gulp, $, options) {
         paths.dist.views + '/{partials|templates|components}',
         assetsPath('dist.vendors'),
         paths.dist.root + '/styleguide',
-        paths.dist.revmap
-
+        paths.dist.assets + '/' + paths.dist.revmap
     ];
 
 

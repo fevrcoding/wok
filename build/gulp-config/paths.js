@@ -18,7 +18,7 @@ var paths = {
         root: distRoot, //where static files are to be saved
         assets: distRoot + '/assets',
         views: distRoot, //when working on with CMS, views may be stored in a diffrent folder
-        revmap: 'assets-map.json', //map of revved files
+        revmap: 'assets/assets-map.json', //map of revved files
         usemin: distRoot  //path to views to be processed by usemin/htmlrefs
     },
 

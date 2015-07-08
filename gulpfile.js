@@ -79,10 +79,17 @@ taskList = fs.readdirSync(taskPath).filter(function (taskFile) {
 
 
 gulp.task('default', ['clean'], function (done) {
-    runSequence(
-        ['images', 'fonts', 'media'],
-        ['styles', 'scripts'],
-        ['views'],
-        done
-    );
+
+    var tasks = [
+        ['images'],
+        ['fonts', 'media', 'styles', 'scripts'],
+        ['views']
+    ];
+
+    if (options.production) {
+        tasks.push(['rev']);
+    }
+
+    tasks.push(done);
+    runSequence.apply(null, tasks);
 });
