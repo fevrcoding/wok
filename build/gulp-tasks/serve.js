@@ -29,7 +29,7 @@ module.exports = function (gulp, $, options) {
             }
         });
 
-        gulp.watch([assetsPath('src.sass') + '/**/*.{scss,sass}'], ['styles', reload]);
+        gulp.watch([assetsPath('src.sass') + '/**/*.{scss,sass}'], ['styles']);
         gulp.watch([assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}')], ['images', reload]);
         gulp.watch([assetsPath('src.fonts', '**/*.{eot,svg,ttf,woff,woff2}')], ['fonts', reload]);
         gulp.watch([assetsPath('src.video', '{,*/}*.*'), assetsPath('src.audio', '{,*/}*.*')], ['media', reload]);

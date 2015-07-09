@@ -1,6 +1,7 @@
 
 var path = require('path'),
     autoprefixer = require('autoprefixer-core'),
+    browserSync = require('browser-sync'),
     lazypipe = require('lazypipe');
 
 
@@ -59,6 +60,7 @@ module.exports = function (gulp, $, options) {
             .pipe($.if(production, productionPipe()))
             .pipe($.sourcemaps.write('.'))
             .pipe(gulp.dest(options.assetsPath('dist.css')))
+            .pipe($.if(options.isWatching, browserSync.stream({match: '**/*.css'})))
             .pipe($.size({title: 'styles'}));
     });
 
