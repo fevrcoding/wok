@@ -6,10 +6,11 @@ module.exports = function (gulp, $, options) {
     var paths = options.paths,
         assetsPath = options.assetsPath;
 
-    options.isWatching = true;
-
     // Watch Files For Changes & Reload
     gulp.task('serve', ['default'], function () {
+
+        options.isWatching = true;
+
         browserSync.init(null, {
             watchTask: true,
             notify: true,

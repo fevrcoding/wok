@@ -49,6 +49,9 @@ module.exports = function (gulp, $, options) {
         return gulp.src([
               options.assetsPath('src.sass', '**/*.{sass,scss}')
             ])
+            .pipe($.plumber({
+                errorHandler: $.notify.onError('Error: <%= error.message %>')
+            }))
             .pipe($.sourcemaps.init())
             .pipe($.sass({
                 precision: 10,
@@ -61,7 +64,8 @@ module.exports = function (gulp, $, options) {
             .pipe($.sourcemaps.write('.'))
             .pipe(gulp.dest(options.assetsPath('dist.css')))
             .pipe($.if(options.isWatching, browserSync.stream({match: '**/*.css'})))
-            .pipe($.size({title: 'styles'}));
+            .pipe($.size({title: 'styles'}))
+            .pipe($.if(options.isWatching, $.notify({ message: 'SASS Compiled' })));
     });
 
 };
