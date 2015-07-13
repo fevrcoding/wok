@@ -63,9 +63,9 @@ module.exports = function (gulp, $, options) {
             .pipe($.if(production, productionPipe()))
             .pipe($.sourcemaps.write('.'))
             .pipe(gulp.dest(options.assetsPath('dist.css')))
-            .pipe($.if(options.isWatching, browserSync.stream({match: '**/*.css'})))
-            .pipe($.size({title: 'styles'}))
-            .pipe($.if(options.isWatching, $.notify({ message: 'SASS Compiled' })));
+            .pipe($.if(options.isWatching && options.livereload, browserSync.stream({match: '**/*.css'})))
+            .pipe($.if(options.isWatching, $.notify({ message: 'SASS Compiled', onLast: true })))
+            .pipe($.size({title: 'styles'}));
     });
 
 };

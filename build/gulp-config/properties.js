@@ -1,24 +1,12 @@
 module.exports = {
 
-    livereload: true, //set to `true` to enable livereload
-
-    sync: false, //set to `true` to enable browsersync
-
-    remoteDebug: false, //enable remote debug via weinre
-
-    notify: true, //enable system notifications
+    livereload: false, //set to `true` to enable livereload
 
     styleguideDriven: false, //will rebuild the styleguide whenever stylesheets change
 
     buildOnly: false, //set to `true` when paired with Phing
 
-    viewmatch: '*.html', //for php projects use: '*.{html,php,phtml}'
-
-    //Toolchain options
-    engines: {
-        views: 'render',
-        stylesheets: ['sass', 'postcss']
-    }
+    viewmatch: '*.html' //for php projects use: '*.{html,php,phtml}'
 };
 
 

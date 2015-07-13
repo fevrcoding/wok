@@ -9,6 +9,7 @@ module.exports = function (gulp, $, options) {
 
         return gulp.src(options.assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}'))
             .pipe(webpFilter)
+            .pipe($.if(options.production, $.rev()))
             .pipe(
                 gulp.dest(options.assetsPath('dist.images'))
             )
@@ -27,6 +28,7 @@ module.exports = function (gulp, $, options) {
             )
             .pipe($.if(options.production, $.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), {merge: true})))
             .pipe($.if(options.production, gulp.dest('.')))
+            .pipe($.if(options.isWatching, $.notify({ message: 'Images Processed', onLast: true })))
             .pipe($.size({title: 'images'}));
 
     });

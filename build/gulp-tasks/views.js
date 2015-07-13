@@ -50,12 +50,19 @@ module.exports = function (gulp, $, options) {
         })
         .pipe($.rev)
         .pipe(assets.restore)
-        .pipe($.useref);
+        .pipe($.useref, {
+            //just replace src
+            replace: function (blockContent, target, attbs) {
+                if(attbs) {
+                    return '<script src="' + target + '" ' + attbs + '></script>';
+                } else {
+                    return '<script src="' + target + '"></script>';
+                }
+            }
+        });
 
 
     gulp.task('views', function () {
-
-        console.log(options.isWatching);
 
         return gulp.src([viewPath + '/{,*/}' + options.viewmatch, '!' + viewPath + '/{,*/}_*.*'])
             .pipe(map(function(code, filename) {
@@ -64,6 +71,7 @@ module.exports = function (gulp, $, options) {
             .pipe($.if(options.production, userRefPipe()))
             .pipe(gulp.dest(paths.dist.views))
             .pipe($.if(options.production, $.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), {merge: true})))
-            .pipe($.if(options.production, gulp.dest('.')));
+            .pipe($.if(options.production, gulp.dest('.')))
+            .pipe($.if(options.isWatching, $.notify({ message: 'Views rendered', onLast: true })));
     });
 };

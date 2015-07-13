@@ -23,11 +23,8 @@ var fs = require('fs'),
 
 
 pkg.year = moment().format('YYYY');
-banners.application = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= pkg.year %> <%= pkg.author.company %> */"
+banners.application = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= pkg.year %> <%= pkg.author.company %> */";
 banners.vendors = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */";
-
-
-
 
 
 
@@ -47,7 +44,7 @@ fs.readdirSync(optionsPath).filter(function (optFile) {
 
 });
 
-var flags = _.forOwn({
+_.forOwn({
     production: false
 }, function (value, key) {
     options[key] = _.has(yargs.argv, key) ? yargs.argv[key] : value;
@@ -58,11 +55,12 @@ options.banners = banners;
 
 options.assetsPath = function (type, match) {
     var parts = type.split('.'),
-        paths = options.paths;
+        paths = options.paths,
+        folderPath;
     if (parts.length > 1) {
-        var folderPath = path.join(paths[parts[0]].assets, paths[parts[1]]);
+        folderPath = path.join(paths[parts[0]].assets, paths[parts[1]]);
     } else {
-        var folderPath = path.normalize(paths[parts[0]].assets);
+        folderPath = path.normalize(paths[parts[0]].assets);
     }
     if (match) {
         folderPath = path.join(folderPath, match);
@@ -83,6 +81,7 @@ gulp.task('default', ['clean'], function (done) {
     var tasks = [
         ['images'],
         ['fonts', 'media', 'styles', 'scripts'],
+        ['modernizr'],
         ['views']
     ];
 
@@ -92,4 +91,13 @@ gulp.task('default', ['clean'], function (done) {
 
     tasks.push(done);
     runSequence.apply(null, tasks);
+});
+
+gulp.task('dev', ['default']);
+
+
+gulp.task('dist', function () {
+    $.util.log($.util.colors.red('`dist` task has been removed. Please run `gulp --production`'));
+    // emit the end event, to properly end the task
+    this.emit('end');
 });

@@ -13,6 +13,7 @@ module.exports = function (gulp, $, options) {
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
             .pipe(gulp.dest(destPath))
+            .pipe($.if(options.isWatching, $.notify({ message: 'Scripts Compiled', onLast: true })))
             .pipe($.size({title: 'scripts'}));
     });
 

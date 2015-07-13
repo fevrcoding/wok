@@ -5,5 +5,3 @@
  * or just fill it with JS on small projects
  *
  */
-
-var test = 'cccc';
