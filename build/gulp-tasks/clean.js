@@ -3,7 +3,8 @@
  * ===============================
  */
 
-var del = require('del');
+var path = require('path'),
+    del = require('del');
 
 module.exports = function (gulp, $, options) {
 
@@ -23,8 +24,8 @@ module.exports = function (gulp, $, options) {
         paths.dist.views + '/' +  options.viewmatch,
         paths.dist.views + '/{partials|templates|components}',
         assetsPath('dist.vendors'),
-        paths.dist.root + '/styleguide',
-        paths.dist.assets + '/' + paths.dist.revmap
+        path.join(paths.dist.root, '/styleguide'),
+        path.join(paths.dist.root, paths.dist.revmap)
     ];
 
 
