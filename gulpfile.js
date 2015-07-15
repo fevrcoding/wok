@@ -45,7 +45,9 @@ fs.readdirSync(optionsPath).filter(function (optFile) {
 });
 
 _.forOwn({
-    production: false
+    production: false,
+    command: null,
+    remotehost: null //be explicit!
 }, function (value, key) {
     options[key] = _.has(yargs.argv, key) ? yargs.argv[key] : value;
 });
@@ -76,7 +78,7 @@ taskList = fs.readdirSync(taskPath).filter(function (taskFile) {
 });
 
 
-gulp.task('default', ['clean'], function (done) {
+gulp.task('default', ['clean', 'clear-cache'], function (done) {
 
     var tasks = [
         ['images'],
@@ -101,3 +103,33 @@ gulp.task('dist', function () {
     // emit the end event, to properly end the task
     this.emit('end');
 });
+
+if (options.buildOnly) {
+    gulp.task('build', function(done) {
+
+        var testHash = require('crypto').createHash('md5').update(fs.readFileSync(__filename, {encoding: 'utf8'})).digest('hex');
+
+        if (!yargs.argv.grunthash) {
+            $.util.log($.util.colors.red('Cannot run this task directly'));
+            this.emit('end');
+            return;
+        }
+
+        if (yargs.argv.grunthash !== testHash) {
+            $.util.log($.util.colors.red('Safety hash check not passed'));
+            this.emit('end');
+            return;
+        }
+
+        runSequence('default', done);
+
+    });
+
+} else {
+
+    gulp.task('deploy', function(done) {
+        //force backup
+        options.command = 'backup';
+        runSequence('default', 'remote', 'rsync', done);
+    });
+}

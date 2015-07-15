@@ -1,28 +1,31 @@
-var path = require('path');
+var path = require('path'),
+    lazypipe = require('lazypipe');
 
 module.exports = function (gulp, $, options) {
 
     var paths = options.paths;
-    var webpFilter = $.filter('**/*.webp');
+
+    var productionPipe = lazypipe()
+        .pipe($.imagemin, {
+            progressive: false,
+            interlaced: true,
+            svgoPlugins: [{
+                cleanupIDs: false,
+                removeViewBox: false
+            }]
+        })
+        .pipe($.rev);
 
     gulp.task('images', function () {
 
         return gulp.src(options.assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}'))
-            .pipe(webpFilter)
-            .pipe($.if(options.production, $.rev()))
-            .pipe(
-                gulp.dest(options.assetsPath('dist.images'))
-            )
-            .pipe(webpFilter.restore())
-            .pipe($.cache($.imagemin({
-                progressive: false,
-                interlaced: true,
+            .pipe($.if('*.svg', $.imagemin({
                 svgoPlugins: [{
                     cleanupIDs: false,
                     removeViewBox: false
                 }]
             })))
-            .pipe($.if(options.production, $.rev()))
+            .pipe($.if(options.production, productionPipe()))
             .pipe(
                 gulp.dest(options.assetsPath('dist.images'))
             )

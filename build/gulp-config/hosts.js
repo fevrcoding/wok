@@ -8,7 +8,7 @@ module.exports = {
     },
 
     production: {
-        host: 'remote.host',
+        host: 'production.host',
         username: 'username',
         password: 'fancypassword',
         path: '/home/httpd/virtualhost'
