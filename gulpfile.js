@@ -78,7 +78,7 @@ taskList = fs.readdirSync(taskPath).filter(function (taskFile) {
 });
 
 
-gulp.task('default', ['clean', 'clear-cache'], function (done) {
+gulp.task('default', ['clean'], function (done) {
 
     var tasks = [
         ['images'],

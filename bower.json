@@ -1,9 +1,9 @@
 {
   "name": "wok",
-  "version": "0.12.0",
+  "version": "1.0.0-beta",
   "authors": [
     "Marco Solazzi <marco.solazzi@gmail.com>",
-    "Matteo Guidotto <j8.matteo@gmail.com>>",
+    "Matteo Guidotto <j8.matteo@gmail.com>",
     "Umberto Quintarelli <umberto.quintarelli@intesys.it>"
   ],
   "license": "MIT",

@@ -32,8 +32,4 @@ module.exports = function (gulp, $, options) {
     gulp.task('clean', function (done) {
         del(folders, {dot: true}, done);
     });
-    gulp.task('clear-cache', function (done) {
-        return $.cache.clearAll(done);
-    });
-
 };
