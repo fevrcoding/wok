@@ -1,3 +1,8 @@
+/**
+ * Views Compilation and use-ref Task
+ * ===============================
+ */
+
 var path = require('path'),
     _ = require('lodash'),
     glob = require('glob'),
@@ -26,7 +31,7 @@ module.exports = function (gulp, $, options) {
 
 
     var assets = $.useref.assets({searchPath: [paths.dist.root, paths.tmp]});
-    var styleFilter = $.filter('**/*.css');
+    var styleFilter = $.filter('**/*.min.css');
 
     var userRefPipe = lazypipe()
         .pipe(function () {

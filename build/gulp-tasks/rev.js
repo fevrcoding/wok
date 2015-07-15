@@ -1,3 +1,8 @@
+/**
+ * Resource Revving Task
+ * ===============================
+ */
+
 var path = require('path');
 
 module.exports = function (gulp, $, options) {

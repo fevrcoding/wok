@@ -1,6 +1,6 @@
 module.exports = {
 
-    livereload: false, //set to `true` to enable livereload
+    livereload: true, //set to `true` to enable livereload
 
     styleguideDriven: false, //will rebuild the styleguide whenever stylesheets change
 

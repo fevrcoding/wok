@@ -1,3 +1,10 @@
+/**
+ * Images Task
+ * ===============================
+ */
+
+
+
 var path = require('path'),
     lazypipe = require('lazypipe');
 

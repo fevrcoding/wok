@@ -1,3 +1,8 @@
+/**
+ * Modernizr Custom Build Task
+ * ===============================
+ */
+
 var path = require('path'),
     modernizr = require('./lib/modernizr');
 

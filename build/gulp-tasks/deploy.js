@@ -1,10 +1,13 @@
+/**
+ * Deploy Related Tasks
+ * ===============================
+ */
 
 var Ssh = require('ssh2').Client,
     rsync = require('rsyncwrapper').rsync,
     _ = require('lodash');
 
 module.exports = function (gulp, $, options) {
-
 
     var paths = options.paths,
         hosts = options.hosts,

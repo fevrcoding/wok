@@ -1,3 +1,8 @@
+/**
+ * Media Task
+ * ===============================
+ */
+
 module.exports = function (gulp, $, options) {
 
     gulp.task('media', function () {

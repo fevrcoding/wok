@@ -3,12 +3,11 @@
  * ===============================
  */
 
-var path = require('path'),
-    del = require('del');
-
 module.exports = function (gulp, $, options) {
 
-    var paths = options.paths,
+    var path = require('path'),
+        del = require('del'),
+        paths = options.paths,
         assetsPath = options.assetsPath,
         folders;
 
@@ -22,9 +21,9 @@ module.exports = function (gulp, $, options) {
         assetsPath('dist.css'),
         assetsPath('dist.fonts'),
         paths.dist.views + '/' +  options.viewmatch,
-        paths.dist.views + '/{partials|templates|components}',
+        paths.dist.views + '/{partials,templates,components}',
         assetsPath('dist.vendors'),
-        path.join(paths.dist.root, '/styleguide'),
+        path.join(paths.dist.root, 'styleguide'),
         path.join(paths.dist.root, paths.dist.revmap)
     ];
 

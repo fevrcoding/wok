@@ -1,3 +1,8 @@
+/**
+ * JavaScript Related Task
+ * ===============================
+ */
+
 module.exports = function (gulp, $, options) {
 
     var srcPath = options.assetsPath('src.js'),

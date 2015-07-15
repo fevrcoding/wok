@@ -1,3 +1,8 @@
+/**
+ * Fonts Task
+ * ===============================
+ */
+
 module.exports = function (gulp, $, options) {
 
     var destFolder = options.assetsPath('dist.fonts');

@@ -1,3 +1,9 @@
+/**
+ * Development Server Task
+ * ===============================
+ */
+
+
 var browserSync = require('browser-sync');
 
 module.exports = function (gulp, $, options) {
@@ -52,7 +58,10 @@ module.exports = function (gulp, $, options) {
 
         browserSync.init(null, browserSyncConfig, function () {
 
-            gulp.watch([assetsPath('src.sass') + '/**/*.{scss,sass}'], ['styles']);
+            gulp.watch([
+                assetsPath('src.sass', '/**/*.{scss,sass}') ,
+                '!' + assetsPath('src.sass', '**/*scsslint_tmp*.{sass,scss}') //exclude scss lint files
+            ], ['styles']);
             gulp.watch([assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}')], ['images', reload]);
             gulp.watch([assetsPath('src.fonts', '**/*.{eot,svg,ttf,woff,woff2}')], ['fonts', reload]);
             gulp.watch([assetsPath('src.video', '{,*/}*.*'), assetsPath('src.audio', '{,*/}*.*')], ['media', reload]);
