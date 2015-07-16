@@ -32,6 +32,7 @@ module.exports = function (gulp, $, options) {
 
     var assets = $.useref.assets({searchPath: [paths.dist.root, paths.tmp]});
     var styleFilter = $.filter('**/*.min.css');
+    var jsFilter = $.filter('**/*.min.js');
 
     var userRefPipe = lazypipe()
         .pipe(function () {
@@ -44,14 +45,16 @@ module.exports = function (gulp, $, options) {
             return $.if(/\-ie\.min\.css$/, $.minifyCss({compatibility: 'ie8'}), $.minifyCss());
         })
         .pipe(styleFilter.restore)
-        .pipe(function () {
-            return $.if('*.min.js', $.uglify({preserveComments: 'some'}));
+
+        .pipe(function() {
+            return jsFilter;
         })
+        .pipe($.uglify, {preserveComments: 'some'})
+        .pipe($.header, options.banners.application, {pkg: options.pkg})
+        .pipe(jsFilter.restore)
         .pipe(function () {
             var vendorRegexp = new RegExp(paths.vendors);
-            var vendorBanner = $.header(options.banners.vendors, {pkg: options.pkg});
-            var applicationBanner = $.header(options.banners.application, {pkg: options.pkg});
-            return $.if(vendorRegexp, vendorBanner, applicationBanner);
+            return $.if(vendorRegexp, $.header(options.banners.vendors, {pkg: options.pkg}));
         })
         .pipe($.rev)
         .pipe(assets.restore)

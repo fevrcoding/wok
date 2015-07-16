@@ -22,7 +22,7 @@ module.exports = function (options) {
     return {
 
         'build-env()': function () {
-            return new types.String('development');
+            return new types.String(options.production ? 'production' : 'development');
         },
         'map-to-JSON($map)': function (map) {
             var obj = {};

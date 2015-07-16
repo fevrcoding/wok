@@ -1,3 +1,9 @@
+/**
+ * View Compilation Helpers
+ */
+
+'use strict';
+
 
 var _ = require('lodash'),
     loremIpsum = require('lorem-ipsum'),

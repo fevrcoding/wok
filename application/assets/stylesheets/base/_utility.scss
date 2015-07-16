@@ -32,12 +32,12 @@
 
 //@see bootstrap
 .u-text--hide {
+    border: 0;
+    background-color: transparent;
+    color: transparent;
     font: 0 / 0 a;
     font-size: 0.1px;
-    color: transparent;
     text-shadow: none;
-    background-color: transparent;
-    border: 0;
 }
 
 /* ==========================================================================
@@ -62,9 +62,7 @@
    </div>
    ```
    ========================================================================== */
-%clearfix {
-    @include clearfix;
-}
+
 
 .u-clearfix,
 .clearfix {
@@ -78,6 +76,7 @@
 .u-centered {
     margin-right: auto;
     margin-left: auto;
+    float: none;
 }
 
 .u-float,
@@ -129,30 +128,32 @@
 
 @each $font-size-key, $font-size-value in $font-sizes {
     .u-type--#{$font-size-key} {
-        font-size: rem($font-size-value);
+        font-size: rem($font-size-value) !important;
     }
 }
 
 .u-type--default {
-    font-size: rem($font-size-default);
+    font-size: rem($font-size-default) !important;
+}
+
+.u-type--larger {
+    font-size: 130%;
 }
 
 .u-type--smaller {
     font-size: 85%;
 }
 
-.u-type--bigger {
-    font-size: 115%;
+@each $font-weight-key, $font-weight-value in $font-weights {
+    .u-weight--#{$font-weight-key} {
+       font-weight: $font-weight-value !important;
+    }
 }
 
 .u-weight--strong {
-    font-weight: bold !important;
+    @extend .u-weight--bold;
 }
 
 .u-weight--medium {
-    font-weight: normal !important;
-}
-
-.u-weight--light {
-    font-weight: 300 !important;
+    @extend .u-weight--regular;
 }
