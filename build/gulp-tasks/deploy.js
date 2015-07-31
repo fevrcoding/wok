@@ -71,6 +71,40 @@ module.exports = function (gulp, $, options) {
         }
     }
 
+    //gulp.task('ftp', function (done) {
+    //    var host = getDeployTarget(options.remotehost),
+    //        FTPS = require('ftps'),
+    //        ftps;
+    //
+    //    if (host === false) {
+    //        done('Deploy target unavailable');
+    //        return false;
+    //    }
+    //
+    //    ftps = new FTPS({
+    //        host: host.host,
+    //        password: host.password,
+    //        username: host.username
+    //    });
+    //
+    //    ftps.raw('mirror -p --reverse --delete --verbose ' + paths.dist.root + ' ' + host.path).exec(function (err, response) {
+    //        if (response.error) {
+    //            done(response.error);
+    //        } else {
+    //            if (response.data.length > 0) {
+    //                response.data.trim().split('\n').forEach(function (line) {
+    //                    $.util.log('[remote] ' + line);
+    //                });
+    //
+    //            } else {
+    //                $.util.log('[remote] Nothing to sync');
+    //            }
+    //
+    //            done();
+    //        }
+    //    });
+    //});
+
 
     gulp.task('remote', function (done) {
 
