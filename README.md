@@ -15,12 +15,14 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 * [Bower](http://bower.io/)
 * Development server and asset live-reload with [BrowserSync](http://www.browsersync.io/)
 * [Weinre](http://people.apache.org/~pmuellr/weinre/) remote debugging
+* Incremental deploy with [rsync](https://rsync.samba.org/) or [lftp](http://lftp.yar.ru/)
+* Remote backup / rollback (UNIX SSH environments only)
 * more to come... (project scaffolding, jade support)
 
 
 ##Requirements
 
-* Node.js >= 0.10.30 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
+* Node.js >= 0.12.0 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
 * bower (`sudo npm install -g bower`)
 * gulp cli (`sudo npm install -g gulp`)
 
@@ -93,6 +95,10 @@ To generate a production ready build add the `--production` parameter:
 
 ###Deploy and rollback:
 
+####SSH and rsync
+
+By default WOK implements a simple set of deploy tasks requiring SSH remote access and [rsync](https://rsync.samba.org).  
+
 To deploy and rollback with rsync first setup your remote hosts in `build/gulp-config/hosts.js`, then run:
  
     #deploy to remote staging server. A backup of the deploy target folder (`paths.dist.root`) will be stored in `paths.backup`.
@@ -104,7 +110,17 @@ To deploy and rollback with rsync first setup your remote hosts in `build/gulp-c
     #rollback to the previous version in the remote production server
     gulp remote --command=rollback --remotehost=production
 
-**Note**: when paired with Phing or other deployment systems, remember to set `buildOnly` to `false` in `build/gulp-config/properties.js` to delegate deploy tasks.
+####FTP
+
+If you are on a shared hosting with FTP access, you can switch to the more basic `ftp` task, which uses [lftp](http://lftp.yar.ru) mirroring feature for incremental upload.
+
+To switch to ftp mode, set `deployStrategy` in `build/gulp-config/properties.js` to `'ftp'`, then config hosts and run deploy commands as explained above.
+
+**Note** Rollback and backup tasks won't be available with this configuration.
+
+####Usage with extarnal tools
+
+When paired with Phing or other deployment systems, remember to set `buildOnly` to `true` in `build/gulp-config/properties.js` to delegate deploy tasks.
 
 ###Other Gulp tasks
 

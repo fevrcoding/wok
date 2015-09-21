@@ -83,7 +83,7 @@ module.exports = function (gulp, $, options) {
             return false;
         }
 
-        if (!hasbin.sync('lftxp')) {
+        if (!hasbin.sync('lftp')) {
             $.util.log($.util.colors.red('Error: required `lftp` binary not found in PATH.'));
             done();
             return false;
@@ -98,7 +98,7 @@ module.exports = function (gulp, $, options) {
         $.util.log($.util.colors.green('Deploying to target %s (%s)'), options.remotehost, host.host);
 
 
-        ftps.raw('mirror --exclude widget/ -p --reverse --delete --verbose --ignore-time ' + paths.dist.root + ' ' + host.path).exec(function (err, response) {
+        ftps.raw('mirror -p --reverse --delete --verbose --ignore-time ' + paths.dist.root + ' ' + host.path).exec(function (err, response) {
             if (response.error) {
                 done(response.error);
             } else {

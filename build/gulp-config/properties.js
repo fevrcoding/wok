@@ -1,5 +1,7 @@
 module.exports = {
 
+    deployStrategy: 'rsync', //`rsync` or `ftp`
+
     livereload: true, //set to `true` to enable livereload
 
     styleguideDriven: false, //will rebuild the styleguide whenever stylesheets change

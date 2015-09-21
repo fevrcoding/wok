@@ -1,7 +1,7 @@
 {
   "name": "wok",
   "description": "A Static Website Boilerplate",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta2",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -137,8 +137,20 @@ if (options.buildOnly) {
 } else {
 
     gulp.task('deploy', function (done) {
-        //force backup
-        options.command = 'backup';
-        runSequence('default', 'remote', 'rsync', done);
+        var tasks = ['default'];
+
+        switch(options.deployStrategy) {
+        case 'rsync':
+            //force backup
+            options.command = 'backup';
+            tasks.push('remote', 'rsync');
+            break;
+        default:
+            tasks.push(options.deployStrategy);
+            break;
+        }
+        tasks.push(done);
+
+        runSequence.apply(null, tasks);
     });
 }
