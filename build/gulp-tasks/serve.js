@@ -4,9 +4,10 @@
  */
 
 
-var browserSync = require('browser-sync');
-
 module.exports = function (gulp, $, options) {
+
+    var spawn = require('child_process').spawn,
+        browserSync = require('browser-sync').create('website');
 
     var paths = options.paths,
         assetsPath = options.assetsPath,
@@ -16,7 +17,6 @@ module.exports = function (gulp, $, options) {
 
 
     browserSyncConfig = {
-        watchTask: true,
         notify: false,
         port: ports.connect,
         ui: {
@@ -49,38 +49,69 @@ module.exports = function (gulp, $, options) {
         };
     }
 
-    // Watch Files For Changes & Reload
-    gulp.task('serve', ['default'], function () {
+    //ensure proper exit on windows
+    if (process.platform === 'win32') {
+        process.on('SIGINT', function () {
+            process.exit();
+        });
+    }
 
-        browserSyncConfig.middleware = require('./lib/middlewares')(options);
+    // Watch Files For Changes & Reload
+    gulp.task('serve', ['default'], function (done) {
 
         options.isWatching = true;
 
-        browserSync.init(null, browserSyncConfig, function () {
+        browserSyncConfig.middleware = require('./lib/middlewares')(options);
+
+        browserSync.init(browserSyncConfig, function () {
 
             gulp.watch([
-                assetsPath('src.sass', '/**/*.{scss,sass}') ,
+                assetsPath('src.sass', '/**/*.{scss,sass}'),
                 '!' + assetsPath('src.sass', '**/*scsslint_tmp*.{sass,scss}') //exclude scss lint files
             ], ['styles']);
-            gulp.watch([assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}')], ['images', reload]);
-            gulp.watch([assetsPath('src.fonts', '**/*.{eot,svg,ttf,woff,woff2}')], ['fonts', reload]);
-            gulp.watch([assetsPath('src.video', '{,*/}*.*'), assetsPath('src.audio', '{,*/}*.*')], ['media', reload]);
+            gulp.watch([assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}')], ['images']).on('change', reload);
+            gulp.watch([assetsPath('src.fonts', '**/*.{eot,svg,ttf,woff,woff2}')], ['fonts']).on('change', reload);
+            gulp.watch([assetsPath('src.video', '{,*/}*.*'), assetsPath('src.audio', '{,*/}*.*')], ['media']).on('change', reload);
             gulp.watch([
-                    assetsPath('src.js') +  '/**/*.js',
-                    '!' + assetsPath('src.js') +  '/**/*.{spec,conf}.js'
-                ],
-                ['scripts', reload]
-            );
+                assetsPath('src.js') + '/**/*.js',
+                '!' + assetsPath('src.js') + '/**/*.{spec,conf}.js'
+            ], ['scripts']).on('change', reload);
             gulp.watch([
-                    paths.src.views + '/{,*/}' + options.viewmatch,
-                    paths.src.documents + '/*.md',
-                    paths.src.fixtures + '/*.json'
-                ],
-                ['views', reload]
-            );
+                paths.src.views + '/{,*/}' + options.viewmatch,
+                paths.src.documents + '/*.md',
+                paths.src.fixtures + '/*.json'
+            ], ['views']).on('change', reload);
 
         });
 
+        process.on('exit', function () {
+            browserSync.exit();
+            done();
+        });
+
+    });
+
+    //just a static server
+    gulp.task('server', function (done) {
+
+        browserSync.init({
+            logLevel: 'silent',
+            middleware: require('./lib/middlewares')(options),
+            notify: false,
+            open: false,
+            port: ports.connect,
+            server: {
+                baseDir: options.paths.dist.root
+            },
+            ui: false
+        }, function () {
+            $.util.log($.util.colors.green('Running a static server on port ' + ports.connect + '...'));
+        });
+
+        process.on('exit', function () {
+            browserSync.exit();
+            done();
+        });
 
     });
 };

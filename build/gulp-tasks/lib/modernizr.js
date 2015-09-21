@@ -92,7 +92,7 @@ module.exports = function modernizr(config) {
             },
 
             // Return an array of all file paths that match the given wildcard patterns.
-            expand: function() {
+            expand: function () {
                 var args = Array.prototype.slice.call(arguments);
                 // If the first argument is an options object, save those options to pass
                 // into the file.glob.sync method.
@@ -103,21 +103,20 @@ module.exports = function modernizr(config) {
                 // Return empty set if there are no patterns or filepaths.
                 if (patterns.length === 0) { return []; }
                 // Return all matching filepaths.
-                var matches = processPatterns(patterns, function(pattern) {
+                var matches = processPatterns(patterns, function (pattern) {
                     // Find all matching files for this pattern.
                     return glob.sync(pattern, options);
                 });
                 // Filter result set?
                 if (options.filter) {
-                    matches = matches.filter(function(filepath) {
+                    matches = matches.filter(function (filepath) {
                         filepath = path.join(options.cwd || '', filepath);
                         try {
                             if (typeof options.filter === 'function') {
                                 return options.filter(filepath);
-                            } else {
+                            }
                                 // If the file is of the right type and exists, this should work.
                                 return fs.statSync(filepath)[options.filter]();
-                            }
                         } catch(e) {
                             // Otherwise, it's probably not the right type.
                             return false;

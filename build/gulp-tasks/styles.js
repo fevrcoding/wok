@@ -4,8 +4,8 @@
  */
 
 var path = require('path'),
-    autoprefixer = require('autoprefixer-core'),
-    browserSync = require('browser-sync'),
+    autoprefixer = require('autoprefixer'),
+    browserSync = require('browser-sync').get('website'),
     lazypipe = require('lazypipe');
 
 
@@ -13,28 +13,31 @@ module.exports = function (gulp, $, options) {
 
     var production = options.production,
         paths = options.paths,
-        sassFunctions = require('./lib/sass-functions')(options);
+        destPath = options.assetsPath('dist.css'),
+        sassFunctions = require('./lib/sass-functions')(options),
+        postLegacyPipe,
+        postPipe,
+        productionPipe;
 
 
-    var destPath = options.assetsPath('dist.css');
 
     if (production) {
         destPath = path.normalize(destPath.replace(paths.dist.root, paths.tmp));
     }
 
-    var postLegacyPipe = lazypipe()
+    postLegacyPipe = lazypipe()
         .pipe($.postcss, [
             autoprefixer({ browsers: ['ie 8'] }),
             require('postcss-pseudoelements')(),
             require('postcss-color-rgba-fallback')()
         ]);
 
-    var postPipe = lazypipe()
+    postPipe = lazypipe()
         .pipe($.postcss, [
             autoprefixer({ browsers: ['> 1%', 'last 2 versions', 'ie 9'] })
         ]);
 
-    var productionPipe = lazypipe()
+    productionPipe = lazypipe()
         .pipe($.header, options.banners.application, {pkg: options.pkg})
         .pipe(function () {
             return gulp.dest(destPath);

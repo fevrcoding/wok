@@ -75,7 +75,7 @@ module.exports = function (gulp, $, options) {
         if (!options.production) {
             return gulp.src(options.assetsPath('src.vendors', 'modernizr/modernizr.js'))
                 .pipe(gulp.dest(options.assetsPath('dist.vendors') + '/modernizr'));
-        } else {
+        }
             return gulp.src(options.assetsPath('src.vendors', 'modernizr/modernizr.js'))
                 .pipe(modernizr(distConfig))
                 .pipe($.rename({extname: '.min.js'}))
@@ -83,8 +83,6 @@ module.exports = function (gulp, $, options) {
                 .pipe(gulp.dest(options.assetsPath('dist.vendors') + '/modernizr'))
                 .pipe($.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), {merge: true}))
                 .pipe(gulp.dest('.'));
-        }
-
     });
 
 };

@@ -31,7 +31,7 @@ banners.vendors = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.auth
 //load configuration from yaml files
 fs.readdirSync(optionsPath).filter(function (optFile) {
     //accept just js files
-    return path.extname(optFile) === '.js';
+    return path.extname(optFile) === '.js' && optFile.indexOf('.conf.') === -1;
 }).forEach(function (optFile) {
     var key = _.camelCase(path.basename(optFile, path.extname(optFile)));
 
@@ -51,6 +51,11 @@ _.forOwn({
 }, function (value, key) {
     options[key] = _.has(yargs.argv, key) ? yargs.argv[key] : value;
 });
+
+//force production env
+if (options.production) {
+    process.env.NODE_ENV = 'production';
+}
 
 options.pkg = pkg;
 options.banners = banners;
@@ -105,7 +110,7 @@ gulp.task('dist', function () {
 });
 
 if (options.buildOnly) {
-    gulp.task('build', function(done) {
+    gulp.task('build', function (done) {
 
         var testHash = require('crypto').createHash('md5').update(fs.readFileSync(__filename, {encoding: 'utf8'})).digest('hex');
 
@@ -127,7 +132,7 @@ if (options.buildOnly) {
 
 } else {
 
-    gulp.task('deploy', function(done) {
+    gulp.task('deploy', function (done) {
         //force backup
         options.command = 'backup';
         runSequence('default', 'remote', 'rsync', done);

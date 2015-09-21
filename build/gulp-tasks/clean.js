@@ -6,8 +6,9 @@
 module.exports = function (gulp, $, options) {
 
     var path = require('path'),
-        del = require('del'),
-        paths = options.paths,
+        del = require('del');
+
+    var paths = options.paths,
         assetsPath = options.assetsPath,
         folders;
 
@@ -29,6 +30,8 @@ module.exports = function (gulp, $, options) {
 
 
     gulp.task('clean', function (done) {
-        del(folders, {dot: true}, done);
+        del(folders, {dot: true}).then(function () {
+            done();
+        });
     });
 };

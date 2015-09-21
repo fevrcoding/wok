@@ -7,6 +7,7 @@ var path = require('path'),
     _ = require('lodash'),
     glob = require('glob'),
     map = require('vinyl-map'),
+    through = require('through2'),
     lazypipe = require('lazypipe'),
     ejs = require('ejs');
 
@@ -15,7 +16,11 @@ module.exports = function (gulp, $, options) {
     var data = {},
         paths = options.paths,
         viewPath = path.join(process.cwd(), paths.src.views),
-        fixturesPath = path.join(process.cwd(), options.paths.src.fixtures);
+        fixturesPath = path.join(process.cwd(), options.paths.src.fixtures),
+        styleFilter,
+        jsFilter,
+        userRefPipe,
+        assets;
 
 
     //build view data
@@ -28,13 +33,16 @@ module.exports = function (gulp, $, options) {
 
     data.helpers = require('./lib/view-helpers')(options);
     data._ = _;
+    data.PRODUCTION = options.production;
 
 
-    var assets = $.useref.assets({searchPath: [paths.dist.root, paths.tmp]});
-    var styleFilter = $.filter('**/*.min.css');
-    var jsFilter = $.filter('**/*.min.js');
+    assets = $.useref.assets({searchPath: [paths.dist.root, paths.tmp]});
+    styleFilter = $.filter('**/*.min.css');
+    jsFilter = $.filter('**/*.min.js');
 
-    var userRefPipe = lazypipe()
+    if (options.production) {
+
+    userRefPipe = lazypipe()
         .pipe(function () {
             return assets;
         })
@@ -46,10 +54,10 @@ module.exports = function (gulp, $, options) {
         })
         .pipe(styleFilter.restore)
 
-        .pipe(function() {
+        .pipe(function () {
             return jsFilter;
         })
-        .pipe($.uglify, {preserveComments: 'some'})
+        .pipe($.uglify, {preserveComments: 'license'})
         .pipe($.header, options.banners.application, {pkg: options.pkg})
         .pipe(jsFilter.restore)
         .pipe(function () {
@@ -61,22 +69,28 @@ module.exports = function (gulp, $, options) {
         .pipe($.useref, {
             //just replace src
             replace: function (blockContent, target, attbs) {
-                if(attbs) {
+                if (attbs) {
                     return '<script src="' + target + '" ' + attbs + '></script>';
-                } else {
-                    return '<script src="' + target + '"></script>';
                 }
+                return '<script src="' + target + '"></script>';
             }
         });
+    } else {
+        userRefPipe = function empty() {
+            return through.obj(function (file, enc, cb) {
+                cb(null, file);
+            });
+        };
+    }
 
 
     gulp.task('views', function () {
 
         return gulp.src([viewPath + '/{,*/}' + options.viewmatch, '!' + viewPath + '/{,*/}_*.*'])
-            .pipe(map(function(code, filename) {
+            .pipe(map(function (code, filename) {
                 return ejs.render(code.toString(), _.clone(data), {filename: filename});
             }))
-            .pipe($.if(options.production, userRefPipe()))
+            .pipe(userRefPipe())
             .pipe(gulp.dest(paths.dist.views))
             .pipe($.if(options.production, $.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), {merge: true})))
             .pipe($.if(options.production, gulp.dest('.')))

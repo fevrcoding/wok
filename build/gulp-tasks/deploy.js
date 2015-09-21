@@ -64,11 +64,10 @@ module.exports = function (gulp, $, options) {
         var targets = Object.keys(hosts).filter(function (host) { return !!hosts[host].host; });
 
         if (!target || targets.indexOf(target) === -1) {
-            $.util.log($.util.colors.red('Deploy target unavailable. Specifiy it via `--remotehost` argument. Allowed targets are: ' + targets.join(', ')));
+            $.util.log($.util.colors.red('Error: Deploy target unavailable. Specifiy it via `--remotehost` argument. Allowed targets are: ' + targets.join(', ')));
             return false;
-        } else {
-            return hosts[target];
         }
+        return hosts[target];
     }
 
     //gulp.task('ftp', function (done) {
@@ -76,8 +75,10 @@ module.exports = function (gulp, $, options) {
     //        FTPS = require('ftps'),
     //        ftps;
     //
+    //
+    //
     //    if (host === false) {
-    //        done('Deploy target unavailable');
+    //        done();
     //        return false;
     //    }
     //
@@ -87,22 +88,23 @@ module.exports = function (gulp, $, options) {
     //        username: host.username
     //    });
     //
-    //    ftps.raw('mirror -p --reverse --delete --verbose ' + paths.dist.root + ' ' + host.path).exec(function (err, response) {
+    //    $.util.log($.util.colors.green('Deploying to target %s (%s)'), options.remotehost, host.host);
+    //
+    //
+    //    ftps.raw('mirror --exclude widget/ -p --reverse --delete --verbose --ignore-time ' + paths.dist.root + ' ' + host.path).exec(function (err, response) {
     //        if (response.error) {
     //            done(response.error);
     //        } else {
-    //            if (response.data.length > 0) {
-    //                response.data.trim().split('\n').forEach(function (line) {
-    //                    $.util.log('[remote] ' + line);
-    //                });
-    //
-    //            } else {
-    //                $.util.log('[remote] Nothing to sync');
+    //            if (response.data.length === 0) {
+    //                $.util.log($.util.colors.cyan('[remote] ') + ' Nothing to sync');
     //            }
-    //
     //            done();
     //        }
-    //    });
+    //    }).stdout.on('data', function (res) {
+    //            res.toString().trim().split('\n').forEach(function (line) {
+    //                $.util.log($.util.colors.cyan('[remote] ') + line.trim());
+    //            });
+    //        });
     //});
 
 
@@ -113,7 +115,7 @@ module.exports = function (gulp, $, options) {
 
         host = getDeployTarget(options.remotehost);
         if (host === false) {
-            done('Deploy target unavailable');
+            done();
             return false;
         }
 
@@ -123,19 +125,19 @@ module.exports = function (gulp, $, options) {
             return false;
         }
 
-        conn.on('ready', function() {
-            conn.exec('cd ' + host.path + ';' + sshCommands[options.command], function(err, stream) {
+        conn.on('ready', function () {
+            conn.exec('cd ' + host.path + ';' + sshCommands[options.command], function (err, stream) {
                 if (err) {
                     return done(err);
                 }
 
-                stream.on('close', function(code) {
+                stream.on('close', function (code) {
                     $.util.log('REMOTE: close code: ' + code);
                     done();
                     return conn.end();
-                }).on('data', function(data) {
+                }).on('data', function (data) {
                     $.util.log('REMOTE: ' + data);
-                }).stderr.on('data', function(data) {
+                }).stderr.on('data', function (data) {
                     $.util.log($.util.colors.red('REMOTE: ' + data));
                 });
             });
