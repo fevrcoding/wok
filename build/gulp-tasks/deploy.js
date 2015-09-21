@@ -70,42 +70,49 @@ module.exports = function (gulp, $, options) {
         return hosts[target];
     }
 
-    //gulp.task('ftp', function (done) {
-    //    var host = getDeployTarget(options.remotehost),
-    //        FTPS = require('ftps'),
-    //        ftps;
-    //
-    //
-    //
-    //    if (host === false) {
-    //        done();
-    //        return false;
-    //    }
-    //
-    //    ftps = new FTPS({
-    //        host: host.host,
-    //        password: host.password,
-    //        username: host.username
-    //    });
-    //
-    //    $.util.log($.util.colors.green('Deploying to target %s (%s)'), options.remotehost, host.host);
-    //
-    //
-    //    ftps.raw('mirror --exclude widget/ -p --reverse --delete --verbose --ignore-time ' + paths.dist.root + ' ' + host.path).exec(function (err, response) {
-    //        if (response.error) {
-    //            done(response.error);
-    //        } else {
-    //            if (response.data.length === 0) {
-    //                $.util.log($.util.colors.cyan('[remote] ') + ' Nothing to sync');
-    //            }
-    //            done();
-    //        }
-    //    }).stdout.on('data', function (res) {
-    //            res.toString().trim().split('\n').forEach(function (line) {
-    //                $.util.log($.util.colors.cyan('[remote] ') + line.trim());
-    //            });
-    //        });
-    //});
+    gulp.task('ftp', function (done) {
+        var FTPS = require('ftps'),
+            hasbin = require('hasbin'),
+            host = getDeployTarget(options.remotehost),
+            ftps;
+
+
+
+        if (host === false) {
+            done();
+            return false;
+        }
+
+        if (!hasbin.sync('lftxp')) {
+            $.util.log($.util.colors.red('Error: required `lftp` binary not found in PATH.'));
+            done();
+            return false;
+        }
+
+        ftps = new FTPS({
+            host: host.host,
+            password: host.password,
+            username: host.username
+        });
+
+        $.util.log($.util.colors.green('Deploying to target %s (%s)'), options.remotehost, host.host);
+
+
+        ftps.raw('mirror --exclude widget/ -p --reverse --delete --verbose --ignore-time ' + paths.dist.root + ' ' + host.path).exec(function (err, response) {
+            if (response.error) {
+                done(response.error);
+            } else {
+                if (response.data.length === 0) {
+                    $.util.log($.util.colors.cyan('[remote] ') + ' Nothing to sync');
+                }
+                done();
+            }
+        }).stdout.on('data', function (res) {
+                res.toString().trim().split('\n').forEach(function (line) {
+                    $.util.log($.util.colors.cyan('[remote] ') + line.trim());
+                });
+            });
+    });
 
 
     gulp.task('remote', function (done) {
