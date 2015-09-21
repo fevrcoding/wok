@@ -3,15 +3,13 @@
  * ===============================
  */
 
-var path = require('path'),
-    autoprefixer = require('autoprefixer'),
-    browserSync = require('browser-sync').get('website'),
-    lazypipe = require('lazypipe');
-
-
 module.exports = function (gulp, $, options) {
 
-    var production = options.production,
+    var path = require('path'),
+        autoprefixer = require('autoprefixer'),
+        browserSync = require('browser-sync').get(options.buildHash),
+        lazypipe = require('lazypipe'),
+        production = options.production,
         paths = options.paths,
         destPath = options.assetsPath('dist.css'),
         sassFunctions = require('./lib/sass-functions')(options),

@@ -60,6 +60,10 @@ if (options.production) {
 options.pkg = pkg;
 options.banners = banners;
 
+//unique build identifier
+options.buildHash = 'buildhash' + (Date.now());
+
+
 options.assetsPath = function (type, match) {
     var parts = type.split('.'),
         paths = options.paths,

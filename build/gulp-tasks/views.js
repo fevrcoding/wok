@@ -37,8 +37,8 @@ module.exports = function (gulp, $, options) {
 
 
     assets = $.useref.assets({searchPath: [paths.dist.root, paths.tmp]});
-    styleFilter = $.filter('**/*.min.css');
-    jsFilter = $.filter('**/*.min.js');
+    styleFilter = $.filter('**/*.min.css', {restore: true});
+    jsFilter = $.filter('**/*.min.js', {restore: true});
 
     if (options.production) {
 
@@ -52,14 +52,18 @@ module.exports = function (gulp, $, options) {
         .pipe(function () {
             return $.if(/\-ie\.min\.css$/, $.minifyCss({compatibility: 'ie8'}), $.minifyCss());
         })
-        .pipe(styleFilter.restore)
+        .pipe(function () {
+            return styleFilter.restore;
+        })
 
         .pipe(function () {
             return jsFilter;
         })
         .pipe($.uglify, {preserveComments: 'license'})
         .pipe($.header, options.banners.application, {pkg: options.pkg})
-        .pipe(jsFilter.restore)
+        .pipe(function () {
+            return jsFilter.restore;
+        })
         .pipe(function () {
             var vendorRegexp = new RegExp(paths.vendors);
             return $.if(vendorRegexp, $.header(options.banners.vendors, {pkg: options.pkg}));

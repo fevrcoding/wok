@@ -7,7 +7,7 @@
 module.exports = function (gulp, $, options) {
 
     var spawn = require('child_process').spawn,
-        browserSync = require('browser-sync').create('website');
+        browserSync = require('browser-sync').create(options.buildHash);
 
     var paths = options.paths,
         assetsPath = options.assetsPath,
