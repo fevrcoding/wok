@@ -13,6 +13,8 @@ module.exports = function (gulp, $, options) {
     }
 
     gulp.task('scripts', function () {
+
+
         return gulp.src([srcPath +  '/**/*.js', '!' + srcPath +  '/**/*.{spec,conf}.js'])
             .pipe($.plumber({
                 errorHandler: $.notify.onError('Error: <%= error.message %>')

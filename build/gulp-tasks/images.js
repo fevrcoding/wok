@@ -3,16 +3,15 @@
  * ===============================
  */
 
-
-
-var path = require('path'),
-    lazypipe = require('lazypipe');
-
 module.exports = function (gulp, $, options) {
 
-    var paths = options.paths;
+    var path = require('path'),
+        lazypipe = require('lazypipe'),
+        paths = options.paths,
+        filesMatch = '**/*.{png,jpg,gif,svg,webp}',
+        productionPipe;
 
-    var productionPipe = lazypipe()
+    productionPipe = lazypipe()
         .pipe($.imagemin, {
             progressive: false,
             interlaced: true,
@@ -23,9 +22,11 @@ module.exports = function (gulp, $, options) {
         })
         .pipe($.rev);
 
+
     gulp.task('images', function () {
 
-        return gulp.src(options.assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}'))
+        return gulp.src(options.assetsPath('src.images', filesMatch))
+            .pipe($.changed(options.assetsPath('dist.images')))
             .pipe($.if('*.svg', $.imagemin({
                 svgoPlugins: [{
                     cleanupIDs: false,

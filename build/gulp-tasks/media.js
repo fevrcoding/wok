@@ -6,6 +6,7 @@
 module.exports = function (gulp, $, options) {
 
     gulp.task('media', function () {
+
         return gulp.src([options.assetsPath('src.video', '**/*.*'), options.assetsPath('src.audio', '**/*.*')])
             .pipe($.changed(options.assetsPath('dist')))
             .pipe(gulp.dest(options.assetsPath('dist')))

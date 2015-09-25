@@ -3,17 +3,18 @@
  * ===============================
  */
 
-var path = require('path'),
-    _ = require('lodash'),
-    glob = require('glob'),
-    map = require('vinyl-map'),
-    through = require('through2'),
-    lazypipe = require('lazypipe'),
-    ejs = require('ejs');
+
 
 module.exports = function (gulp, $, options) {
 
-    var data = {},
+    var path = require('path'),
+        _ = require('lodash'),
+        glob = require('glob'),
+        map = require('vinyl-map'),
+        through = require('through2'),
+        lazypipe = require('lazypipe'),
+        ejs = require('ejs'),
+        data = {},
         paths = options.paths,
         viewPath = path.join(process.cwd(), paths.src.views),
         fixturesPath = path.join(process.cwd(), options.paths.src.fixtures),

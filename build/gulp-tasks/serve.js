@@ -12,7 +12,6 @@ module.exports = function (gulp, $, options) {
     var paths = options.paths,
         assetsPath = options.assetsPath,
         ports = options.hosts.devbox.ports,
-        reload = options.livereload ? browserSync.reload : function () {},
         browserSyncConfig;
 
 
@@ -65,22 +64,27 @@ module.exports = function (gulp, $, options) {
 
         browserSync.init(browserSyncConfig, function () {
 
+            ['images', 'scripts', 'fonts', 'fonts', 'media', 'views'].forEach(function (task) {
+                gulp.task(task + '-watch', [task], browserSync.reload);
+            });
+
             gulp.watch([
                 assetsPath('src.sass', '/**/*.{scss,sass}'),
                 '!' + assetsPath('src.sass', '**/*scsslint_tmp*.{sass,scss}') //exclude scss lint files
             ], ['styles']);
-            gulp.watch([assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}')], ['images']).on('change', reload);
-            gulp.watch([assetsPath('src.fonts', '**/*.{eot,svg,ttf,woff,woff2}')], ['fonts']).on('change', reload);
-            gulp.watch([assetsPath('src.video', '{,*/}*.*'), assetsPath('src.audio', '{,*/}*.*')], ['media']).on('change', reload);
+
+            gulp.watch([assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}')], ['images-watch']);
+            gulp.watch([assetsPath('src.fonts', '**/*.{eot,svg,ttf,woff,woff2}')], ['fonts-watch']);
+            gulp.watch([assetsPath('src.video', '{,*/}*.*'), assetsPath('src.audio', '{,*/}*.*')], ['media-watch']);
             gulp.watch([
                 assetsPath('src.js') + '/**/*.js',
                 '!' + assetsPath('src.js') + '/**/*.{spec,conf}.js'
-            ], ['scripts']).on('change', reload);
+            ], ['scripts-watch']);
             gulp.watch([
                 paths.src.views + '/{,*/}' + options.viewmatch,
                 paths.src.documents + '/*.md',
                 paths.src.fixtures + '/*.json'
-            ], ['views']).on('change', reload);
+            ], ['views-watch']);
 
         });
 
