@@ -65,7 +65,10 @@ module.exports = function (gulp, $, options) {
         browserSync.init(browserSyncConfig, function () {
 
             ['images', 'scripts', 'fonts', 'fonts', 'media', 'views'].forEach(function (task) {
-                gulp.task(task + '-watch', [task], browserSync.reload);
+                gulp.task(task + '-watch', [task], function (doneWatch) {
+                    browserSync.reload();
+                    doneWatch();
+                });
             });
 
             gulp.watch([
