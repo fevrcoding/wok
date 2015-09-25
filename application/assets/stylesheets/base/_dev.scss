@@ -1,6 +1,6 @@
 //DEVELOPMENT ONLY RULES
 
-@if build-env() != "production" {
+@if build-env() != 'production' {
     img[id^="chromeperfectpixel"] {
         max-width: none !important;
     }

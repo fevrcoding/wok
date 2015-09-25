@@ -1,34 +1,35 @@
 //variables
-@import "base/globals";
-@import "base/colors";
-@import "base/fonts";
+@import 'base/globals';
+@import 'base/colors';
+@import 'base/fonts';
 
 //plugins
-@import "sass-mq/mq";
-@import "jacket/stylesheets/jacket";
+@import 'sass-mq/mq';
+@import 'jacket/stylesheets/jacket';
 
 //base styles and mixins
-@import "normalize-css/normalize";
-@import "base/mixins";
+@import 'normalize-css/normalize';
+@import 'base/mixins';
 //uncomment to use custom grid
-@import "base/mixins-grid";
-@import "base/base";
-@import "base/utility";
-@import "base/content-typography";
+@import 'base/mixins-grid';
+@import 'base/base';
+@import 'base/content-typography';
 
-@import "layouts/layout";
-@import "layouts/header";
-@import "layouts/footer";
+@import 'layouts/layout';
+@import 'layouts/header';
+@import 'layouts/footer';
 
 //modules here
-//@import "modules*/*.*
-//" NOTE: import modules manually;
+//@import 'modules*/*.*
+//' NOTE: import modules manually;
+//utility come last so they can overwrite stuff...
+@import 'base/utility';
 
 //states and themes
-@import "layouts/states";
-//@import "layouts/themes";
-//@import "layouts/swatches";
+@import 'layouts/states';
+//@import 'layouts/themes';
+//@import 'layouts/swatches';
 
 //utility styles
-@import "base/print";
-@import "base/dev";
+@import 'base/print';
+@import 'base/dev';

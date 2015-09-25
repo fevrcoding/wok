@@ -107,7 +107,7 @@ _svn
 node_modules
 bin
 etc
-lib
+/lib
 assets.json
 public/*
 public/.htaccess

@@ -78,9 +78,10 @@ $container-lg: $container-large-desktop !default;
     min-height: 1px;
     padding-left: $gutter / 2;
     padding-right: $gutter / 2;
+
     @include mq(sm) {
-        float: left;
         width: percentage($columns / $grid-columns);
+        float: left;
     }
 }
 
@@ -108,9 +109,10 @@ $container-lg: $container-large-desktop !default;
     min-height: 1px;
     padding-left: $gutter / 2;
     padding-right: $gutter / 2;
+
     @include mq(md) {
-        float: left;
         width: percentage($columns / $grid-columns);
+        float: left;
     }
 }
 
@@ -138,9 +140,10 @@ $container-lg: $container-large-desktop !default;
     min-height: 1px;
     padding-left: $gutter / 2;
     padding-right: $gutter / 2;
+
     @include mq(lg) {
-        float: left;
         width: percentage($columns / $grid-columns);
+        float: left;
     }
 }
 
@@ -175,6 +178,7 @@ $container-lg: $container-large-desktop !default;
     @for $i from 2 through $grid-columns {
         $list: ".l-col--xs-#{$i}, .l-col--sm-#{$i}, .l-col--md-#{$i}, .l-col--lg-#{$i}, #{$list}";
     }
+
     #{$list} {
         position: relative;
         // Prevent columns from collapsing when empty
@@ -193,6 +197,7 @@ $container-lg: $container-large-desktop !default;
     @for $i from 2 through $grid-columns {
         $list: ".l-col--#{$class}-#{$i}, #{$list}";
     }
+
     #{$list} {
         float: left;
     }
