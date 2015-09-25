@@ -32,7 +32,7 @@
     .ir a::after,
     a[href^="javascript:"]::after,
     a[href^="#"]::after {
-        content: "";
+        content: '';
     }
     pre,
     blockquote {
@@ -56,9 +56,9 @@
     p,
     h2,
     h3 {
-        orphans: 3;
-        widows: 3;
         color: $color-dark !important;
+        widows: 3;
+        orphans: 3;
     }
     h2,
     h3 {

@@ -1,7 +1,9 @@
 {
     "preset": "airbnb",
+    "maximumLineLength": null,
     "validateLineBreaks": "LF",
     "validateIndentation": 4,
+    "requireLineFeedAtFileEnd": null,
     "disallowSpacesInAnonymousFunctionExpression": null,
     "disallowSpacesInFunctionExpression": null,
 	"disallowMultipleLineBreaks": null,

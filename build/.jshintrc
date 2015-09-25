@@ -1,0 +1,25 @@
+{
+	"predef": [],
+
+	"browser": false,
+    "node": true,
+
+	//Enforcing options
+	"curly": true, // Require {} for every new block or scope.
+	"eqeqeq": true,
+	"immed": true,
+	"trailing": true,
+	"undef": true,
+    "indent": 4,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "unused": true,
+
+	//Relaxing options
+	"evil": false,  // Tolerate use of `eval`.
+
+	"expr": false, // Tolerate `ExpressionStatement` as Programs.
+	"boss": false // Tolerate assignments inside if, for & while. Usually conditions & loops are for comparison
+
+}

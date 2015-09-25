@@ -32,41 +32,24 @@
 // Elements
 // ==========================================================================
 
-//proxy method to postcss-asset function
-@function image-url($image-path) {
-    @return resolve($image-path);
-}
-
-//proxy method to postcss-asset function
-@function image-width($image-path) {
-    @return width($image-path);
-}
-
-//proxy method to postcss-asset function
-@function image-height($image-path) {
-    @return height($image-path);
-}
-
-//proxy method to postcss-asset function
-@function inline-image($image-path) {
-    @return inline($image-path);
-}
-
 @mixin boost-performance ($translate: true){
     backface-visibility: hidden;
     transform-style: preserve-3d;
     @if ($translate) {
-        transform: translate3d(0,0,0);
+        transform: translate3d(0, 0, 0);
+        will-change: transform;
     }
 }
 
 @mixin clearfix {
     *zoom: 1;
+
     &:before,
     &:after {
-        content: "";
         display: table;
+        content: '';
     }
+
     &:after {
         clear: both;
     }
@@ -80,8 +63,8 @@
 }
 
 @mixin pseudo-img($image-url, $width: false, $height: false) {
-    content: " ";
     display: block;
+    content: ' ';
     background: image-url($image-url) no-repeat 0 0;
     @if $height {
         height: $height;
@@ -99,13 +82,13 @@
     @if $line-height {
         line-height: ceil(image-height($image-url) * $ratio);
     } @else {
-        height: ceil(image-height($image-url) * $ratio);
         width: ceil(image-width($image-url) * $ratio);
+        height: ceil(image-height($image-url) * $ratio);
     }
     @if $inline {
         background-image: inline-image($image-url);
-        background-position: 0 0;
         background-repeat: no-repeat;
+        background-position: 0 0;
     } @else {
         background: image-url($image-url) no-repeat 0 0;
     }
@@ -125,12 +108,15 @@
     &::-webkit-input-placeholder {
         @content;
     }
+
     &:-moz-placeholder {
         @content;
     }
+
     &::-moz-placeholder {
         @content;
     }
+
     &:-ms-input-placeholder {
         @content;
     }
@@ -152,38 +138,38 @@
     }
 }
 
-@mixin triangle($color: #000, $size: "5px", $direction: "up") {
+@mixin triangle($color: #000, $size: '5px', $direction: 'up') {
     width: 0;
     height: 0;
-    @if $direction == "up" {
+    @if $direction == 'up' {
         border-right: $size solid transparent;
-        border-left: $size solid transparent;
         border-bottom: $size solid $color;
+        border-left: $size solid transparent;
     }
-    @if $direction == "down" {
+    @if $direction == 'down' {
+        border-top: $size solid $color;
         border-right: $size solid transparent;
         border-left: $size solid transparent;
-        border-top: $size solid $color;
     }
-    @if $direction == "right" {
+    @if $direction == 'right' {
         border-top: $size solid transparent;
         border-bottom: $size solid transparent;
         border-left: $size solid $color;
     }
-    @if $direction == "left" {
+    @if $direction == 'left' {
         border-top: $size solid transparent;
-        border-bottom: $size solid transparent;
         border-right: $size solid $color;
+        border-bottom: $size solid transparent;
     }
 }
 
 @mixin transparent-bg($color, $alpha) {
     $rgba: rgba($color, $alpha);
+
+    background-color: $rgba;
+
     @include jacket(legacy) {
         background-color: transparent;
-    }
-    background-color: $rgba;
-    @include jacket(legacy) {
         $ie-hex-str: ie-hex-str($rgba);
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#{$ie-hex-str}, endColorstr=#{$ie-hex-str});
         zoom: 1;

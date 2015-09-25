@@ -11,18 +11,20 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 * [Sass](http://sass-lang.com/) 3.2+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
 * [BEM](http://blog.kaelig.fr/post/48196348743/fifty-shades-of-bem)-like naming convention
 * Legacy browsers fallback stylesheet (rem units conversion, large screen fallback via [sass-mq](https://github.com/sass-mq/sass-mq#responsive-mode-off))
-* [Grunt.js](http://gruntjs.com/) build and deploy workflow
+* [Gulp.js](http://gulpjs.com/) build and deploy workflow
 * [Bower](http://bower.io/)
-* Asset Live-reload and/or [BrowserSync](http://www.browsersync.io/)
+* Development server and asset live-reload with [BrowserSync](http://www.browsersync.io/)
 * [Weinre](http://people.apache.org/~pmuellr/weinre/) remote debugging
+* Incremental deploy with [rsync](https://rsync.samba.org/) or [lftp](http://lftp.yar.ru/)
+* Remote backup / rollback (UNIX SSH environments only)
 * more to come... (project scaffolding, jade support)
 
 
 ##Requirements
 
-* Node.js >= 0.10.30 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
+* Node.js >= 0.12.0 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
 * bower (`sudo npm install -g bower`)
-* grunt-cli (`sudo npm install -g grunt-cli`)
+* gulp cli (`sudo npm install -g gulp`)
 
 ##Installation
 
@@ -33,16 +35,16 @@ Clone this repo:
 From project root:
 
 * `bower install` (vendors)
-* `npm install` (grunt deps)
+* `npm install` (gulp deps)
 
 ##Configuration
 
 On a plain HTML project, the default configuration should work just fine. On other setups you might need to tweak some paths/options:
 
 
-1. customize paths and options in `hosts.yml`, `paths.yml` and `properties.yml` files within the `build/grunt-config` folder
+1. customize paths and options in `hosts.js`, `paths.js` and `properties.js` files within the `build/gulp-config` folder
 
-1. if needed, edit/add/remove tasks by editing tasks' configuration in `build/grunt-tasks/`. Configuration format are listed on the [load-grunt-config docs](https://github.com/firstandthird/load-grunt-config#grunt-tasks-files)
+1. if needed, edit/add/remove tasks by editing tasks' configuration in `build/gulp-tasks/`.
 
 ##Project Structure
 
@@ -81,21 +83,53 @@ You may use [bower](http://bower.io/) to manage vendors. Installed packages will
 
 From project root:
 
-`grunt serve` (builds in development mode,  runs a static server on port 8000, watches for change and live-reloads assets)
+`gulp serve` (builds in development mode,  runs a static server on port 8000, watches for change and live-reloads assets)
 
-Other Grunt tasks:
+###Production build
 
-* `dev`: development build
-* `dist`: production ready build
-* `deploy:[staging|production]`: development / production build and deploy with rsync. A backup of the deploy target folder (`paths.www`) will be stored in `paths.backup`.
-* `rollback:[staging|production]`: restores the latest backup (if available)
+To generate a production ready build add the `--production` parameter:
 
-**Note**: when paired with Phing or other deployment systems, remember to set `buildOnly` to `false` in `build/grunt-config/properties.yml` to delegate deploy tasks.
+
+    gulp --production
+    
+
+###Deploy and rollback:
+
+####SSH and rsync
+
+By default WOK implements a simple set of deploy tasks requiring SSH remote access and [rsync](https://rsync.samba.org).  
+
+To deploy and rollback with rsync first setup your remote hosts in `build/gulp-config/hosts.js`, then run:
+ 
+    #deploy to remote staging server. A backup of the deploy target folder (`paths.dist.root`) will be stored in `paths.backup`.
+    gulp deploy --remotehost=staging
+    
+    #deploy a production build to remote production server
+    gulp deploy --production --remotehost=production
+    
+    #rollback to the previous version in the remote production server
+    gulp remote --command=rollback --remotehost=production
+
+####FTP
+
+If you are on a shared hosting with FTP access, you can switch to the more basic `ftp` task, which uses [lftp](http://lftp.yar.ru) mirroring feature for incremental upload.
+
+To switch to ftp mode, set `deployStrategy` in `build/gulp-config/properties.js` to `'ftp'`, then config hosts and run deploy commands as explained above.
+
+**Note** Rollback and backup tasks won't be available with this configuration.
+
+####Usage with extarnal tools
+
+When paired with Phing or other deployment systems, remember to set `buildOnly` to `true` in `build/gulp-config/properties.js` to delegate deploy tasks.
+
+###Other Gulp tasks
+
+* `dev`: one time development build (also runs as default task)
+* `bump`: bumps semver version of `package.json` and `bower.json` files. Accepts a `--type` parameter with value `major|minor|patch|prerelease`. Defaults to `patch`. 
 
 ##Project Info
 
 WOK was created by [Marco Solazzi](https://github.com/dwightjack) with contributions from [Matteo Guidotto](https://github.com/mguidotto) and [Umberto Quintarelli](ttps://github.com/quincia).
-
 
 Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.
 Modified work Copyright © 2015 Marco Solazzi, released under the MIT license.

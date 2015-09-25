@@ -55,10 +55,10 @@ body {
 }
 
 body {
+    min-width: 320px;
     background: $color-bg;
     color: $color-text;
     font-family: $font-family-base;
-    min-width: 320px;
 }
 
 //Remove text-shadow in selection highlight: h5bp.com/i
@@ -80,10 +80,10 @@ body {
 hr {
     display: block;
     height: 1px;
-    border: 0;
-    border-top: 1px solid $color-border;
     margin: rem(1rem) 0;
     padding: 0;
+    border: 0;
+    border-top: 1px solid $color-border;
 }
 
 // Remove the gap between images and the bottom of their containers: h5bp.com/i/440
@@ -111,6 +111,18 @@ textarea {
     resize: vertical;
 }
 
+
+
+
+/* ==========================================================================
+   ##prevent 300ms delay in FF, Chrome and IE on touch devices
+   ========================================================================== */
+
+a[href],
+button {
+    touch-action: manipulation;
+}
+
 /* ==========================================================================
    ##Shared Styles
 
@@ -128,6 +140,10 @@ textarea {
     display: block;
     max-width: 100%;
     height: auto;
+}
+
+%clearfix {
+    @include clearfix;
 }
 
 /* ==========================================================================
@@ -164,6 +180,7 @@ p {
 a {
     color: $color-link;
     text-decoration: underline;
+
     &:hover {
         //set to important so that hover is hardly overwritten by other styles
         color: $color-link-hover !important;
