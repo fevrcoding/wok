@@ -32,6 +32,8 @@ module.exports = function (gulp, $, options) {
     gulp.task('clean', function (done) {
         del(folders, {dot: true}).then(function () {
             done();
+        }, function (err) {
+            done(err);
         });
     });
 };
