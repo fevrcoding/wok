@@ -2,7 +2,8 @@
  * Grunt build tasks
  */
 
-/*jshint node:true */
+/*eslint-env node, mocha */
+/*eslint one-var: 0, no-new: 0, func-names: 0, strict: 0 */
 
 'use strict';
 
@@ -18,8 +19,7 @@ var fs = require('fs'),
     taskPath = path.join(process.cwd(), 'build', 'gulp-tasks'),
     optionsPath = path.join(process.cwd(), 'build', 'gulp-config'),
     options = {},
-    banners = {},
-    taskList;
+    banners = {};
 
 
 pkg.year = moment().format('YYYY');
@@ -79,7 +79,7 @@ options.assetsPath = function (type, match) {
     return folderPath;
 };
 
-taskList = fs.readdirSync(taskPath).filter(function (taskFile) {
+fs.readdirSync(taskPath).filter(function (taskFile) {
     //accept just js files
     return path.extname(taskFile) === '.js';
 }).forEach(function (taskFile) {
@@ -139,7 +139,7 @@ if (options.buildOnly) {
     gulp.task('deploy', function (done) {
         var tasks = ['default'];
 
-        switch(options.deployStrategy) {
+        switch (options.deployStrategy) {
         case 'rsync':
             //force backup
             options.command = 'backup';
