@@ -13,7 +13,6 @@ module.exports = function (gulp, $, options) {
         map = require('vinyl-map'),
         through = require('through2'),
         lazypipe = require('lazypipe'),
-        ejs = require('ejs'),
         data = {},
         paths = options.paths,
         viewPath = path.join(process.cwd(), paths.src.views),
@@ -21,6 +20,7 @@ module.exports = function (gulp, $, options) {
         styleFilter,
         jsFilter,
         userRefPipe,
+        env,
         assets;
 
 
@@ -32,9 +32,12 @@ module.exports = function (gulp, $, options) {
         data[id] = require(path.join(fixturesPath, filename));
     });
 
-    data.helpers = require('./lib/view-helpers')(options);
+    data.helpers = require('./lib/view-helpers').helpers(options);
     data._ = _;
     data.PRODUCTION = options.production;
+    data.page = {};
+
+    env = require('./lib/view-helpers').nunjucks([viewPath, paths.src.documents], options);
 
 
     assets = $.useref.assets({searchPath: [paths.dist.root, paths.tmp]});
@@ -43,43 +46,43 @@ module.exports = function (gulp, $, options) {
 
     if (options.production) {
 
-    userRefPipe = lazypipe()
-        .pipe(function () {
-            return assets;
-        })
-        .pipe(function () {
-            return styleFilter;
-        })
-        .pipe(function () {
-            return $.if(/\-ie\.min\.css$/, $.minifyCss({compatibility: 'ie8'}), $.minifyCss());
-        })
-        .pipe(function () {
-            return styleFilter.restore;
-        })
+        userRefPipe = lazypipe()
+            .pipe(function () {
+                return assets;
+            })
+            .pipe(function () {
+                return styleFilter;
+            })
+            .pipe(function () {
+                return $.if(/\-ie\.min\.css$/, $.minifyCss({compatibility: 'ie8'}), $.minifyCss());
+            })
+            .pipe(function () {
+                return styleFilter.restore;
+            })
 
-        .pipe(function () {
-            return jsFilter;
-        })
-        .pipe($.uglify, {preserveComments: 'license'})
-        .pipe($.header, options.banners.application, {pkg: options.pkg})
-        .pipe(function () {
-            return jsFilter.restore;
-        })
-        .pipe(function () {
-            var vendorRegexp = new RegExp(paths.vendors);
-            return $.if(vendorRegexp, $.header(options.banners.vendors, {pkg: options.pkg}));
-        })
-        .pipe($.rev)
-        .pipe(assets.restore)
-        .pipe($.useref, {
-            //just replace src
-            replace: function (blockContent, target, attbs) {
-                if (attbs) {
-                    return '<script src="' + target + '" ' + attbs + '></script>';
+            .pipe(function () {
+                return jsFilter;
+            })
+            .pipe($.uglify, {preserveComments: 'license'})
+            .pipe($.header, options.banners.application, {pkg: options.pkg})
+            .pipe(function () {
+                return jsFilter.restore;
+            })
+            .pipe(function () {
+                var vendorRegexp = new RegExp(paths.vendors);
+                return $.if(vendorRegexp, $.header(options.banners.vendors, {pkg: options.pkg}));
+            })
+            .pipe($.rev)
+            .pipe(assets.restore)
+            .pipe($.useref, {
+                //just replace src
+                replace: function (blockContent, target, attbs) {
+                    if (attbs) {
+                        return '<script src="' + target + '" ' + attbs + '></script>';
+                    }
+                    return '<script src="' + target + '"></script>';
                 }
-                return '<script src="' + target + '"></script>';
-            }
-        });
+            });
     } else {
         userRefPipe = function empty() {
             return through.obj(function (file, enc, cb) {
@@ -88,14 +91,19 @@ module.exports = function (gulp, $, options) {
         };
     }
 
-
     gulp.task('views', function () {
 
         return gulp.src([viewPath + '/{,*/}' + options.viewmatch, '!' + viewPath + '/{,*/}_*.*'])
-            .pipe(map(function (code, filename) {
-                return ejs.render(code.toString(), _.clone(data), {filename: filename});
+            .pipe($.plumber({
+                errorHandler: $.notify.onError('Error: <%= error.message %>')
+            }))
+            .pipe(map(function (code/*, filename*/) {
+                return env.renderString(code.toString(), _.clone(data));
             }))
             .pipe(userRefPipe())
+            .pipe($.rename(function (filepath) {
+                filepath.basename = filepath.basename.replace('.nunj', '');
+            }))
             .pipe(gulp.dest(paths.dist.views))
             .pipe($.if(options.production, $.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), {merge: true})))
             .pipe($.if(options.production, gulp.dest('.')))

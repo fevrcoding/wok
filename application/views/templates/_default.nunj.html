@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{{ pageTitle }}</title>
+    <meta name="description" content="" />
+
+    <!-- This could be needed in some layouts
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+    -->
+    <!-- mobile meta (hooray!) -->
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- build:replace /assets/vendors/modernizr/modernizr.min.js -->
+    <script src="/assets/vendors/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+
+
+    <!-- media queries for supporting devices and IE mobile (since it's mobile first) -->
+    <!--[if (gt IE 8) | (IEMobile)]><!-->
+    <!-- build:css /assets/stylesheets/application.min.css -->
+    <link rel="stylesheet" href="/assets/stylesheets/application.css" />
+    <!-- endbuild -->
+    <!--<![endif]-->
+
+    <!-- Fixed width style -->
+    <!-- build:css /assets/stylesheets/application-ie.min.css --><!--[if (lt IE 9) & (!IEMobile)]>
+    <link rel="stylesheet" href="/assets/stylesheets/application-ie.css" type="text/css" />
+    <![endif]--><!-- endbuild -->
+
+</head>
+<!--[if lt IE 9]> <body class="lt-ie10 lt-ie9"> <![endif]-->
+<!--[if IE 9]> <body class="lt-ie10"> <![endif]-->
+<!--[if gt IE 9]><!--> <body> <!--<![endif]-->
+
+<h1>Hello World!</h1>
+
+{% block main %}
+
+{% endblock %}
+
+<!-- build:js /assets/javascripts/application.min.js -->
+<script src="/assets/javascripts/base/plugins.js"></script>
+<script src="/assets/javascripts/application.js"></script>
+<!-- endbuild -->
+
+</body>
+</html>

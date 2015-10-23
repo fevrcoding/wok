@@ -1,0 +1,19 @@
+{% extends 'templates/_default.nunj.html' %}
+
+
+{% block main %}
+
+    <img src="/assets/images/test.png" alt=""/>
+
+    <div id="demo"></div>
+
+    {% include 'partials/_readme.html' %}
+
+    <p>{{ helpers.lorem(10, 20) }}</p>
+
+    {% markdown %}
+    {% include '../documents/readme.md' %}
+    {% endmarkdown %}
+
+{% endblock %}
+
