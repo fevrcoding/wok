@@ -40,7 +40,7 @@ module.exports = function (gulp, $, options) {
     env = require('./lib/view-helpers').nunjucks([viewPath, paths.src.documents], options);
 
 
-    assets = $.useref.assets({searchPath: [paths.dist.root, paths.tmp]});
+    assets = $.useref.assets({types: ['css', 'js', 'replace'], searchPath: [paths.dist.root, paths.tmp]});
     styleFilter = $.filter('**/*.min.css', {restore: true});
     jsFilter = $.filter('**/*.min.js', {restore: true});
 

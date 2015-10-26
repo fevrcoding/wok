@@ -3,8 +3,7 @@
  * ===============================
  */
 
-var path = require('path'),
-    modernizr = require('./lib/modernizr');
+var path = require('path');
 
 module.exports = function (gulp, $, options) {
 
@@ -12,45 +11,43 @@ module.exports = function (gulp, $, options) {
 
     var distConfig = {
 
-        // [REQUIRED] Path to the build you're using for development.
-        devFile: options.assetsPath('src.vendors', 'modernizr/modernizr.js'),
+        cache: true,
 
-        // [REQUIRED] Path to save out the built file.
-        outputFile: options.paths.tmp + '/modernizr/modernizr.min.js',
+        devFile: false,
 
-        // Based on default settings on http://modernizr.com/download/
-        extra: {
-            shiv: true,
-            printshiv: false,
-            load: false, //exclude yepnope
-            mq: true,
-            cssclasses: true
-        },
+        dest: options.paths.tmp + '/modernizr/modernizr.min.js',
 
         // Based on default settings on http://modernizr.com/download/
-        extensibility: {
-            addtest: false,
-            prefixed: false,
-            teststyles: false,
-            testprops: false,
-            testallprops: false,
-            hasevents: false,
-            prefixes: false,
-            domprefixes: false
-        },
+        options: [
+            'setClasses',
+            'addTest',
+            'html5printshiv',
+            'testProp',
+            'fnBind'
+        ],
 
         // By default, source is uglified before saving
         uglify: true,
 
-        // Define any tests you want to impliticly include.
-        tests: ['touch'],
+        // Define any tests you want to explicitly include
+        tests: [
+            'pointerevents',
+            'touchevents'
+        ],
 
-        // By default, this task will crawl your project for references to Modernizr tests.
-        // Set to false to disable.
-        parseFiles: true,
+        // Useful for excluding any tests that this tool will match
+        // e.g. you use .notification class for notification elements,
+        // but don’t want the test for Notification API
+        excludeTests: [],
 
-        // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
-        // You can override this by defining a 'files' array below.
+        // By default, will crawl your project for references to Modernizr tests
+        // Set to false to disable
+        crawl: true,
+
+        // Set to true to pass in buffers via the "files" parameter below
+        useBuffers: false,
+
+        // By default, this task will crawl all *.js, *.css, *.scss files.
         files: {
             src: [
                 options.assetsPath('src.js', '**/*.js'),
@@ -59,30 +56,53 @@ module.exports = function (gulp, $, options) {
             ]
         },
 
-        // When parseFiles = true, matchCommunityTests = true will attempt to
-        // match user-contributed tests.
-        matchCommunityTests: false,
-
-        // Have custom Modernizr tests? Add paths to their location here.
+        // Have custom Modernizr tests? Add them here.
         customTests: []
     };
 
 
-    gulp.task('modernizr', function () {
+    //gulp.task('modernizr', function () {
+    //
+    //
+    //
+    //    if (!options.production) {
+    //        return gulp.src(options.assetsPath('src.vendors', 'modernizr/modernizr.js'))
+    //            .pipe(gulp.dest(options.assetsPath('dist.vendors') + '/modernizr'));
+    //    }
+    //        return gulp.src(options.assetsPath('src.vendors', 'modernizr/modernizr.js'))
+    //            .pipe(modernizr(distConfig))
+    //            .pipe($.rename({extname: '.min.js'}))
+    //            .pipe($.rev())
+    //            .pipe(gulp.dest(options.assetsPath('dist.vendors') + '/modernizr'))
+    //            .pipe($.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), {merge: true}))
+    //            .pipe(gulp.dest('.'));
+    //});
 
 
 
-        if (!options.production) {
-            return gulp.src(options.assetsPath('src.vendors', 'modernizr/modernizr.js'))
-                .pipe(gulp.dest(options.assetsPath('dist.vendors') + '/modernizr'));
+    gulp.task('modernizr', function (done) {
+        var fs = require('fs'),
+            modernizr = require('modernizr'),
+            customizr = require('customizr'),
+            fullConfig = require('modernizr/lib/config-all.json'),
+            filePath = options.assetsPath('dist.vendors',  '/modernizr');
+
+
+        require('mkdirp').sync(filePath);
+
+        if (options.production) {
+            customizr(distConfig, function () {
+                done();
+            });
+        } else {
+            //full build
+            modernizr.build(fullConfig, function (result) {
+                fs.writeFile(filePath + '/modernizr.js', result, done);
+            });
         }
-            return gulp.src(options.assetsPath('src.vendors', 'modernizr/modernizr.js'))
-                .pipe(modernizr(distConfig))
-                .pipe($.rename({extname: '.min.js'}))
-                .pipe($.rev())
-                .pipe(gulp.dest(options.assetsPath('dist.vendors') + '/modernizr'))
-                .pipe($.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), {merge: true}))
-                .pipe(gulp.dest('.'));
+
+
+
     });
 
 };
