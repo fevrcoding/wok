@@ -52,8 +52,8 @@ module.exports = function (gulp, $, options) {
 
         // For best performance, don't add Sass partials to `gulp.src`
         return gulp.src([
-              options.assetsPath('src.sass', '**/*.{sass,scss}'),
-              '!' + options.assetsPath('src.sass', '**/*scsslint_tmp*.{sass,scss}') //exclude scss lint files
+                options.assetsPath('src.sass', '**/*.{sass,scss}'),
+                '!' + options.assetsPath('src.sass', '**/*scsslint_tmp*.{sass,scss}') //exclude scss lint files
             ])
             .pipe($.plumber({
                 errorHandler: $.notify.onError('Error: <%= error.message %>')

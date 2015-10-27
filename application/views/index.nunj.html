@@ -1,0 +1,14 @@
+{% extends 'templates/_default.nunj.html' %}
+
+
+{% block main %}
+
+    {% include 'partials/_readme.html' %}
+
+    <p>{{ helpers.lorem(10, 20) }}</p>
+
+    {% markdown %}
+    {% include '../documents/readme.md' %}
+    {% endmarkdown %}
+
+{% endblock %}

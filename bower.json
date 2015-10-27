@@ -1,6 +1,6 @@
 {
   "name": "wok",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "authors": [
     "Marco Solazzi <marco.solazzi@gmail.com>",
     "Matteo Guidotto <j8.matteo@gmail.com>",
@@ -15,7 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "modernizr": "2.8.3",
     "jacket": "1.1.1",
     "sass-mq": "3.2.3",
     "normalize-css": "3.0.3"

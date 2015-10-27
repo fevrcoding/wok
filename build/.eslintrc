@@ -1,0 +1,17 @@
+{
+    "extends": "../.eslintrc",
+
+    "parser": null,
+
+    "env": {
+        "node": true
+    },
+
+    "rules": {
+        "one-var": 0,
+        "no-new": 0,
+        "func-names": 0,
+        "strict": 0          // http://eslint.org/docs/rules/strict
+
+    }
+}
