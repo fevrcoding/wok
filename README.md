@@ -129,7 +129,7 @@ When paired with Phing or other deployment systems, remember to set `buildOnly` 
 
 ##Project Info
 
-WOK was created by [Marco Solazzi](https://github.com/dwightjack) with contributions from [Matteo Guidotto](https://github.com/mguidotto) and [Umberto Quintarelli](ttps://github.com/quincia).
+WOK was created by [Marco Solazzi](https://github.com/dwightjack) with contributions from [Matteo Guidotto](https://github.com/mguidotto) and [Umberto Quintarelli](https://github.com/quincia).
 
-Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.
+Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.  
 Modified work Copyright © 2015 Marco Solazzi, released under the MIT license.
