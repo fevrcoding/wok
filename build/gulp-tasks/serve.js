@@ -6,24 +6,18 @@
 
 module.exports = function (gulp, $, options) {
 
-    var spawn = require('child_process').spawn,
+    var _ = require('lodash'),
         browserSync = require('browser-sync').create(options.buildHash);
 
     var paths = options.paths,
         assetsPath = options.assetsPath,
         ports = options.hosts.devbox.ports,
-        browserSyncConfig;
+        serverConfigDefault;
 
-
-    browserSyncConfig = {
+    serverConfigDefault = {
+        middleware: require('./lib/middlewares')(options),
         notify: false,
         port: ports.connect,
-        ui: {
-            port: 3001,
-            weinre: {
-                port: ports.weinre
-            }
-        },
         server: {
             baseDir: options.paths.dist.root
         },
@@ -41,9 +35,9 @@ module.exports = function (gulp, $, options) {
     };
 
     if (!options.livereload) {
-        browserSyncConfig.ghostMode = false;
-        browserSyncConfig.ui = false;
-        browserSyncConfig.snippetOptions.rule.fn = function (snippet, match) {
+        serverConfigDefault.ghostMode = false;
+        serverConfigDefault.ui = false;
+        serverConfigDefault.snippetOptions.rule.fn = function (snippet, match) {
             return match;
         };
     }
@@ -58,11 +52,18 @@ module.exports = function (gulp, $, options) {
     // Watch Files For Changes & Reload
     gulp.task('serve', ['default'], function (done) {
 
+        var serverConf = _.defaults({
+            ui: {
+                port: 3001,
+                weinre: {
+                    port: ports.weinre
+                }
+            }
+        }, serverConfigDefault);
+
         options.isWatching = true;
 
-        browserSyncConfig.middleware = require('./lib/middlewares')(options);
-
-        browserSync.init(browserSyncConfig, function () {
+        browserSync.init(serverConf, function () {
 
             ['images', 'scripts', 'fonts', 'fonts', 'media', 'views'].forEach(function (task) {
                 gulp.task(task + '-watch', [task], function (doneWatch) {
@@ -101,17 +102,13 @@ module.exports = function (gulp, $, options) {
     //just a static server
     gulp.task('server', function (done) {
 
-        browserSync.init({
+        var serverConf = _.defaults({
             logLevel: 'silent',
-            middleware: require('./lib/middlewares')(options),
-            notify: false,
             open: false,
-            port: ports.connect,
-            server: {
-                baseDir: options.paths.dist.root
-            },
             ui: false
-        }, function () {
+        }, serverConfigDefault);
+
+        browserSync.init(serverConf, function () {
             $.util.log($.util.colors.green('Running a static server on port ' + ports.connect + '...'));
         });
 
