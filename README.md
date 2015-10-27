@@ -7,8 +7,8 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 ##Features
 
 * [HTML5 Boilerplate](http://html5boilerplate.com/)
-* Static HTML templating with [EJS](https://github.com/mde/ejs)
-* [Sass](http://sass-lang.com/) 3.2+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
+* Static HTML templating with [Nunjucks](https://mozilla.github.io/nunjucks/)
+* [Sass](http://sass-lang.com/) 3.3+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
 * [BEM](http://blog.kaelig.fr/post/48196348743/fifty-shades-of-bem)-like naming convention
 * Legacy browsers fallback stylesheet (rem units conversion, large screen fallback via [sass-mq](https://github.com/sass-mq/sass-mq#responsive-mode-off))
 * [Gulp.js](http://gulpjs.com/) build and deploy workflow
@@ -64,18 +64,23 @@ Project sources are located into `application` folder. Don't edit files in `publ
     fixtures #JSON files
     views #HTML files
         +   partials #View partials
-        index.html #Main views
+        +   templates #Nunjucks templates
+        index.nunj.html #Main views
     ...
 
-###View Partials
+###View Templates
+
+With Nunjucks you can setup extensible page templates. See [official docs](https://mozilla.github.io/nunjucks/templating.html#template-inheritance) for further details.
+
+###View Partials and Sub-folders
 
 View partials in `application/views/partials` are rendered to `public` folder like every other file. To prevent rendering prepend a `_` to the filename.
 
-To limit performance issues, nested `partials` subfolders will not be parsed.
+To limit performance issues, just first level sub-folders will be included in the parse process.
 
 ###Vendors
 
-You may use [bower](http://bower.io/) to manage vendors. Installed packages will be stored into the `application/assets/vendors` folder. Except for modernizr (which comes with wok by default) it's up to you to provide dev and dist configuration to deploy vendors' files to `public`.
+You may use [bower](http://bower.io/) to manage vendors. Installed packages will be stored into the `application/assets/vendors` folder. It's up to you to provide dev and dist configuration to deploy vendors' files to `public`.
 
 ###*More docs to come...*
 
