@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>{{ pageTitle }}</title>
-    <meta name="description" content="" />
+    <meta name="description" content="{{ metaDescription }}" />
+    {% block meta %}{% endblock %}
 
     <!-- This could be needed in some layouts
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
@@ -32,15 +33,17 @@
     <link rel="stylesheet" href="/assets/stylesheets/application-ie.css" type="text/css" />
     <![endif]--><!-- endbuild -->
 
+    {% block head %}
+    {% endblock %}
+
 </head>
-<!--[if lt IE 9]> <body class="lt-ie10 lt-ie9"> <![endif]-->
-<!--[if IE 9]> <body class="lt-ie10"> <![endif]-->
-<!--[if gt IE 9]><!--> <body> <!--<![endif]-->
+<!--[if lt IE 9]> <body class="lt-ie10 lt-ie9{% if bodyClass %}{{ ' ' + bodyClass }}{% endif %}"> <![endif]-->
+<!--[if IE 9]> <body class="lt-ie10{% if bodyClass %}{{ ' ' + bodyClass }}{% endif %}"> <![endif]-->
+<!--[if gt IE 9]><!--> <body class="{% if bodyClass %}{{ bodyClass }}{% endif %}"> <!--<![endif]-->
 
 <h1>Hello World!</h1>
 
 {% block main %}
-
 {% endblock %}
 
 <!-- build:js /assets/javascripts/application.min.js -->
