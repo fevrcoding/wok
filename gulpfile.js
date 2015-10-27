@@ -90,14 +90,15 @@ fs.readdirSync(taskPath).filter(function (taskFile) {
 gulp.task('default', ['clean'], function (done) {
 
     var tasks = [
-        ['images'],
+        'images',
         ['fonts', 'media', 'styles', 'scripts'],
-        ['modernizr'],
-        ['views']
+        'modernizr',
+        'views'
     ];
 
     if (options.production) {
-        tasks.push(['rev']);
+        //rev production files and cleanup temp files
+        tasks.push('rev', 'clean:tmp');
     }
 
     tasks.push(done);

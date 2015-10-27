@@ -36,4 +36,12 @@ module.exports = function (gulp, $, options) {
             done(err);
         });
     });
+
+    gulp.task('clean:tmp', function (done) {
+        del([ paths.tmp, '.tmp'], {dot: true}).then(function () {
+            done();
+        }, function (err) {
+            done(err);
+        });
+    });
 };

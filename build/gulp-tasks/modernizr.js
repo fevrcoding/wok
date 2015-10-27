@@ -3,11 +3,7 @@
  * ===============================
  */
 
-var path = require('path');
-
 module.exports = function (gulp, $, options) {
-
-    var paths = options.paths;
 
     var distConfig = {
 
@@ -15,7 +11,7 @@ module.exports = function (gulp, $, options) {
 
         devFile: false,
 
-        dest: options.paths.tmp + '/modernizr/modernizr.min.js',
+        dest: options.paths.tmp + '/assets/vendors/modernizr/modernizr.js',
 
         // Based on default settings on http://modernizr.com/download/
         options: [
@@ -59,25 +55,6 @@ module.exports = function (gulp, $, options) {
         // Have custom Modernizr tests? Add them here.
         customTests: []
     };
-
-
-    //gulp.task('modernizr', function () {
-    //
-    //
-    //
-    //    if (!options.production) {
-    //        return gulp.src(options.assetsPath('src.vendors', 'modernizr/modernizr.js'))
-    //            .pipe(gulp.dest(options.assetsPath('dist.vendors') + '/modernizr'));
-    //    }
-    //        return gulp.src(options.assetsPath('src.vendors', 'modernizr/modernizr.js'))
-    //            .pipe(modernizr(distConfig))
-    //            .pipe($.rename({extname: '.min.js'}))
-    //            .pipe($.rev())
-    //            .pipe(gulp.dest(options.assetsPath('dist.vendors') + '/modernizr'))
-    //            .pipe($.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), {merge: true}))
-    //            .pipe(gulp.dest('.'));
-    //});
-
 
 
     gulp.task('modernizr', function (done) {
