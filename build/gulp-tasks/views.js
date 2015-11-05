@@ -11,7 +11,6 @@ module.exports = function (gulp, $, options) {
         _ = require('lodash'),
         glob = require('glob'),
         map = require('vinyl-map'),
-        through = require('through2'),
         lazypipe = require('lazypipe'),
         data = {},
         paths = options.paths,
@@ -84,11 +83,7 @@ module.exports = function (gulp, $, options) {
                 }
             });
     } else {
-        userRefPipe = function empty() {
-            return through.obj(function (file, enc, cb) {
-                cb(null, file);
-            });
-        };
+        userRefPipe = $.util.noop;
     }
 
     gulp.task('views', function () {
