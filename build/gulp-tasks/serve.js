@@ -7,12 +7,34 @@
 module.exports = function (gulp, $, options) {
 
     var _ = require('lodash'),
+        del = require('del'),
+        path = require('path'),
         browserSync = require('browser-sync').create(options.buildHash);
 
     var paths = options.paths,
         assetsPath = options.assetsPath,
         ports = options.hosts.devbox.ports,
         serverConfigDefault;
+
+
+
+    function deleteListener(fileType) {
+
+        return function (event) {
+            var filePathFromSrc,
+                destFilePath;
+
+            if (event.type === 'deleted') {
+                // Simulating the {base: 'src'} used with gulp.src in the scripts task
+                filePathFromSrc = path.relative(assetsPath('src.' + fileType), event.path);
+
+                // Concatenating the 'build' absolute path used by gulp.dest in the scripts task
+                destFilePath = path.resolve(assetsPath('dist.' + fileType), filePathFromSrc);
+
+                del.sync(destFilePath);
+            }
+        };
+    }
 
     serverConfigDefault = {
         middleware: require('./lib/middlewares')(options),
@@ -77,8 +99,8 @@ module.exports = function (gulp, $, options) {
                 '!' + assetsPath('src.sass', '**/*scsslint_tmp*.{sass,scss}') //exclude scss lint files
             ], ['styles']);
 
-            gulp.watch([assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}')], ['images-watch']);
-            gulp.watch([assetsPath('src.fonts', '**/*.{eot,svg,ttf,woff,woff2}')], ['fonts-watch']);
+            gulp.watch([assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}')], ['images-watch']).on('change', deleteListener('images'));
+            gulp.watch([assetsPath('src.fonts', '**/*.{eot,svg,ttf,woff,woff2}')], ['fonts-watch']).on('change', deleteListener('fonts'));
             gulp.watch([assetsPath('src.video', '{,*/}*.*'), assetsPath('src.audio', '{,*/}*.*')], ['media-watch']);
             gulp.watch([
                 assetsPath('src.js') + '/**/*.js',
