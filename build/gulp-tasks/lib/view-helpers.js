@@ -29,7 +29,9 @@ module.exports.helpers = function (options) {
 };
 
 module.exports.nunjucks = function (viewPath) {
-    var env = nunjucks.configure(viewPath);
+    var env = nunjucks.configure(viewPath, {
+        noCache: true
+    });
 
     var markdownTag = new Markdown(env, marked);
 
