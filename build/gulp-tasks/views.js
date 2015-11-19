@@ -10,7 +10,7 @@ module.exports = function (gulp, $, options) {
     var path = require('path'),
         _ = require('lodash'),
         glob = require('glob'),
-        map = require('vinyl-map'),
+        through = require('through2'),
         lazypipe = require('lazypipe'),
         data = {},
         paths = options.paths,
@@ -21,6 +21,31 @@ module.exports = function (gulp, $, options) {
         userRefPipe,
         env,
         assets;
+
+
+    function map(renderFn) {
+
+        return through.obj(function (file, enc, cb) {
+            if (file.isNull()) {
+                this.push(file);
+                return cb();
+            }
+            if (file.isStream()) {
+                this.emit(
+                    'error',
+                    new $.util.PluginError('view-task', 'Streaming not supported')
+                );
+            }
+            try {
+                file.contents = new Buffer(renderFn(file.contents.toString(), file.path));
+            } catch (err) {
+                this.emit('error', new $.util.PluginError('view-task', err.toString()));
+            }
+            this.push(file);
+            cb();
+        });
+
+    }
 
 
     //build view data
@@ -93,7 +118,7 @@ module.exports = function (gulp, $, options) {
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
             .pipe(map(function (code/*, filename*/) {
-                return env.renderString(code.toString(), _.clone(data));
+                return env.renderString(code, _.clone(data));
             }))
             .pipe(userRefPipe())
             .pipe($.rename(function (filepath) {

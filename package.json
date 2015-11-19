@@ -73,7 +73,7 @@
     "rsyncwrapper": "0.4.3",
     "run-sequence": "1.1.4",
     "ssh2": "0.4.12",
-    "vinyl-map": "1.0.1",
+    "through2": "2.0.0",
     "yargs": "3.29.0"
   }
 }
