@@ -39,6 +39,7 @@ module.exports = function (gulp, $, options) {
     serverConfigDefault = {
         middleware: require('./lib/middlewares')(options),
         notify: false,
+        ghostMode: false,
         port: ports.connect,
         server: {
             baseDir: options.paths.dist.root
