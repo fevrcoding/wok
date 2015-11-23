@@ -64,15 +64,24 @@ module.exports = function (gulp, $, options) {
     env = require('./lib/view-helpers').nunjucks([viewPath, paths.src.documents], options);
 
 
-    assets = $.useref.assets({types: ['css', 'js', 'replace'], searchPath: [paths.dist.root, paths.tmp]});
+    //assets = $.useref.assets({types: ['css', 'js', 'replace'], searchPath: [paths.dist.root, paths.tmp]});
     styleFilter = $.filter('**/*.min.css', {restore: true});
     jsFilter = $.filter('**/*.min.js', {restore: true});
 
     if (options.production) {
 
+
         userRefPipe = lazypipe()
-            .pipe(function () {
-                return assets;
+            .pipe($.useref, {
+                types: ['css', 'js', 'replace', 'remove'],
+                searchPath: [paths.dist.root, paths.tmp],
+                //just replace src
+                replace: function (blockContent, target, attbs) {
+                    if (attbs) {
+                        return '<script src="' + target + '" ' + attbs + '></script>';
+                    }
+                    return '<script src="' + target + '"></script>';
+                }
             })
             .pipe(function () {
                 return styleFilter;
@@ -80,6 +89,7 @@ module.exports = function (gulp, $, options) {
             .pipe(function () {
                 return $.if(/\-ie\.min\.css$/, $.minifyCss({compatibility: 'ie8'}), $.minifyCss());
             })
+            .pipe($.rev)
             .pipe(function () {
                 return styleFilter.restore;
             })
@@ -89,24 +99,45 @@ module.exports = function (gulp, $, options) {
             })
             .pipe($.uglify, {preserveComments: 'license'})
             .pipe($.header, options.banners.application, {pkg: options.pkg})
+            .pipe($.rev)
             .pipe(function () {
                 return jsFilter.restore;
             })
             .pipe(function () {
                 var vendorRegexp = new RegExp(paths.vendors);
                 return $.if(vendorRegexp, $.header(options.banners.vendors, {pkg: options.pkg}));
-            })
-            .pipe($.rev)
-            .pipe(assets.restore)
-            .pipe($.useref, {
-                //just replace src
-                replace: function (blockContent, target, attbs) {
-                    if (attbs) {
-                        return '<script src="' + target + '" ' + attbs + '></script>';
-                    }
-                    return '<script src="' + target + '"></script>';
-                }
             });
+
+        //userRefPipe = lazypipe()
+        //    .pipe(function () {
+        //        return assets;
+        //    })
+        //    .pipe(function () {
+        //        return styleFilter;
+        //    })
+        //    .pipe(function () {
+        //        return $.if(/\-ie\.min\.css$/, $.minifyCss({compatibility: 'ie8'}), $.minifyCss());
+        //    })
+        //    .pipe(function () {
+        //        return styleFilter.restore;
+        //    })
+        //
+        //    .pipe(function () {
+        //        return jsFilter;
+        //    })
+        //    .pipe($.uglify, {preserveComments: 'license'})
+        //    .pipe($.header, options.banners.application, {pkg: options.pkg})
+        //    .pipe(function () {
+        //        return jsFilter.restore;
+        //    })
+        //    .pipe(function () {
+        //        var vendorRegexp = new RegExp(paths.vendors);
+        //        return $.if(vendorRegexp, $.header(options.banners.vendors, {pkg: options.pkg}));
+        //    })
+        //    .pipe($.rev)
+        //    .pipe(assets.restore)
+        //    .pipe($.useref,
+        //    });
     } else {
         userRefPipe = $.util.noop;
     }
