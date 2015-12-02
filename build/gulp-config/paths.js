@@ -10,8 +10,7 @@ var paths = {
         assets: srcRoot + '/assets',
         fixtures: srcRoot + '/fixtures',
         documents: srcRoot + '/documents',
-        views: srcRoot + '/views',
-        partials: srcRoot + '/views/partials'
+        views: srcRoot + '/views'
     },
 
     dist: {
