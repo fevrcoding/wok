@@ -58,7 +58,6 @@ module.exports = function (gulp, $, options) {
     };
 
     if (!options.livereload) {
-        serverConfigDefault.ghostMode = false;
         serverConfigDefault.ui = false;
         serverConfigDefault.snippetOptions.rule.fn = function (snippet, match) {
             return match;
