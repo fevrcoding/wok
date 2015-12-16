@@ -61,7 +61,7 @@ module.exports = function (gulp, $, options) {
         var fs = require('fs'),
             modernizr = require('modernizr'),
             customizr = require('customizr'),
-            fullConfig = require('modernizr/lib/config-all.json'),
+            fullConfig = require('../gulp-config/modernizr.conf.json'),
             filePath = options.assetsPath('dist.vendors',  '/modernizr');
 
 
