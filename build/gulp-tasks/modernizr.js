@@ -59,20 +59,21 @@ module.exports = function (gulp, $, options) {
 
     gulp.task('modernizr', function (done) {
         var fs = require('fs'),
-            modernizr = require('modernizr'),
-            customizr = require('customizr'),
-            fullConfig = require('../gulp-config/modernizr.conf.json'),
-            filePath = options.assetsPath('dist.vendors',  '/modernizr');
-
+            filePath = options.assetsPath('dist.vendors',  '/modernizr'),
+            fullConfig,
+            modernizr;
 
         require('mkdirp').sync(filePath);
 
         if (options.production) {
-            customizr(distConfig, function () {
+            modernizr = require('customizr');
+            modernizr(distConfig, function () {
                 done();
             });
         } else {
             //full build
+            modernizr = require('modernizr');
+            fullConfig = require('../gulp-config/modernizr.conf.json');
             modernizr.build(fullConfig, function (result) {
                 fs.writeFile(filePath + '/modernizr.js', result, done);
             });

@@ -8,8 +8,7 @@ module.exports = function (gulp, $, options) {
 
     var _ = require('lodash'),
         del = require('del'),
-        path = require('path'),
-        browserSync = require('browser-sync').create(options.buildHash);
+        path = require('path');
 
     var paths = options.paths,
         assetsPath = options.assetsPath,
@@ -74,14 +73,15 @@ module.exports = function (gulp, $, options) {
     // Watch Files For Changes & Reload
     gulp.task('serve', ['default'], function (done) {
 
-        var serverConf = _.defaults({
-            ui: {
-                port: 3001,
-                weinre: {
-                    port: ports.weinre
+        var browserSync = require('browser-sync').create(options.buildHash),
+            serverConf = _.defaults({
+                ui: {
+                    port: 3001,
+                    weinre: {
+                        port: ports.weinre
+                    }
                 }
-            }
-        }, serverConfigDefault);
+            }, serverConfigDefault);
 
         options.isWatching = true;
 
@@ -124,11 +124,12 @@ module.exports = function (gulp, $, options) {
     //just a static server
     gulp.task('server', function (done) {
 
-        var serverConf = _.defaults({
-            logLevel: 'silent',
-            open: false,
-            ui: false
-        }, serverConfigDefault);
+        var browserSync = require('browser-sync').create(options.buildHash),
+            serverConf = _.defaults({
+                logLevel: 'silent',
+                open: false,
+                ui: false
+            }, serverConfigDefault);
 
         browserSync.init(serverConf, function () {
             $.util.log($.util.colors.green('Running a static server on port ' + ports.connect + '...'));

@@ -5,12 +5,14 @@
 
 module.exports = function (gulp, $, options) {
 
-    var argv = require('yargs').argv,
-        allowed = ['major', 'minor', 'patch'],
-        semver = require('semver'),
-        inquirer = require('inquirer');
+    var argv = require('yargs').argv;
 
     gulp.task('bump:type', function (done) {
+
+        var allowed = ['major', 'minor', 'patch'],
+            semver = require('semver'),
+            inquirer = require('inquirer');
+
         //if --type is set and valid, use it
         if (semver.inc(options.pkg.version, argv.type) !== null) {
             done();
