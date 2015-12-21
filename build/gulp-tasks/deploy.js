@@ -3,15 +3,10 @@
  * ===============================
  */
 
-var Ssh = require('ssh2').Client,
-    rsync = require('rsyncwrapper').rsync,
-    _ = require('lodash');
-
 module.exports = function (gulp, $, options) {
 
     var paths = options.paths,
         hosts = options.hosts,
-        sshCommands,
         rsyncConf;
 
     rsyncConf = {
@@ -29,35 +24,6 @@ module.exports = function (gulp, $, options) {
         ]
     };
 
-
-    sshCommands = {
-
-        backup: _.template(
-            'mkdir -p <%= paths.backup %>;' +
-            'filecount=$(ls -t <%= paths.backup %> | grep .tgz | wc -l);' +
-            'if [ $filecount -gt 2 ];' +
-                'then for file in $(ls -t <%= paths.backup %> | grep .tgz | tail -n $(($filecount-2)));' +
-                    'do rm <%= paths.backup %>/$file;' +
-                    'printf "Removing old backup file $file";' +
-                'done;' +
-            'fi;' +
-            'if [ -d <%= paths.rsync %> ]; then ' +
-                'printf "Backup folder <%= paths.rsync %> in <%= paths.backup %>/backup-<%= new Date().getTime() %>.tgz";' +
-                'tar -cpzf <%= paths.backup %>/backup-<%= new Date().getTime() %>.tgz ' +
-                    '<%= excludes.map(function (exc) { return " --exclude=\'" + exc + "\'";}).join(" ") %> <%= paths.rsync %>;' +
-                'printf "Backup completed";' +
-            'fi;'
-        )({paths: paths, excludes: rsyncConf.exclude}),
-
-        rollback: _.template(
-            'if [ -d <%= paths.backup %> ];then ' +
-                'rm -rf <%= paths.rsync %>/;' +
-                'for file in $(ls -tr <%= paths.backup %> | tail -n 1);' +
-                    'do tar -xzpf <%= paths.backup %>/$file;' +
-                'done;' +
-            'fi;'
-        )({paths: paths})
-    };
 
 
     function getDeployTarget(target) {
@@ -108,17 +74,49 @@ module.exports = function (gulp, $, options) {
                 done();
             }
         }).stdout.on('data', function (res) {
-                res.toString().trim().split('\n').forEach(function (line) {
-                    $.util.log($.util.colors.cyan('[remote] ') + line.trim());
-                });
+            res.toString().trim().split('\n').forEach(function (line) {
+                $.util.log($.util.colors.cyan('[remote] ') + line.trim());
             });
+        });
     });
 
 
     gulp.task('remote', function (done) {
 
-        var conn = new Ssh(),
+        var _ = require('lodash'),
+            Ssh = require('ssh2').Client,
+            conn = new Ssh(),
+            sshCommands,
             host;
+
+        sshCommands = {
+
+            backup: _.template(
+                'mkdir -p <%= paths.backup %>;' +
+                'filecount=$(ls -t <%= paths.backup %> | grep .tgz | wc -l);' +
+                'if [ $filecount -gt 2 ];' +
+                'then for file in $(ls -t <%= paths.backup %> | grep .tgz | tail -n $(($filecount-2)));' +
+                'do rm <%= paths.backup %>/$file;' +
+                'printf "Removing old backup file $file";' +
+                'done;' +
+                'fi;' +
+                'if [ -d <%= paths.rsync %> ]; then ' +
+                'printf "Backup folder <%= paths.rsync %> in <%= paths.backup %>/backup-<%= new Date().getTime() %>.tgz";' +
+                'tar -cpzf <%= paths.backup %>/backup-<%= new Date().getTime() %>.tgz ' +
+                '<%= excludes.map(function (exc) { return " --exclude=\'" + exc + "\'";}).join(" ") %> <%= paths.rsync %>;' +
+                'printf "Backup completed";' +
+                'fi;'
+            )({paths: paths, excludes: rsyncConf.exclude}),
+
+            rollback: _.template(
+                'if [ -d <%= paths.backup %> ];then ' +
+                'rm -rf <%= paths.rsync %>/;' +
+                'for file in $(ls -tr <%= paths.backup %> | tail -n 1);' +
+                'do tar -xzpf <%= paths.backup %>/$file;' +
+                'done;' +
+                'fi;'
+            )({paths: paths})
+        };
 
         host = getDeployTarget(options.remotehost);
         if (host === false) {
@@ -160,7 +158,9 @@ module.exports = function (gulp, $, options) {
 
     gulp.task('rsync', function (done) {
 
-        var conf,
+        var _ = require('lodash'),
+            rsync = require('rsyncwrapper').rsync,
+            conf,
             host;
 
         host = getDeployTarget(options.remotehost);

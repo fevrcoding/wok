@@ -11,16 +11,20 @@ module.exports = function (gulp, $, options) {
         _ = require('lodash'),
         glob = require('glob'),
         through = require('through2'),
-        lazypipe = require('lazypipe'),
-        data = {},
+        baseData = {},
         paths = options.paths,
         viewPath = path.join(process.cwd(), paths.src.views),
         fixturesPath = path.join(process.cwd(), options.paths.src.fixtures),
         styleFilter,
         jsFilter,
         userRefPipe,
-        env,
-        assets;
+        env;
+
+
+    baseData.helpers = require('./lib/view-helpers').helpers(options);
+    baseData._ = _;
+    baseData.PRODUCTION = options.production;
+    baseData.page = {};
 
 
     function map(renderFn) {
@@ -37,7 +41,7 @@ module.exports = function (gulp, $, options) {
                 );
             }
             try {
-                file.contents = new Buffer(renderFn(file.contents.toString(), file.path));
+                file.contents = new Buffer(renderFn(file.contents.toString(), file.path, file));
             } catch (err) {
                 this.emit('error', new $.util.PluginError('view-task', err.toString()));
             }
@@ -48,30 +52,15 @@ module.exports = function (gulp, $, options) {
     }
 
 
-    //build view data
-    glob.sync('{,*/}*.json', {
-        cwd: fixturesPath
-    }).forEach(function (filename) {
-        var id = _.camelCase(filename.toLowerCase().replace('.json', ''));
-        data[id] = require(path.join(fixturesPath, filename));
-    });
-
-    data.helpers = require('./lib/view-helpers').helpers(options);
-    data._ = _;
-    data.PRODUCTION = options.production;
-    data.page = {};
-
     env = require('./lib/view-helpers').nunjucks([viewPath, paths.src.documents], options);
 
 
-    //assets = $.useref.assets({types: ['css', 'js', 'replace'], searchPath: [paths.dist.root, paths.tmp]});
-    styleFilter = $.filter('**/*.min.css', {restore: true});
-    jsFilter = $.filter('**/*.min.js', {restore: true});
-
     if (options.production) {
 
+        styleFilter = $.filter('**/*.min.css', {restore: true});
+        jsFilter = $.filter('**/*.min.js', {restore: true});
 
-        userRefPipe = lazypipe()
+        userRefPipe = require('lazypipe')()
             .pipe($.useref, {
                 types: ['css', 'js', 'replace', 'remove'],
                 searchPath: [paths.dist.root, paths.tmp],
@@ -108,48 +97,25 @@ module.exports = function (gulp, $, options) {
                 return $.if(vendorRegexp, $.header(options.banners.vendors, {pkg: options.pkg}));
             });
 
-        //userRefPipe = lazypipe()
-        //    .pipe(function () {
-        //        return assets;
-        //    })
-        //    .pipe(function () {
-        //        return styleFilter;
-        //    })
-        //    .pipe(function () {
-        //        return $.if(/\-ie\.min\.css$/, $.minifyCss({compatibility: 'ie8'}), $.minifyCss());
-        //    })
-        //    .pipe(function () {
-        //        return styleFilter.restore;
-        //    })
-        //
-        //    .pipe(function () {
-        //        return jsFilter;
-        //    })
-        //    .pipe($.uglify, {preserveComments: 'license'})
-        //    .pipe($.header, options.banners.application, {pkg: options.pkg})
-        //    .pipe(function () {
-        //        return jsFilter.restore;
-        //    })
-        //    .pipe(function () {
-        //        var vendorRegexp = new RegExp(paths.vendors);
-        //        return $.if(vendorRegexp, $.header(options.banners.vendors, {pkg: options.pkg}));
-        //    })
-        //    .pipe($.rev)
-        //    .pipe(assets.restore)
-        //    .pipe($.useref,
-        //    });
     } else {
         userRefPipe = $.util.noop;
     }
 
     gulp.task('views', function () {
 
+        var data = {};
+
+        glob.sync('{,*/}*.json', {cwd: fixturesPath}).forEach(function (filename) {
+            var id = _.camelCase(filename.toLowerCase().replace('.json', ''));
+            data[id] = require(path.join(fixturesPath, filename));
+        });
+
         return gulp.src([viewPath + '/{,*/}' + options.viewmatch, '!' + viewPath + '/{,*/}_*.*'])
             .pipe($.plumber({
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
-            .pipe(map(function (code/*, filename*/) {
-                return env.renderString(code, _.clone(data));
+            .pipe(map(function (code) {
+                return env.renderString(code, _.extend({}, baseData, data || {}));
             }))
             .pipe(userRefPipe())
             .pipe($.rename(function (filepath) {
