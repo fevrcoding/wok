@@ -17,7 +17,6 @@ module.exports = function (gulp, $, options) {
         fixturesPath = path.join(process.cwd(), options.paths.src.fixtures),
         styleFilter,
         jsFilter,
-        globMatch,
         userRefPipe,
         env;
 
@@ -50,46 +49,6 @@ module.exports = function (gulp, $, options) {
             cb();
         });
 
-    }
-
-
-
-
-    function globData() {
-
-        var opts = globMatch || {};
-        opts.cwd = fixturesPath;
-
-        globMatch = glob('{,*/}*.json', opts, function (err, filenames) {
-            if (err) {
-                this.emit('error', new $.util.PluginError('view-task', err.toString()));
-            } else {
-                file.data = {};
-                console.log(filenames);
-                filenames.forEach(function (filename) {
-                    var id = _.camelCase(filename.toLowerCase().replace('.json', ''));
-                    file.data[id] = require(path.join(fixturesPath, filename));
-                });
-                this.push(file);
-                cb();
-            }
-        }.bind(this));
-
-        return through.obj(function (file, enc, cb) {
-            if (file.isNull()) {
-                this.push(file);
-                return cb();
-            }
-            if (file.isStream()) {
-                this.emit(
-                    'error',
-                    new $.util.PluginError('view-task', 'Streaming not supported')
-                );
-            }
-
-
-
-        });
     }
 
 
@@ -144,13 +103,19 @@ module.exports = function (gulp, $, options) {
 
     gulp.task('views', function () {
 
+        var data = {};
+
+        glob.sync('{,*/}*.json', {cwd: fixturesPath}).forEach(function (filename) {
+            var id = _.camelCase(filename.toLowerCase().replace('.json', ''));
+            data[id] = require(path.join(fixturesPath, filename));
+        });
+
         return gulp.src([viewPath + '/{,*/}' + options.viewmatch, '!' + viewPath + '/{,*/}_*.*'])
             .pipe($.plumber({
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
-            .pipe(globData())
-            .pipe(map(function (code, filename, file) {
-                return env.renderString(code, _.extend({}, baseData, file.data || {}));
+            .pipe(map(function (code) {
+                return env.renderString(code, _.extend({}, baseData, data || {}));
             }))
             .pipe(userRefPipe())
             .pipe($.rename(function (filepath) {

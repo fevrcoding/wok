@@ -7,8 +7,8 @@ module.exports = function (gulp, $, options) {
 
     var path = require('path'),
         autoprefixer = require('autoprefixer'),
-        reloadStream = $.util.noop,
         lazypipe = require('lazypipe'),
+        reloadStream,
         production = options.production,
         paths = options.paths,
         destPath = options.assetsPath('dist.css'),
@@ -17,14 +17,16 @@ module.exports = function (gulp, $, options) {
         postPipe,
         productionPipe;
 
+    function reloadStreamFn() {
+        if (options.isWatching && options.livereload) {
+            return reloadStream || (reloadStream = require('browser-sync').get(options.buildHash).stream);
+        }
+        return $.util.noop;
+    }
 
 
     if (production) {
         destPath = path.normalize(destPath.replace(paths.dist.root, paths.tmp));
-    }
-
-    if (options.isWatching && options.livereload) {
-        reloadStream = require('browser-sync').create(options.buildHash).stream;
     }
 
     postLegacyPipe = lazypipe()
@@ -59,7 +61,6 @@ module.exports = function (gulp, $, options) {
 
     gulp.task('styles', function () {
 
-
         // For best performance, don't add Sass partials to `gulp.src`
         return gulp.src([
                 options.assetsPath('src.sass', '**/*.{sass,scss}'),
@@ -79,7 +80,7 @@ module.exports = function (gulp, $, options) {
             .pipe($.if(production, productionPipe()))
             .pipe($.sourcemaps.write('.'))
             .pipe(gulp.dest(options.assetsPath('dist.css')))
-            .pipe(reloadStream({match: '**/*.css'}))
+            .pipe(reloadStreamFn()({match: '**/*.css'}))
             .pipe($.if(options.isWatching, $.notify({ message: 'SASS Compiled', onLast: true })))
             .pipe($.size({title: 'styles'}));
     });

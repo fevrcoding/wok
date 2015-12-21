@@ -74,10 +74,10 @@ module.exports = function (gulp, $, options) {
                 done();
             }
         }).stdout.on('data', function (res) {
-                res.toString().trim().split('\n').forEach(function (line) {
-                    $.util.log($.util.colors.cyan('[remote] ') + line.trim());
-                });
+            res.toString().trim().split('\n').forEach(function (line) {
+                $.util.log($.util.colors.cyan('[remote] ') + line.trim());
             });
+        });
     });
 
 
