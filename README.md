@@ -8,13 +8,12 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 
 * [HTML5 Boilerplate](http://html5boilerplate.com/)
 * Static HTML templating with [Nunjucks](https://mozilla.github.io/nunjucks/)
-* [Sass](http://sass-lang.com/) 3.3+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
+* [Sass](http://sass-lang.com/) 3.4+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
 * [BEM](http://blog.kaelig.fr/post/48196348743/fifty-shades-of-bem)-like naming convention
 * Legacy browsers fallback stylesheet (rem units conversion, large screen fallback via [sass-mq](https://github.com/sass-mq/sass-mq#responsive-mode-off))
 * [Gulp.js](http://gulpjs.com/) build and deploy workflow
 * [Bower](http://bower.io/)
-* Development server and asset live-reload with [BrowserSync](http://www.browsersync.io/)
-* [Weinre](http://people.apache.org/~pmuellr/weinre/) remote debugging
+* Development server and asset live-reload with [BrowserSync](http://www.browsersync.io/) and [Weinre](http://people.apache.org/~pmuellr/weinre/) remote debugging
 * Incremental deploy with [rsync](https://rsync.samba.org/) or [lftp](http://lftp.yar.ru/)
 * Remote backup / rollback (UNIX SSH environments only)
 * more to come... (project scaffolding, jade support)
@@ -22,7 +21,7 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 
 ##Requirements
 
-* Node.js >= 0.12.0 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
+* Node.js >= 0.12.7 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
 * bower (`sudo npm install -g bower`)
 * gulp cli (`sudo npm install -g gulp`)
 

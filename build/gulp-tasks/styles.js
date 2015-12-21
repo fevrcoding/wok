@@ -7,8 +7,8 @@ module.exports = function (gulp, $, options) {
 
     var path = require('path'),
         autoprefixer = require('autoprefixer'),
-        browserSync = require('browser-sync').get(options.buildHash),
         lazypipe = require('lazypipe'),
+        reloadStream,
         production = options.production,
         paths = options.paths,
         destPath = options.assetsPath('dist.css'),
@@ -17,6 +17,12 @@ module.exports = function (gulp, $, options) {
         postPipe,
         productionPipe;
 
+    function reloadStreamFn() {
+        if (options.isWatching && options.livereload) {
+            return reloadStream || (reloadStream = require('browser-sync').get(options.buildHash).stream);
+        }
+        return $.util.noop;
+    }
 
 
     if (production) {
@@ -35,20 +41,25 @@ module.exports = function (gulp, $, options) {
             autoprefixer({ browsers: ['> 1%', 'last 2 versions', 'ie 9'] })
         ]);
 
-    productionPipe = lazypipe()
-        .pipe($.header, options.banners.application, {pkg: options.pkg})
-        .pipe(function () {
-            return gulp.dest(destPath);
-        })
-        .pipe(function () {
-            return $.if(/\-ie\.css$/, $.minifyCss({compatibility: 'ie8'}), $.minifyCss());
-        })
-        .pipe($.rename, {suffix: '.min'});
+
+    if (production) {
+        productionPipe = lazypipe()
+            .pipe($.header, options.banners.application, {pkg: options.pkg})
+            .pipe(function () {
+                return gulp.dest(destPath);
+            })
+            .pipe(function () {
+                return $.if(/\-ie\.css$/, $.minifyCss({compatibility: 'ie8'}), $.minifyCss());
+            })
+            .pipe($.rename, {suffix: '.min'});
+    } else {
+        productionPipe = $.util.noop;
+    }
+
 
 
 
     gulp.task('styles', function () {
-
 
         // For best performance, don't add Sass partials to `gulp.src`
         return gulp.src([
@@ -69,7 +80,7 @@ module.exports = function (gulp, $, options) {
             .pipe($.if(production, productionPipe()))
             .pipe($.sourcemaps.write('.'))
             .pipe(gulp.dest(options.assetsPath('dist.css')))
-            .pipe($.if(options.isWatching && options.livereload, browserSync.stream({match: '**/*.css'})))
+            .pipe(reloadStreamFn()({match: '**/*.css'}))
             .pipe($.if(options.isWatching, $.notify({ message: 'SASS Compiled', onLast: true })))
             .pipe($.size({title: 'styles'}));
     });
