@@ -1,12 +1,8 @@
 //global configs
 $rem-to-px-fallback: false !default;
 
-$jacket: modern !default;
-
 //use custom grid
 $grid-enabled: true;
-
-$mq-responsive: true !default;
 
 $mq-breakpoints: (
     xs: 480px,

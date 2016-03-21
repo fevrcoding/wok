@@ -10,8 +10,8 @@ $font-family-script: $font-family-serif;
 $font-family-typescript: $font-family-mono;
 
 //font dimensions
-$font-size-default: 12px;
-$font-lheight-default: 18px;
+$font-size-default: 16px;
+$font-lheight-default: 20px;
 
 $font-sizes: (
     xl: ceil($font-size-default * 2),

@@ -10,12 +10,12 @@
    ========================================================================== */
 
 .l-wrapper {
-    @extend %clearfix;
+    @include clearfix;
     position: relative;
 }
 
 .l-container {
-    @extend %clearfix;
+    @include clearfix;
     margin-right: auto;
     margin-left: auto;
 
@@ -57,7 +57,7 @@
     }
 
     .l-row {
-        @extend %clearfix;
+        @include clearfix;
         margin-right: $grid-gutter-width / -2;
         margin-left: $grid-gutter-width / -2;
     }
@@ -158,24 +158,5 @@
     }
 }
 
-/* CSS to JS Breakpoint Bridge
-   =========================================================================== */
-
-@if $mq-responsive {
-
-    head {
-        font-family: '/#{map-to-JSON($mq-breakpoints)}/';
-    }
-
-//    @each $mq-breakpoint-key, $mq-breakpoint-value in $mq-breakpoints {
-//        title {
-//            font-family: '/#{map-get($mq-list, $mq-breakpoint-value)}/';
-//        }
-//    }
-
-
-
-
-}
 /* Shared Layout Styles
  * ========================================================================== */

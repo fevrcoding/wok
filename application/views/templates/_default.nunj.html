@@ -21,35 +21,25 @@
     <!-- endbuild -->
 
 
-    <!-- media queries for supporting devices and IE mobile (since it's mobile first) -->
-    <!--[if (gt IE 8) | (IEMobile)]><!-->
     <!-- build:css /assets/stylesheets/application.min.css -->
     <link rel="stylesheet" href="/assets/stylesheets/application.css" />
     <!-- endbuild -->
-    <!--<![endif]-->
-
-    <!-- Fixed width style -->
-    <!-- build:css /assets/stylesheets/application-ie.min.css --><!--[if (lt IE 9) & (!IEMobile)]>
-    <link rel="stylesheet" href="/assets/stylesheets/application-ie.css" type="text/css" />
-    <![endif]--><!-- endbuild -->
 
     {% block head %}
     {% endblock %}
 
 </head>
-<!--[if lt IE 9]> <body class="lt-ie10 lt-ie9{% if bodyClass %}{{ ' ' + bodyClass }}{% endif %}"> <![endif]-->
-<!--[if IE 9]> <body class="lt-ie10{% if bodyClass %}{{ ' ' + bodyClass }}{% endif %}"> <![endif]-->
-<!--[if gt IE 9]><!--> <body class="{% if bodyClass %}{{ bodyClass }}{% endif %}"> <!--<![endif]-->
+<body class="{% if bodyClass %}{{ bodyClass }}{% endif %}">
 
-<h1>Hello World!</h1>
+    <h1>Hello World!</h1>
 
-{% block main %}
-{% endblock %}
+    {% block main %}
+    {% endblock %}
 
-<!-- build:js /assets/javascripts/application.min.js -->
-<script src="/assets/javascripts/base/plugins.js"></script>
-<script src="/assets/javascripts/application.js"></script>
-<!-- endbuild -->
+    <!-- build:js /assets/javascripts/application.min.js -->
+    <script src="/assets/javascripts/base/plugins.js"></script>
+    <script src="/assets/javascripts/application.js"></script>
+    <!-- endbuild -->
 
 </body>
 </html>

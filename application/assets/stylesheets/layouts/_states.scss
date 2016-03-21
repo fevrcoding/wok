@@ -5,35 +5,4 @@
 
    ========================================================================== */
 
-.is-hidden,
-.js .is-jshidden {
-    display: none !important;
-    visibility: hidden;
-}
-
-.is-visuallyhidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-
-    .is-focusable {
-        &:active,
-        &:focus {
-            position: static;
-            width: auto;
-            height: auto;
-            margin: 0;
-            overflow: visible;
-            clip: auto;
-        }
-    }
-}
-
-.is-invisible {
-    visibility: hidden;
-}
+//see base/utility for legacy global states
