@@ -91,7 +91,7 @@ img {
 hr {
     display: block;
     height: 1px;
-    margin: rem(1rem) 0;
+    margin: 1rem 0;
     padding: 0;
     border: 0;
     border-top: 1px solid $color-border;
@@ -163,7 +163,6 @@ button {
    ========================================================================== */
 
 %heading-base {
-    @include rem-font-size($font-size-h, $font-lheight-h);
     margin: 0 0 0.2em;
     //color: $color-text
     font-family: $font-family-h;
@@ -176,12 +175,14 @@ button {
 
 @each $font-head-num, $font-head-size in $font-sizes-headings {
     h#{$font-head-num}, .h#{$font-head-num} {
-        @include rem-font-size($font-head-size, $font-lheight-h);
+        font-size: font-size($font-head-size);
+        line-height: $font-lheight-h;
     }
 }
 
 p {
     margin: 0 0 0.2em;
+    line-height: $font-lheight-h;
 }
 
 a {
@@ -215,7 +216,7 @@ a {
     }
 
     body::after {
-        content: 'mobile';
+        content: "xs";
         @each $mq-key, $mq-value in $mq-breakpoints {
             @include mq($mq-key) {
                 content: '#{$mq-key}';

@@ -7,6 +7,7 @@
     },
 
     "rules": {
+        "consistent-return": 0,
         "one-var": 0,
         "no-new": 0,
         "func-names": 0,

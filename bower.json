@@ -15,7 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "sass-mq": "3.2.5",
-    "normalize-css": "3.0.3"
+    "sass-mq": "3.2.9",
+    "normalize-css": "4.0.0"
   }
 }

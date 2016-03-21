@@ -168,15 +168,25 @@
 
 // Typography
 //
-// Adapted from https://github.com/csswizardry/typecsset
 // ==========================================================================
 
 @function em($pixels, $context: $font-size-default) {
-    @return #{$pixels/$context}em;
+    @if (unitless($pixels)) {
+        $pixels: $pixels * 1px;
+    }
+
+    @if (unitless($context)) {
+        $context: $context * 1px;
+    }
+
+    @return ($pixels / $context) * 1em;
 }
 
-@function rem($size) {
-    @return #{$size / $font-size-default}rem;
+@function rem($pixels) {
+    @if (unitless($pixels)) {
+        $pixels: $pixels * 1px;
+    }
+    @return ($pixels / $font-size-default) * 1rem;
 }
 
 
@@ -188,9 +198,8 @@
 
     @if $rem == true {
         @return rem($result);
-    } @else {
-        @return $result
     }
+    @return $result
 }
 
 @function font-weight($weight) {
