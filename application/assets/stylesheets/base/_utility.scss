@@ -13,10 +13,9 @@
    <p class="u-text--right">Right aligned text</p>
    <p class="u-text--center">Centered text</p>
    <p class="u-text--hide">Hidden text</p>
+   <p class="u-text--ellipsis">This text is one line with ellipsis</p>
    ```
    ========================================================================== */
-
-
 
 .u-text--left {
     text-align: left;
@@ -38,6 +37,10 @@
     font: 0 / 0 a;
     font-size: 0.1px;
     text-shadow: none;
+}
+
+.u-text--ellipsis {
+    @include text-ellipsis;
 }
 
 /* ==========================================================================
@@ -66,7 +69,7 @@
 
 .u-clearfix,
 .clearfix {
-    @extend %clearfix;
+    @include clearfix;
 }
 
 .u-clear {
@@ -88,13 +91,14 @@
     float: right;
 }
 
+//DEPRECATED
 %u-inline {
     display: inline-block;
 }
 
 //inline children
 .u-inline > * {
-    @extend %u-inline;
+    display: inline-block;
 }
 
 // vertically stacked
@@ -104,7 +108,7 @@
 
 // inline
 .u-inline--baseline > * {
-    @extend %u-inline;
+    display: inline-block;
     vertical-align: baseline;
 }
 
@@ -156,4 +160,47 @@
 
 .u-weight--medium {
     @extend .u-weight--regular;
+}
+
+
+
+/* ==========================================================================
+
+   ### Visibility Helpers
+
+   ```
+   <p class="u-hidden">this is hidden from mobile screens</p>
+   <p class="u-visuallyhidden">this is hidden from small tablet screens</p>
+   <p class="u-invisible">this is hidden from large tablets screens</p>
+   ```
+   ========================================================================== */
+
+
+.u-hidden,
+.is-hidden, //DEPRECATED: also as global state
+.js .is-jshidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+.is-visuallyhidden, //DEPRECATED: also as global state
+.u-visuallyhidden {
+    @include visually-hidden;
+    .focusable {
+        &:active,
+        &:focus {
+            position: static;
+            overflow: visible;
+            clip: auto;
+            width: auto;
+            height: auto;
+            margin: 0;
+        }
+    }
+}
+
+//also as global state
+.is-invisible,
+.u-invisible { //DEPRECATED: also as global state
+    visibility: hidden;
 }

@@ -8,6 +8,7 @@
 module.exports = function (gulp, $, options) {
 
     var path = require('path'),
+        fs = require('fs'),
         _ = require('lodash'),
         glob = require('glob'),
         through = require('through2'),
@@ -75,9 +76,7 @@ module.exports = function (gulp, $, options) {
             .pipe(function () {
                 return styleFilter;
             })
-            .pipe(function () {
-                return $.if(/\-ie\.min\.css$/, $.minifyCss({compatibility: 'ie8'}), $.minifyCss());
-            })
+            .pipe($.minifyCss)
             .pipe($.rev)
             .pipe(function () {
                 return styleFilter.restore;
@@ -107,7 +106,7 @@ module.exports = function (gulp, $, options) {
 
         glob.sync('{,*/}*.json', {cwd: fixturesPath}).forEach(function (filename) {
             var id = _.camelCase(filename.toLowerCase().replace('.json', ''));
-            data[id] = require(path.join(fixturesPath, filename));
+            data[id] = JSON.parse(fs.readFileSync(path.join(fixturesPath, filename), {encoding: 'utf8'}));
         });
 
         return gulp.src([viewPath + '/{,*/}' + options.viewmatch, '!' + viewPath + '/{,*/}_*.*'])
@@ -115,7 +114,7 @@ module.exports = function (gulp, $, options) {
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
             .pipe(map(function (code) {
-                return env.renderString(code, _.extend({}, baseData, data || {}));
+                return env.renderString(code, _.assign({}, baseData, data || {}));
             }))
             .pipe(userRefPipe())
             .pipe($.rename(function (filepath) {

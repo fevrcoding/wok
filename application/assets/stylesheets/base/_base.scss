@@ -50,7 +50,7 @@ textarea {
 
 html,
 body {
-    font-size: $font-size-default;
+    font-size: percentage($font-size-default / 16px); //16px
     line-height: $font-lheight-default / $font-size-default;
 }
 
@@ -75,17 +75,6 @@ body {
     text-shadow: none;
 }
 
-// A better looking default horizontal rule
-
-hr {
-    display: block;
-    height: 1px;
-    margin: rem(1rem) 0;
-    padding: 0;
-    border: 0;
-    border-top: 1px solid $color-border;
-}
-
 // Remove the gap between images and the bottom of their containers: h5bp.com/i/440
 
 audio,
@@ -96,6 +85,19 @@ video,
 img {
     vertical-align: middle;
 }
+
+// A better looking default horizontal rule
+
+hr {
+    display: block;
+    height: 1px;
+    margin: 1rem 0;
+    padding: 0;
+    border: 0;
+    border-top: 1px solid $color-border;
+}
+
+
 
 // Remove default fieldset styles.
 
@@ -111,7 +113,9 @@ textarea {
     resize: vertical;
 }
 
-
+input::-moz-focus-inner {
+    border: 0;
+}
 
 
 /* ==========================================================================
@@ -132,16 +136,19 @@ button {
    ```
    ========================================================================== */
 
+//DEPRECATED
 %inline-block {
     display: inline-block;
 }
 
+//DEPRECATED
 %img-responsive {
     display: block;
     max-width: 100%;
     height: auto;
 }
 
+//DEPRECATED
 %clearfix {
     @include clearfix;
 }
@@ -156,7 +163,6 @@ button {
    ========================================================================== */
 
 %heading-base {
-    @include rem-font-size($font-size-h, $font-lheight-h);
     margin: 0 0 0.2em;
     //color: $color-text
     font-family: $font-family-h;
@@ -169,12 +175,14 @@ button {
 
 @each $font-head-num, $font-head-size in $font-sizes-headings {
     h#{$font-head-num}, .h#{$font-head-num} {
-        @include rem-font-size($font-head-size, $font-lheight-h);
+        font-size: font-size($font-head-size);
+        line-height: $font-lheight-h;
     }
 }
 
 p {
     margin: 0 0 0.2em;
+    line-height: $font-lheight-h;
 }
 
 a {
@@ -187,3 +195,42 @@ a {
         text-decoration: none;
     }
 }
+
+/* ==========================================================================
+   ## CSS to JS Breakpoint Bridge
+   ========================================================================== */
+
+@if $mq-responsive {
+
+    body::after,
+    body::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: z-index(behind) - 2;
+        visibility: hidden;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        display: block;
+    }
+
+    body::after {
+        content: "xs";
+        @each $mq-key, $mq-value in $mq-breakpoints {
+            @include mq($mq-key) {
+                content: '#{$mq-key}';
+            }
+        }
+    }
+
+    body::before {
+        content: '/#{map-to-JSON($mq-breakpoints)}/';
+    }
+
+    //fallback
+    head {
+        font-family: '/#{map-to-JSON($mq-breakpoints)}/';
+    }
+}
+
