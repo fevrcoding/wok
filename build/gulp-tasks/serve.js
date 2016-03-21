@@ -97,11 +97,12 @@ module.exports = function (gulp, $, options) {
             gulp.watch([
                 assetsPath('src.sass', '/**/*.{scss,sass}'),
                 '!' + assetsPath('src.sass', '**/*scsslint_tmp*.{sass,scss}') //exclude scss lint files
-            ], ['styles']);
+            ], (options.styleguideDriven ? ['styles', 'styleguide'] : ['styles']));
 
             gulp.watch([assetsPath('src.images', '**/*.{png,jpg,gif,svg,webp}')], ['images-watch']).on('change', deleteListener('images'));
             gulp.watch([assetsPath('src.fonts', '**/*.{eot,svg,ttf,woff,woff2}')], ['fonts-watch']).on('change', deleteListener('fonts'));
-            gulp.watch([assetsPath('src.video', '{,*/}*.*'), assetsPath('src.audio', '{,*/}*.*')], ['media-watch']);
+            gulp.watch([assetsPath('src.video', '{,*/}*.*')], ['media-watch']).on('change', deleteListener('video'));
+            gulp.watch([assetsPath('src.audio', '{,*/}*.*')], ['media-watch']).on('change', deleteListener('audio'));
             gulp.watch([
                 assetsPath('src.js') + '/**/*.js',
                 '!' + assetsPath('src.js') + '/**/*.{spec,conf}.js'

@@ -23,11 +23,7 @@
     @return map-get($layers, $level);
 }
 
-//@mixin ie-fallback($ie-version: 8)
-//  @if index($supported-browsers, 'ie') and map-get($browser-minimum-versions, 'ie') == '7' and ($ie-version <= 8)
-//    $ie-version: $ie-version + 1
-//    .lt-ie#{$ie-version} &
-//      @content
+
 
 // Elements
 // ==========================================================================
@@ -163,49 +159,34 @@
     }
 }
 
+//DEPRECATED
 @mixin transparent-bg($color, $alpha) {
     $rgba: rgba($color, $alpha);
-
     background-color: $rgba;
-
-    @include jacket(legacy) {
-        background-color: transparent;
-        $ie-hex-str: ie-hex-str($rgba);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#{$ie-hex-str}, endColorstr=#{$ie-hex-str});
-        zoom: 1;
-    }
+    @warn "This mixin is deprecated";
 }
 
 // Typography
 //
-// Adapted from https://github.com/csswizardry/typecsset
 // ==========================================================================
 
 @function em($pixels, $context: $font-size-default) {
-    @return #{$pixels/$context}em;
+    @if (unitless($pixels)) {
+        $pixels: $pixels * 1px;
+    }
+
+    @if (unitless($context)) {
+        $context: $context * 1px;
+    }
+
+    @return ($pixels / $context) * 1em;
 }
 
-//see http://davidwalsh.name/rem-px-browser-function-sass
-@function rem($values) {
-    $rem-list: ();
-    @each $value in $values {
-        $rem-unit: unit($value);
-        $rem-val: strip-units($value);
-        @if $rem-to-px-fallback and $rem-unit == "rem" {
-            //convert rem to px
-            $rem-list: append($rem-list, $rem-val * strip-units($font-size-default) + px);
-        } @else if $rem-to-px-fallback == false and $rem-unit == "px" {
-            //convert everything to rem units.
-            //use $value since we need units
-            $rem-list: append($rem-list, $value / $font-size-default * 1rem);
-        } @else if $rem-unit == "px" or $rem-unit == "rem" {
-            //either case, just add it if it's px or rem
-            $rem-list: append($rem-list, $value);
-        } @else if $rem-unit != "" {
-            @warn "There is no unit conversion for #{$rem-val} #{$rem-unit}";
-        }
+@function rem($pixels) {
+    @if (unitless($pixels)) {
+        $pixels: $pixels * 1px;
     }
-    @return $rem-list ();
+    @return ($pixels / $font-size-default) * 1rem;
 }
 
 
@@ -217,9 +198,8 @@
 
     @if $rem == true {
         @return rem($result);
-    } @else {
-        @return $result
     }
+    @return $result
 }
 
 @function font-weight($weight) {
@@ -230,6 +210,29 @@
     }
 }
 
+@function line-height($size, $context: m) {
+    $context-size: font-size($context, false);
+    @return em($size, $context-size);
+}
+
+
+@mixin text-ellipsis() {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@mixin visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
 @mixin reset-typography($font-weight: normal, $line-height: inherit) {
     font-weight: $font-weight;
     font-size: $font-size-default;
@@ -238,13 +241,7 @@
     margin-top: 0;
 }
 
-// Quickly generate a font-size in rems, with a pixel fallback, based on the
-// value we pass into the mixin, e.g.:
-//
-// h1
-//     @include typecsset-font-size(24px)
-//
-//
+//DEPRECATED
 @mixin rem-font-size($font-size, $line-height: $font-lheight-default) {
     font-size: rem($font-size);
     @if $line-height != false {
@@ -255,4 +252,7 @@
             line-height: ceil($font-size / $line-height) * $line-height / $font-size;
         }
     }
+    @warn "This mixin is deprecated";
 }
+
+

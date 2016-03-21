@@ -8,8 +8,14 @@ var path = require('path'),
     fs = require('fs'),
     _ = require('lodash'),
     sizeOf = require('image-size'),
-    datauri = require('datauri'),
+    datauri = require('datauri').sync,
+    types;
+
+try {
+    types = require('node-sass').types;
+} catch (e) {
     types = require('gulp-sass/node_modules/node-sass').types;
+}
 
 module.exports = function (options) {
 

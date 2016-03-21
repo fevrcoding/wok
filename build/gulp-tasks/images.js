@@ -5,8 +5,8 @@
 
 module.exports = function (gulp, $, options) {
 
-    var productionPipe = $.util.noop,
-        path = require('path'),
+    var path = require('path'),
+        productionPipe = $.util.noop,
         paths = options.paths,
         filesMatch = '**/*.{png,jpg,gif,svg,webp}';
 

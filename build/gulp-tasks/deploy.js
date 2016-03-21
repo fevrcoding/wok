@@ -13,7 +13,7 @@ module.exports = function (gulp, $, options) {
         src: paths.rsync,
         recursive: true,
         compareMode: 'checksum',
-        syncDestIgnoreExcl: true,
+        delete: true,
         args: ['--verbose', '--progress', '--cvs-exclude'],
         exclude: [
             '.svn*',
@@ -159,7 +159,7 @@ module.exports = function (gulp, $, options) {
     gulp.task('rsync', function (done) {
 
         var _ = require('lodash'),
-            rsync = require('rsyncwrapper').rsync,
+            rsync = require('rsyncwrapper'),
             conf,
             host;
 

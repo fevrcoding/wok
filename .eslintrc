@@ -1,7 +1,6 @@
 {
     "env": {                           // http://eslint.org/docs/user-guide/configuring.html#specifying-environments
-        "browser": true,                 // browser global variables
-        "node": false                     // Node.js global variables and Node.js-specific rules
+        "browser": true                 // browser global variables
     },
     "rules": {
         /**
@@ -9,12 +8,6 @@
          */
         // babel inserts "use strict"; for us
         "strict": [2, "never"],          // http://eslint.org/docs/rules/strict
-
-        /**
-         * ES6
-         */
-        "no-var": 0,                     // http://eslint.org/docs/rules/no-var
-        "prefer-const": 0,               // http://eslint.org/docs/rules/prefer-const
 
         /**
          * Variables
