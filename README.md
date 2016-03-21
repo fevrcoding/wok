@@ -10,7 +10,7 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 * Static HTML templating with [Nunjucks](https://mozilla.github.io/nunjucks/)
 * [Sass](http://sass-lang.com/) 3.4+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
 * [BEM](http://blog.kaelig.fr/post/48196348743/fifty-shades-of-bem)-like naming convention
-* Legacy browsers fallback stylesheet (rem units conversion, large screen fallback via [sass-mq](https://github.com/sass-mq/sass-mq#responsive-mode-off))
+* Em based media-queries via [sass-mq](https://github.com/sass-mq/sass-mq)
 * [Gulp.js](http://gulpjs.com/) build and deploy workflow
 * [Bower](http://bower.io/)
 * Development server and asset live-reload with [BrowserSync](http://www.browsersync.io/) and [Weinre](http://people.apache.org/~pmuellr/weinre/) remote debugging
@@ -155,4 +155,4 @@ When paired with Phing or other deployment systems, remember to set `buildOnly` 
 WOK was created by [Marco Solazzi](https://github.com/dwightjack) with contributions from [Matteo Guidotto](https://github.com/mguidotto) and [Umberto Quintarelli](https://github.com/quincia).
 
 Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.  
-Modified work Copyright © 2015 Marco Solazzi, released under the MIT license.
+Modified work Copyright © 2015-2016 Marco Solazzi, released under the MIT license.
