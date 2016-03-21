@@ -19,7 +19,17 @@ module.exports = function (gulp, $, options) {
             'addTest',
             'html5printshiv',
             'testProp',
-            'fnBind'
+            'fnBind',
+            'atRule',
+            'domPrefixes',
+            'hasEvent',
+            'html5shiv',
+            'mq',
+            'prefixed',
+            'prefixes',
+            'prefixedCSS',
+            'testAllProps',
+            'testStyles'
         ],
 
         // By default, source is uglified before saving

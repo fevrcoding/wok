@@ -12,9 +12,8 @@ var fs = require('fs'),
     gulp = require('gulp'),
     runSequence = require('run-sequence'),
     _ = require('lodash'),
-    moment = require('moment'),
     $ = require('gulp-load-plugins')(),
-    yargs = require('yargs'),
+    argv = require('yargs').argv || {},
     pkg = require('./package.json'),
     taskPath = path.join(process.cwd(), 'build', 'gulp-tasks'),
     optionsPath = path.join(process.cwd(), 'build', 'gulp-config'),
@@ -22,7 +21,7 @@ var fs = require('fs'),
     banners = {};
 
 
-pkg.year = moment().format('YYYY');
+pkg.year = new Date().getFullYear();
 banners.application = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= pkg.year %> <%= pkg.author.company %> */\n";
 banners.vendors = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n";
 
@@ -49,7 +48,7 @@ _.forOwn({
     command: null,
     remotehost: null //be explicit!
 }, function (value, key) {
-    options[key] = _.has(yargs.argv, key) ? yargs.argv[key] : value;
+    options[key] = argv.hasOwnProperty(key) ? argv[key] : value;
 });
 
 //force production env
@@ -96,10 +95,15 @@ gulp.task('default', ['clean'], function (done) {
         'views'
     ];
 
-    if (options.production) {
+    if (options.styleguideDriven) {
+        tasks.push('styleguide');
+    }
+	
+	if (options.production) {
         //rev production files and cleanup temp files
         tasks.push('rev', 'clean:tmp');
     }
+	
 
     tasks.push(done);
     runSequence.apply(null, tasks);
@@ -119,13 +123,13 @@ if (options.buildOnly) {
 
         var testHash = require('crypto').createHash('md5').update(fs.readFileSync(__filename, {encoding: 'utf8'})).digest('hex');
 
-        if (!yargs.argv.grunthash) {
+        if (!argv.grunthash) {
             $.util.log($.util.colors.red('Cannot run this task directly'));
             this.emit('end');
             return;
         }
 
-        if (yargs.argv.grunthash !== testHash) {
+        if (argv.grunthash !== testHash) {
             $.util.log($.util.colors.red('Safety hash check not passed'));
             this.emit('end');
             return;

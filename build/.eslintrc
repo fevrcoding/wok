@@ -1,8 +1,6 @@
 {
     "extends": "../.eslintrc",
 
-    "parser": null,
-
     "env": {
         "node": true,
         "browser": false
