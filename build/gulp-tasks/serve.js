@@ -64,11 +64,11 @@ module.exports = function (gulp, $, options) {
     }
 
     //ensure proper exit on windows
-    if (process.platform === 'win32') {
-        process.on('SIGINT', function () {
-            process.exit();
-        });
-    }
+    // if (process.platform === 'win32') {
+    process.on('SIGINT', function () {
+        process.exit();
+    });
+    // }
 
     // Watch Files For Changes & Reload
     gulp.task('serve', ['default'], function (done) {
@@ -127,13 +127,12 @@ module.exports = function (gulp, $, options) {
 
         var browserSync = require('browser-sync').create(options.buildHash),
             serverConf = _.defaults({
-                logLevel: 'silent',
                 open: false,
                 ui: false
             }, serverConfigDefault);
 
         browserSync.init(serverConf, function () {
-            $.util.log($.util.colors.green('Running a static server on port ' + ports.connect + '...'));
+            //$.util.log($.util.colors.green('Running a static server on port ' + ports.connect + '...'));
         });
 
         process.on('exit', function () {

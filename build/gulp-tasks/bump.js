@@ -25,7 +25,7 @@ module.exports = function (gulp, $, options) {
             message: 'New version number?',
             default: (allowed.length - 1),
             choices: allowed.map(function (type) { return { name: type + ' (' + semver.inc(options.pkg.version, type)  + ')', value: type}; })
-        }], function (answers) {
+        }]).then(function (answers) {
             argv.type = answers.version;
             done();
         });
