@@ -204,3 +204,20 @@
 .u-invisible { //DEPRECATED: also as global state
     visibility: hidden;
 }
+
+@each $mq-key, $mq-value in $mq-breakpoints {
+
+    @include mq($mq-key) {
+        .u-hidden--from-#{$mq-key} {
+            display: none !important;
+            visibility: hidden;
+        }
+    }
+
+    @include mq($until: $mq-key) {
+        .u-hidden--until-#{$mq-key} {
+            display: none !important;
+            visibility: hidden;
+        }
+    }
+}
