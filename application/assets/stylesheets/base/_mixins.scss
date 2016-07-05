@@ -23,6 +23,13 @@
     @return map-get($layers, $level);
 }
 
+@function vw($width, $viewport-reference-width: $viewport-width) {
+    @return (strip-units($width) / strip-units($viewport-reference-width)) * 100 + vw;
+}
+
+@function vh($height, $viewport-reference-height: $viewport-height) {
+    @return (strip-units($height) / strip-units($viewport-reference-height)) * 100 + vh;
+}
 
 
 // Elements
@@ -179,14 +186,14 @@
         $context: $context * 1px;
     }
 
-    @return ($pixels / $context) * 1em;
+    @return #{$pixels / $context}em;
 }
 
 @function rem($pixels) {
     @if (unitless($pixels)) {
         $pixels: $pixels * 1px;
     }
-    @return ($pixels / $font-size-default) * 1rem;
+    @return #{$pixels / $font-size-default}rem;
 }
 
 
