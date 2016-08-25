@@ -15,16 +15,20 @@
     <meta name="HandheldFriendly" content="True" />
     <meta name="MobileOptimized" content="320" />
     <meta name="format-detection" content="telephone=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- build:css /assets/stylesheets/application.min.css -->
+    <link rel="stylesheet" href="/assets/stylesheets/application.css" />
+    <!-- endbuild -->
+
+    <!--[if lt IE 9]>
+    <script src="/assets/vendors/html5shiv/dist/html5shiv-printshiv.min.js"></script>
+    <![endif]-->
 
     <!-- build:replace /assets/vendors/modernizr/modernizr.min.js -->
     <script src="/assets/vendors/modernizr/modernizr.js"></script>
     <!-- endbuild -->
 
-
-    <!-- build:css /assets/stylesheets/application.min.css -->
-    <link rel="stylesheet" href="/assets/stylesheets/application.css" />
-    <!-- endbuild -->
 
     {% block head %}
     {% endblock %}
