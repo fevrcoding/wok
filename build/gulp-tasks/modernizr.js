@@ -5,6 +5,8 @@
 
 module.exports = function (gulp, $, options) {
 
+    var defaultConfig = require('../gulp-config/modernizr.conf.json');
+
     var distConfig = {
 
         cache: true,
@@ -14,23 +16,7 @@ module.exports = function (gulp, $, options) {
         dest: options.paths.tmp + '/assets/vendors/modernizr/modernizr.js',
 
         // Based on default settings on http://modernizr.com/download/
-        options: [
-            'setClasses',
-            'addTest',
-            'html5printshiv',
-            'testProp',
-            'fnBind',
-            'atRule',
-            'domPrefixes',
-            'hasEvent',
-            'html5shiv',
-            'mq',
-            'prefixed',
-            'prefixes',
-            'prefixedCSS',
-            'testAllProps',
-            'testStyles'
-        ],
+        options: defaultConfig.options,
 
         // By default, source is uglified before saving
         uglify: true,
@@ -67,7 +53,7 @@ module.exports = function (gulp, $, options) {
     };
 
 
-    gulp.task('modernizr', function (done) {
+    gulp.task('modernizr', ['modernizr:html5shiv'], function (done) {
         var fs = require('fs'),
             filePath = options.assetsPath('dist.vendors',  '/modernizr'),
             fullConfig,
@@ -77,7 +63,25 @@ module.exports = function (gulp, $, options) {
 
         if (options.production) {
             modernizr = require('customizr');
-            modernizr(distConfig, function () {
+            modernizr(distConfig, function (obj) {
+                var tests = obj.options['feature-detects'],
+                    logStr = 'The production build includes the following tests: ',
+                    colors = $.util.colors;
+                if (tests.length > 0) {
+
+
+                    logStr += colors.bold(tests.map(function (test) {
+                        return test.replace('test/', '');
+                    }).join(', '));
+
+                    $.util.log(logStr);
+
+                    $.util.log(
+                        'For optimal performances you might add a `defer` attribute to the script tag. ' +
+                        'Refer to https://github.com/Modernizr/Modernizr/issues/878#issuecomment-41448059 for guidelines'
+                    );
+                }
+
                 done();
             });
         } else {
@@ -91,6 +95,15 @@ module.exports = function (gulp, $, options) {
 
 
 
+    });
+
+    gulp.task('modernizr:html5shiv', function () {
+
+        var path = require('path'),
+            html5shivPath = path.join(path.dirname(require.resolve('html5shiv')), '*.min.js');
+
+        return gulp.src([html5shivPath])
+            .pipe(gulp.dest(options.assetsPath('dist.vendors', 'html5shiv/dist')));
     });
 
 };
