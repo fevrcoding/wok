@@ -16,6 +16,6 @@
   ],
   "dependencies": {
     "sass-mq": "3.2.9",
-    "normalize-css": "4.1.1"
+    "normalize-css": "5.0.0"
   }
 }
