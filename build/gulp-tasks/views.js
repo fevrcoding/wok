@@ -7,30 +7,27 @@
 
 module.exports = function (gulp, $, options) {
 
-    var path = require('path'),
-        fs = require('fs'),
-        _ = require('lodash'),
-        glob = require('glob'),
-        through = require('through2'),
-        baseData = {},
-        paths = options.paths,
-        viewPath = path.join(process.cwd(), paths.src.views),
-        fixturesPath = path.join(process.cwd(), options.paths.src.fixtures),
-        styleFilter,
-        jsFilter,
-        userRefPipe,
-        env;
+    const path = require('path');
+    const fs = require('fs');
+    const _ = require('lodash');
+    const glob = require('glob');
+    const through = require('through2');
+    const baseData = {};
+    const paths = options.paths;
+    const viewPath = path.join(process.cwd(), paths.src.views);
+    const fixturesPath = path.join(process.cwd(), options.paths.src.fixtures);
 
 
-    baseData.helpers = require('./lib/view-helpers').helpers(options);
-    baseData._ = _;
+    var userRefPipe; //eslint-disable-line no-var
+
+
     baseData.PRODUCTION = options.production;
     baseData.page = {};
 
 
     function map(renderFn) {
 
-        return through.obj(function (file, enc, cb) {
+        return through.obj(function (file, enc, cb) { //eslint-disable-line consistent-return
             if (file.isNull()) {
                 this.push(file);
                 return cb();
@@ -42,7 +39,7 @@ module.exports = function (gulp, $, options) {
                 );
             }
             try {
-                file.contents = new Buffer(renderFn(file.contents.toString(), file.path, file));
+                file.contents = new Buffer(renderFn(file.contents.toString(), file.path, file)); //eslint-disable-line no-param-reassign
             } catch (err) {
                 this.emit('error', new $.util.PluginError('view-task', err.toString()));
             }
@@ -53,13 +50,15 @@ module.exports = function (gulp, $, options) {
     }
 
 
-    env = require('./lib/view-helpers').nunjucks([viewPath, paths.src.documents], options);
+    const env = require('./lib/view-helpers').nunjucks([viewPath, paths.src.documents], options);
 
+    env.addGlobal('helpers', require('./lib/view-helpers').helpers(options));
+    env.addGlobal('_', _);
 
     if (options.production) {
 
-        styleFilter = $.filter('**/*.min.css', {restore: true});
-        jsFilter = $.filter('**/*.min.js', {restore: true});
+        const styleFilter = $.filter('**/*.min.css', { restore: true });
+        const jsFilter = $.filter('**/*.min.js', { restore: true });
 
         userRefPipe = require('lazypipe')()
             .pipe($.useref, {
@@ -73,55 +72,49 @@ module.exports = function (gulp, $, options) {
                     return '<script src="' + target + '"></script>';
                 }
             })
-            .pipe(function () {
-                return styleFilter;
+            .pipe(() => styleFilter)
+            .pipe($.cleanCss, {
+                advanced: false,
+                aggressiveMerging: false,
+                mediaMerging: false,
+                rebase: false
             })
-            .pipe($.minifyCss)
             .pipe($.rev)
-            .pipe(function () {
-                return styleFilter.restore;
-            })
-
-            .pipe(function () {
-                return jsFilter;
-            })
-            .pipe($.uglify, {preserveComments: 'license'})
-            .pipe($.header, options.banners.application, {pkg: options.pkg})
+            .pipe(() => styleFilter.restore)
+            .pipe(() => jsFilter)
+            .pipe($.uglify, { preserveComments: 'license' })
+            .pipe($.header, options.banners.application, { pkg: options.pkg })
             .pipe($.rev)
-            .pipe(function () {
-                return jsFilter.restore;
-            })
-            .pipe(function () {
-                var vendorRegexp = new RegExp(paths.vendors);
-                return $.if(vendorRegexp, $.header(options.banners.vendors, {pkg: options.pkg}));
+            .pipe(() => jsFilter.restore)
+            .pipe(() => {
+                const vendorRegexp = new RegExp(paths.vendors);
+                return $.if(vendorRegexp, $.header(options.banners.vendors, { pkg: options.pkg }));
             });
 
     } else {
         userRefPipe = $.util.noop;
     }
 
-    gulp.task('views', function () {
+    gulp.task('views', () => {
 
-        var data = {};
+        const data = {};
 
-        glob.sync('{,*/}*.json', {cwd: fixturesPath}).forEach(function (filename) {
-            var id = _.camelCase(filename.toLowerCase().replace('.json', ''));
-            data[id] = JSON.parse(fs.readFileSync(path.join(fixturesPath, filename), {encoding: 'utf8'}));
+        glob.sync('{,*/}*.json', { cwd: fixturesPath }).forEach((filename) => {
+            const id = _.camelCase(filename.toLowerCase().replace('.json', ''));
+            data[id] = JSON.parse(fs.readFileSync(path.join(fixturesPath, filename), { encoding: 'utf8' }));
         });
 
         return gulp.src([viewPath + '/{,*/}' + options.viewmatch, '!' + viewPath + '/{,*/}_*.*'])
             .pipe($.plumber({
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
-            .pipe(map(function (code) {
-                return env.renderString(code, _.assign({}, baseData, data || {}));
-            }))
+            .pipe(map((code) => env.renderString(code, Object.assign({}, baseData, data || {}))))
             .pipe(userRefPipe())
-            .pipe($.rename(function (filepath) {
-                filepath.basename = filepath.basename.replace('.nunj', '');
+            .pipe($.rename((filepath) => {
+                filepath.basename = filepath.basename.replace('.nunj', ''); //eslint-disable-line no-param-reassign
             }))
             .pipe(gulp.dest(paths.dist.views))
-            .pipe($.if(options.production, $.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), {merge: true})))
+            .pipe($.if(options.production, $.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), { merge: true })))
             .pipe($.if(options.production, gulp.dest('.')))
             .pipe($.if(options.isWatching, $.notify({ message: 'Views rendered', onLast: true })));
     });

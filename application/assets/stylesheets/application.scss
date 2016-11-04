@@ -1,13 +1,14 @@
 //variables
 @import 'base/globals';
-@import 'base/colors';
-@import 'base/fonts';
 
 //plugins
 @import 'sass-mq/mq';
-
 //base styles and mixins
 @import 'normalize-css/normalize';
+
+@import 'base/colors';
+@import 'base/fonts';
+
 @import 'base/mixins';
 //uncomment to use custom grid
 @import 'base/mixins-grid';

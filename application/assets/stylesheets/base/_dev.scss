@@ -1,7 +1,8 @@
 //DEVELOPMENT ONLY RULES
 
 @if build-env() != 'production' {
-    img[id^="chromeperfectpixel"] {
-        max-width: none !important;
+
+    img[id^="chromeperfectpixel"] { // scss-lint:disable QualifyingElement
+        max-width: none !important; // scss-lint:disable ImportantRule
     }
 }

@@ -2,8 +2,8 @@
 //   Content typography and styles
 //  ============================================================================
 %typography {
-    color: $color-text;
     overflow-wrap: break-word;
+    color: $color-text;
     word-wrap: break-word;
 
     a {
@@ -21,9 +21,9 @@
 
     ol,
     ul {
+        overflow: hidden;
         margin-top: 0.1em;
         padding-left: 1.5em;
-        overflow: hidden;
     }
 
     img {
@@ -36,8 +36,9 @@
     }
 
     table {
-        margin-bottom: 2em;
         overflow-x: auto;
+        margin-bottom: 2em;
+
         &.table--large {
             width: 100%;
         }
@@ -47,15 +48,15 @@
             padding: 0.2em 0.5em;
             border-bottom: 1px solid $color-border;
             text-align: left;
-
-            &.numeric {
-                text-align: right;
-            }
         }
 
         th {
             font-weight: bold;
             text-align: center;
+        }
+
+        th.numeric { // scss-lint:disable QualifyingElement
+            text-align: right;
         }
     }
 

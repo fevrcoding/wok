@@ -2,23 +2,23 @@
  * Global JavaScript Plugins
  */
 
-/*eslint no-console: 0*/
+/* eslint no-console: 0, no-var: 0 */
 // @see https://raw.github.com/h5bp/html5-boilerplate/master/js/plugins.js
 // Avoid `console` errors in browsers that lack a console.
-(function () {
+(function consoleFallback() {
     var methods = [
-            'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
-            'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
-            'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
-            'timeStamp', 'trace', 'warn'
-        ],
-        length = methods.length,
-        console = (window.console = window.console || {}),
-        method;
+        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+        'timeStamp', 'trace', 'warn'
+    ];
+    var length = methods.length;
+    var console = (window.console = window.console || {});
+    var method;
 
     function noop() {}
 
-    while (length--) {
+    while (length--) { //eslint-disable-line no-plusplus
         method = methods[length];
 
         // Only stub undefined methods.

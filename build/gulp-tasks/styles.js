@@ -5,14 +5,15 @@
 
 module.exports = function (gulp, $, options) {
 
-    var path = require('path'),
-        autoprefixer = require('autoprefixer'),
-        reloadStream,
-        production = options.production,
-        paths = options.paths,
-        destPath = options.assetsPath('dist.css'),
-        sassFunctions = require('./lib/sass-functions')(options),
-        productionPipe;
+    const path = require('path');
+    const autoprefixer = require('autoprefixer');
+    const production = options.production;
+    const paths = options.paths;
+    const sassFunctions = require('./lib/sass-functions')(options);
+
+    var productionPipe; //eslint-disable-line no-var
+    var destPath = options.assetsPath('dist.css'); //eslint-disable-line no-var
+    var reloadStream; //eslint-disable-line no-var
 
     function reloadStreamFn() {
         if (options.isWatching && options.livereload) {
@@ -28,20 +29,22 @@ module.exports = function (gulp, $, options) {
 
     if (production) {
         productionPipe = require('lazypipe')()
-            .pipe($.header, options.banners.application, {pkg: options.pkg})
-            .pipe(function () {
-                return gulp.dest(destPath);
+            .pipe($.header, options.banners.application, { pkg: options.pkg })
+            .pipe(() => gulp.dest(destPath))
+            .pipe($.cleanCss, {
+                advanced: false,
+                aggressiveMerging: false,
+                mediaMerging: false,
+                rebase: false
             })
-            .pipe($.minifyCss)
-            .pipe($.rename, {suffix: '.min'});
+            .pipe($.rename, { suffix: '.min' });
     } else {
         productionPipe = $.util.noop;
     }
 
 
 
-
-    gulp.task('styles', function () {
+    gulp.task('styles', () => {
 
         // For best performance, don't add Sass partials to `gulp.src`
         return gulp.src([
@@ -64,9 +67,9 @@ module.exports = function (gulp, $, options) {
         .pipe($.if(production, productionPipe()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(options.assetsPath('dist.css')))
-        .pipe(reloadStreamFn()({match: '**/*.css'}))
+        .pipe(reloadStreamFn()({ match: '**/*.css' }))
         .pipe($.if(options.isWatching, $.notify({ message: 'SASS Compiled', onLast: true })))
-        .pipe($.size({title: 'styles'}));
+        .pipe($.size({ title: 'styles' }));
     });
 
 };
