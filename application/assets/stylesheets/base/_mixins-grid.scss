@@ -41,8 +41,8 @@ $container-lg: $container-large-desktop !default;
 
 @mixin make-row {
     @include clearfix;
-    margin-left: $grid-gutter-width / -2;
     margin-right: $grid-gutter-width / -2;
+    margin-left: $grid-gutter-width / -2;
 }
 
 @mixin make-xs-column($columns, $gutter: $grid-gutter-width) {
@@ -50,8 +50,8 @@ $container-lg: $container-large-desktop !default;
     float: left;
     width: percentage($columns / $grid-columns);
     min-height: 1px;
-    padding-left: $gutter / 2;
     padding-right: $gutter / 2;
+    padding-left: $gutter / 2;
 }
 
 @mixin make-xs-column-offset($columns) {
@@ -76,12 +76,12 @@ $container-lg: $container-large-desktop !default;
 @mixin make-sm-column($columns, $gutter: $grid-gutter-width) {
     position: relative;
     min-height: 1px;
-    padding-left: $gutter / 2;
     padding-right: $gutter / 2;
+    padding-left: $gutter / 2;
 
     @include mq(sm) {
-        width: percentage($columns / $grid-columns);
         float: left;
+        width: percentage($columns / $grid-columns);
     }
 }
 
@@ -107,12 +107,12 @@ $container-lg: $container-large-desktop !default;
 @mixin make-md-column($columns, $gutter: $grid-gutter-width) {
     position: relative;
     min-height: 1px;
-    padding-left: $gutter / 2;
     padding-right: $gutter / 2;
+    padding-left: $gutter / 2;
 
     @include mq(md) {
-        width: percentage($columns / $grid-columns);
         float: left;
+        width: percentage($columns / $grid-columns);
     }
 }
 
@@ -138,12 +138,12 @@ $container-lg: $container-large-desktop !default;
 @mixin make-lg-column($columns, $gutter: $grid-gutter-width) {
     position: relative;
     min-height: 1px;
-    padding-left: $gutter / 2;
     padding-right: $gutter / 2;
+    padding-left: $gutter / 2;
 
     @include mq(lg) {
-        width: percentage($columns / $grid-columns);
         float: left;
+        width: percentage($columns / $grid-columns);
     }
 }
 
@@ -205,21 +205,25 @@ $container-lg: $container-large-desktop !default;
 
 @mixin calc-grid($index, $class, $type) {
     @if $type == width and $index > 0 {
+
         .l-col--#{$class}-#{$index} {
             width: percentage($index / $grid-columns);
         }
     }
     @if $type == push {
+
         .l-col--#{$class}-push-#{$index} {
             left: percentage($index / $grid-columns);
         }
     }
     @if $type == pull {
+
         .l-col--#{$class}-pull-#{$index} {
             right: percentage($index / $grid-columns);
         }
     }
     @if $type == offset {
+
         .l-col--#{$class}-offset-#{$index} {
             margin-left: percentage($index / $grid-columns);
         }

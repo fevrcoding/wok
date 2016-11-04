@@ -35,9 +35,10 @@
 // Elements
 // ==========================================================================
 
-@mixin boost-performance ($translate: true){
+@mixin boost-performance ($translate: true) {
     backface-visibility: hidden;
     transform-style: preserve-3d;
+
     @if ($translate) {
         transform: translate3d(0, 0, 0);
         will-change: transform;
@@ -45,35 +46,37 @@
 }
 
 @mixin clearfix {
-    *zoom: 1;
+    *zoom: 1; // scss-lint:disable PropertySpelling
 
-    &:before,
-    &:after {
+    &::before,
+    &::after {
         display: table;
         content: '';
     }
 
-    &:after {
+    &::after {
         clear: both;
     }
 }
 
 @mixin ir($image-url, $context: false) {
+    width: image-width($image-url);
+    height: image-height($image-url);
     background: image-url($image-url) no-repeat 0 0;
     background-size: 100% auto;
-    height: image-height($image-url);
-    width: image-width($image-url);
 }
 
 @mixin pseudo-img($image-url, $width: false, $height: false) {
     display: block;
-    content: ' ';
     background: image-url($image-url) no-repeat 0 0;
+    content: ' ';
+
     @if $height {
         height: $height;
     } @else {
         height: image-height($image-url);
     }
+
     @if $width {
         width: $width;
     } @else {
@@ -106,17 +109,40 @@
     height: auto;
 }
 
+@mixin scrollbar-custom {
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-button {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+
+    &::-webkit-scrollbar-corner {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba($color-light, 0.3);
+    }
+}
+
 //see https://github.com/tinganho/compass-placeholder
 @mixin placeholder {
+
     &::-webkit-input-placeholder {
         @content;
     }
 
-    &:-moz-placeholder {
+    &:-moz-placeholder { // scss-lint:disable VendorPrefix, PseudoElement
         @content;
     }
 
-    &::-moz-placeholder {
+    &::-moz-placeholder { // scss-lint:disable VendorPrefix
         @content;
     }
 
@@ -141,9 +167,10 @@
     }
 }
 
-@mixin triangle($color: #000, $size: '5px', $direction: 'up') {
+@mixin triangle($color: $color-dark, $size: '5px', $direction: 'up') {
     width: 0;
     height: 0;
+
     @if $direction == 'up' {
         border-right: $size solid transparent;
         border-bottom: $size solid $color;
@@ -166,12 +193,6 @@
     }
 }
 
-//DEPRECATED
-@mixin transparent-bg($color, $alpha) {
-    $rgba: rgba($color, $alpha);
-    background-color: $rgba;
-    @warn "This mixin is deprecated";
-}
 
 // Typography
 //
@@ -185,7 +206,6 @@
     @if (unitless($context)) {
         $context: $context * 1px;
     }
-
     @return #{$pixels / $context}em;
 }
 
@@ -206,7 +226,8 @@
     @if $rem == true {
         @return rem($result);
     }
-    @return $result
+
+    @return $result;
 }
 
 @function font-weight($weight) {
@@ -221,7 +242,6 @@
     $context-size: font-size($context, false);
     @return em($size, $context-size);
 }
-
 
 @mixin text-ellipsis() {
     overflow: hidden;
@@ -241,25 +261,9 @@
 }
 
 @mixin reset-typography($font-weight: normal, $line-height: inherit) {
-    font-weight: $font-weight;
-    font-size: $font-size-default;
-    line-height: $line-height;
-    margin-bottom: 0;
     margin-top: 0;
+    margin-bottom: 0;
+    font-size: $font-size-default;
+    font-weight: $font-weight;
+    line-height: $line-height;
 }
-
-//DEPRECATED
-@mixin rem-font-size($font-size, $line-height: $font-lheight-default) {
-    font-size: rem($font-size);
-    @if $line-height != false {
-        $lh-unit: unit($line-height);
-        @if $lh-unit == "" {
-            line-height: $line-height;
-        } @else {
-            line-height: ceil($font-size / $line-height) * $line-height / $font-size;
-        }
-    }
-    @warn "This mixin is deprecated";
-}
-
-

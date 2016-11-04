@@ -11,34 +11,11 @@
 
    ========================================================================== */
 
-//Fix IE10 on WP8 visualization issues
-//see http://getbootstrap.com/getting-started/#ie-10-width
-//see http://timkadlec.com/2013/01/windows-phone-8-and-device-width/
-@-webkit-viewport {
-    width: device-width;
-}
-
-@-moz-viewport {
-    width: device-width;
-}
-
-@-ms-viewport {
-    width: device-width;
-}
-
-@-o-viewport {
-    width: device-width;
-}
-
-@viewport {
-    width: device-width;
-}
-
 *,
 *::before,
 *::after {
     box-sizing: border-box;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); // scss-lint:disable ColorVariable
 }
 
 html,
@@ -51,8 +28,11 @@ textarea {
 
 html,
 body {
-    font-size: percentage($font-size-default / 16px); //16px
     line-height: $font-lheight-default / $font-size-default;
+}
+
+html {
+    font-size: percentage($font-size-default / 16px); //16px
 }
 
 body {
@@ -66,7 +46,7 @@ body {
 //These selection declarations have to be separate.
 //Customize the background color to match your design.
 
-::-moz-selection {
+::-moz-selection { // scss-lint:disable VendorPrefix
     color: $color-text-selection;
     text-shadow: none;
 }
@@ -123,35 +103,9 @@ input::-moz-focus-inner {
    ##prevent 300ms delay in FF, Chrome and IE on touch devices
    ========================================================================== */
 
-a[href],
+a[href], // scss-lint:disable QualifyingElement
 button {
     touch-action: manipulation;
-}
-
-/* ==========================================================================
-   ##Shared Styles
-
-   Shared placeholder
-
-   ```
-   ```
-   ========================================================================== */
-
-//DEPRECATED
-%inline-block {
-    display: inline-block;
-}
-
-//DEPRECATED
-%img-responsive {
-    display: block;
-    max-width: 100%;
-    height: auto;
-}
-
-//DEPRECATED
-%clearfix {
-    @include clearfix;
 }
 
 /* ==========================================================================
@@ -175,7 +129,9 @@ button {
 }
 
 @each $font-head-num, $font-head-size in $font-sizes-headings {
-    h#{$font-head-num}, .h#{$font-head-num} {
+
+    h#{$font-head-num},
+    .h#{$font-head-num} {
         font-size: font-size($font-head-size);
         line-height: $font-lheight-h;
     }
@@ -186,13 +142,13 @@ p {
     line-height: $font-lheight-h;
 }
 
-a {
+a:not([class]) {
     color: $color-link;
     text-decoration: underline;
 
     &:hover {
         //set to important so that hover is hardly overwritten by other styles
-        color: $color-link-hover !important;
+        color: $color-link-hover !important; // scss-lint:disable ImportantRule
         text-decoration: none;
     }
 }
@@ -209,15 +165,16 @@ a {
         top: 0;
         left: 0;
         z-index: z-index(behind) - 2;
+        display: block;
         visibility: hidden;
+        overflow: hidden;
         width: 1px;
         height: 1px;
-        overflow: hidden;
-        display: block;
     }
 
     body::after {
-        content: "xs";
+        content: 'xs';
+
         @each $mq-key, $mq-value in $mq-breakpoints {
             @include mq($mq-key) {
                 content: '#{$mq-key}';
@@ -226,12 +183,12 @@ a {
     }
 
     body::before {
-        content: '/#{map-to-JSON($mq-breakpoints)}/';
+        content: '/#{map-to-JSON($mq-breakpoints)}/'; // scss-lint:disable NameFormat
     }
 
     //fallback
     head {
-        font-family: '/#{map-to-JSON($mq-breakpoints)}/';
+        font-family: '/#{map-to-JSON($mq-breakpoints)}/'; // scss-lint:disable NameFormat
     }
 }
 

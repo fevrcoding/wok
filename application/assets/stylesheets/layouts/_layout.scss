@@ -22,6 +22,7 @@
     @if $grid-enabled {
         padding-right: $grid-gutter-width / 2;
         padding-left: $grid-gutter-width / 2;
+
         @if $grid-fluid-breakpoints {
             //fluid layout till max width
             max-width: $container-lg;
@@ -58,6 +59,7 @@
         margin-right: $grid-gutter-width / -2;
         margin-left: $grid-gutter-width / -2;
     }
+
     @include make-grid-columns;
     // Extra small grid
     //
@@ -107,50 +109,58 @@
    ========================================================================== */
 @if $grid-enabled {
     @include mq(xs) {
+
         .l-hidden--from-xs {
-            display: none !important;
+            display: none !important; // scss-lint:disable ImportantRule
         }
     }
 
     @include mq(sm) {
+
         .l-hidden--from-sm {
-            display: none !important;
+            display: none !important; // scss-lint:disable ImportantRule
         }
     }
 
     @include mq(md) {
+
         .l-hidden--from-md {
-            display: none !important;
+            display: none !important; // scss-lint:disable ImportantRule
         }
     }
 
     @include mq(lg) {
+
         .l-hidden--from-lg {
-            display: none !important;
+            display: none !important; // scss-lint:disable ImportantRule
         }
     }
 
     @include mq($until: xs) {
+
         .l-hidden--until-xs {
-            display: none !important;
+            display: none !important; // scss-lint:disable ImportantRule
         }
     }
 
     @include mq($until: sm) {
+
         .l-hidden--until-sm {
-            display: none !important;
+            display: none !important; // scss-lint:disable ImportantRule
         }
     }
 
     @include mq($until: md) {
+
         .l-hidden--until-md {
-            display: none !important;
+            display: none !important; // scss-lint:disable ImportantRule
         }
     }
 
     @include mq($until: lg) {
+
         .l-hidden--until-lg {
-            display: none !important;
+            display: none !important; // scss-lint:disable ImportantRule
         }
     }
 }
