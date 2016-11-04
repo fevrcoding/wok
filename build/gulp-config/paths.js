@@ -1,9 +1,9 @@
 //NOTE: folders are relative to project root folder
 
-var srcRoot = 'application';
-var distRoot = 'public';
+const srcRoot = 'application';
+const distRoot = 'public';
 
-var paths = {
+const paths = {
 
     src: {
         root: srcRoot,

@@ -5,11 +5,10 @@
 
 module.exports = function (gulp, $, options) {
 
-    var paths = options.paths,
-        hosts = options.hosts,
-        rsyncConf;
+    const paths = options.paths;
+    const hosts = options.hosts;
 
-    rsyncConf = {
+    const rsyncConf = {
         src: paths.rsync,
         recursive: true,
         compareMode: 'checksum',
@@ -27,7 +26,7 @@ module.exports = function (gulp, $, options) {
 
 
     function getDeployTarget(target) {
-        var targets = Object.keys(hosts).filter(function (host) { return !!hosts[host].host; });
+        const targets = Object.keys(hosts).filter((host) => !!hosts[host].host);
 
         if (!target || targets.indexOf(target) === -1) {
             $.util.log($.util.colors.red('Error: Deploy target unavailable. Specifiy it via `--remotehost` argument. Allowed targets are: ' + targets.join(', ')));
@@ -36,26 +35,25 @@ module.exports = function (gulp, $, options) {
         return hosts[target];
     }
 
-    gulp.task('ftp', function (done) {
-        var FTPS = require('ftps'),
-            hasbin = require('hasbin'),
-            host = getDeployTarget(options.remotehost),
-            ftps;
+    gulp.task('ftp', (done) => {
+        const FTPS = require('ftps');
+        const hasbin = require('hasbin');
+        const host = getDeployTarget(options.remotehost);
 
 
 
         if (host === false) {
             done();
-            return false;
+            return;
         }
 
         if (!hasbin.sync('lftp')) {
             $.util.log($.util.colors.red('Error: required `lftp` binary not found in PATH.'));
             done();
-            return false;
+            return;
         }
 
-        ftps = new FTPS({
+        const ftps = new FTPS({
             host: host.host,
             password: host.password,
             username: host.username
@@ -64,7 +62,7 @@ module.exports = function (gulp, $, options) {
         $.util.log($.util.colors.green('Deploying to target %s (%s)'), options.remotehost, host.host);
 
 
-        ftps.raw('mirror -p --reverse --delete --verbose --ignore-time ' + paths.dist.root + ' ' + host.path).exec(function (err, response) {
+        ftps.raw('mirror -p --reverse --delete --verbose --ignore-time ' + paths.dist.root + ' ' + host.path).exec((err, response) => {
             if (response.error) {
                 done(response.error);
             } else {
@@ -73,25 +71,23 @@ module.exports = function (gulp, $, options) {
                 }
                 done();
             }
-        }).stdout.on('data', function (res) {
-            res.toString().trim().split('\n').forEach(function (line) {
+        }).stdout.on('data', (res) => {
+            res.toString().trim().split('\n').forEach((line) => {
                 $.util.log($.util.colors.cyan('[remote] ') + line.trim());
             });
         });
     });
 
 
-    gulp.task('remote', function (done) {
+    gulp.task('remote', (done) => {
 
-        var _ = require('lodash'),
-            Ssh = require('ssh2').Client,
-            conn = new Ssh(),
-            sshCommands,
-            host;
+        const template = require('lodash/template');
+        const Ssh = require('ssh2').Client;
+        const conn = new Ssh();
 
-        sshCommands = {
+        const sshCommands = {
 
-            backup: _.template(
+            backup: template(
                 'mkdir -p <%= paths.backup %>;' +
                 'filecount=$(ls -t <%= paths.backup %> | grep .tgz | wc -l);' +
                 'if [ $filecount -gt 2 ];' +
@@ -106,43 +102,47 @@ module.exports = function (gulp, $, options) {
                 '<%= excludes.map(function (exc) { return " --exclude=\'" + exc + "\'";}).join(" ") %> <%= paths.rsync %>;' +
                 'printf "Backup completed";' +
                 'fi;'
-            )({paths: paths, excludes: rsyncConf.exclude}),
+            )({ paths: paths, excludes: rsyncConf.exclude }),
 
-            rollback: _.template(
+            rollback: template(
                 'if [ -d <%= paths.backup %> ];then ' +
                 'rm -rf <%= paths.rsync %>/;' +
                 'for file in $(ls -tr <%= paths.backup %> | tail -n 1);' +
                 'do tar -xzpf <%= paths.backup %>/$file;' +
                 'done;' +
                 'fi;'
-            )({paths: paths})
+            )({ paths: paths })
         };
 
-        host = getDeployTarget(options.remotehost);
+        const host = getDeployTarget(options.remotehost);
+
         if (host === false) {
             done();
-            return false;
+            return;
         }
 
-        if (!options.command || !sshCommands.hasOwnProperty(options.command)) {
-            $.util.log($.util.colors.red('SSH command set not specified. Specifiy it via `--command` argument.Allowed commands are: ' + Object.keys(sshCommands).join(', ')));
+        if (!options.command || !sshCommands.hasOwnProperty(options.command)) { //eslint-disable-line no-prototype-builtins
+            $.util.log($.util.colors.red(
+                'SSH command set not specified. Specifiy it via `--command` argument.Allowed commands are: ' + Object.keys(sshCommands).join(', ')
+            ));
             done('SSH command set not specified');
-            return false;
+            return;
         }
 
-        conn.on('ready', function () {
-            conn.exec('cd ' + host.path + ';' + sshCommands[options.command], function (err, stream) {
+        conn.on('ready', () => {
+            conn.exec('cd ' + host.path + ';' + sshCommands[options.command], (err, stream) => {
                 if (err) {
-                    return done(err);
+                    done(err);
+                    return;
                 }
 
-                stream.on('close', function (code) {
+                stream.on('close', (code) => {
                     $.util.log('REMOTE: close code: ' + code);
                     done();
-                    return conn.end();
-                }).on('data', function (data) {
+                    conn.end();
+                }).on('data', (data) => {
                     $.util.log('REMOTE: ' + data);
-                }).stderr.on('data', function (data) {
+                }).stderr.on('data', (data) => {
                     $.util.log($.util.colors.red('REMOTE: ' + data));
                 });
             });
@@ -156,25 +156,22 @@ module.exports = function (gulp, $, options) {
     });
 
 
-    gulp.task('rsync', function (done) {
+    gulp.task('rsync', (done) => {
 
-        var _ = require('lodash'),
-            rsync = require('rsyncwrapper'),
-            conf,
-            host;
+        const rsync = require('rsyncwrapper');
+        const host = getDeployTarget(options.remotehost);
 
-        host = getDeployTarget(options.remotehost);
         if (host === false) {
             done('Deploy target unavailable');
-            return false;
+            return;
         }
 
-        conf = _.extend({
+        const conf = Object.assign({
             dest: host.path,
             host: host.username + '@' + host.host
         }, rsyncConf);
 
-        rsync(conf, function (error, stdout, sterr, cmd) {
+        rsync(conf, (error, stdout, sterr, cmd) => {
             $.util.log($.util.colors.green('Running command ' + cmd));
             if (error) {
                 // failed

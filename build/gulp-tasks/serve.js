@@ -6,36 +6,33 @@
 
 module.exports = function (gulp, $, options) {
 
-    var _ = require('lodash'),
-        del = require('del'),
-        path = require('path');
+    const defaults = require('lodash/defaults');
+    const del = require('del');
+    const path = require('path');
 
-    var paths = options.paths,
-        assetsPath = options.assetsPath,
-        ports = options.hosts.devbox.ports,
-        serverConfigDefault;
+    const paths = options.paths;
+    const assetsPath = options.assetsPath;
+    const ports = options.hosts.devbox.ports;
 
 
 
     function deleteListener(fileType) {
 
-        return function (event) {
-            var filePathFromSrc,
-                destFilePath;
+        return (event) => {
 
             if (event.type === 'deleted') {
                 // Simulating the {base: 'src'} used with gulp.src in the scripts task
-                filePathFromSrc = path.relative(assetsPath('src.' + fileType), event.path);
+                const filePathFromSrc = path.relative(assetsPath('src.' + fileType), event.path);
 
                 // Concatenating the 'build' absolute path used by gulp.dest in the scripts task
-                destFilePath = path.resolve(assetsPath('dist.' + fileType), filePathFromSrc);
+                const destFilePath = path.resolve(assetsPath('dist.' + fileType), filePathFromSrc);
 
                 del.sync(destFilePath);
             }
         };
     }
 
-    serverConfigDefault = {
+    const serverConfigDefault = {
         middleware: require('./lib/middlewares')(options),
         notify: false,
         ghostMode: false,
@@ -50,7 +47,7 @@ module.exports = function (gulp, $, options) {
             rule: {
                 match: /<\/head[^>]*>/i,
                 fn: function (snippet, match) {
-                    return ['<!--[if (gt IE 9) | (IEMobile)]><!-->', snippet, '<!--<![endif]-->', match].join("\n");
+                    return ['<!--[if (gt IE 9) | (IEMobile)]><!-->', snippet, '<!--<![endif]-->', match].join('\n');
                 }
             }
         }
@@ -65,30 +62,30 @@ module.exports = function (gulp, $, options) {
 
     //ensure proper exit on windows
     // if (process.platform === 'win32') {
-    process.on('SIGINT', function () {
+    process.on('SIGINT', () => {
         process.exit();
     });
     // }
 
     // Watch Files For Changes & Reload
-    gulp.task('serve', ['default'], function (done) {
+    gulp.task('serve', ['default'], (done) => {
 
-        var browserSync = require('browser-sync').create(options.buildHash),
-            serverConf = _.defaults({
-                ui: {
-                    port: 3001,
-                    weinre: {
-                        port: ports.weinre
-                    }
+        const browserSync = require('browser-sync').create(options.buildHash);
+        const serverConf = defaults({
+            ui: {
+                port: 3001,
+                weinre: {
+                    port: ports.weinre
                 }
-            }, serverConfigDefault);
+            }
+        }, serverConfigDefault);
 
-        options.isWatching = true;
+        options.isWatching = true; //eslint-disable-line no-param-reassign
 
-        browserSync.init(serverConf, function () {
+        browserSync.init(serverConf, () => {
 
-            ['images', 'scripts', 'fonts', 'fonts', 'media', 'views'].forEach(function (task) {
-                gulp.task(task + '-watch', [task], function (doneWatch) {
+            ['images', 'scripts', 'fonts', 'fonts', 'media', 'views'].forEach((task) => {
+                gulp.task(task + '-watch', [task], (doneWatch) => {
                     browserSync.reload();
                     doneWatch();
                 });
@@ -115,7 +112,7 @@ module.exports = function (gulp, $, options) {
 
         });
 
-        process.on('exit', function () {
+        process.on('exit', () => {
             browserSync.exit();
             done();
         });
@@ -123,23 +120,22 @@ module.exports = function (gulp, $, options) {
     });
 
     //just a static server
-    gulp.task('server', function (done) {
+    gulp.task('server', (done) => {
 
-        var browserSync = require('browser-sync').create(options.buildHash),
-            serverConf = _.defaults({
-                open: false,
-                ui: false
-            }, serverConfigDefault);
+        const browserSync = require('browser-sync').create(options.buildHash);
+        const serverConf = defaults({
+            open: false,
+            ui: false
+        }, serverConfigDefault);
 
-        browserSync.init(serverConf, function () {
+        browserSync.init(serverConf, () => {
             //$.util.log($.util.colors.green('Running a static server on port ' + ports.connect + '...'));
         });
 
-        process.on('exit', function () {
+        process.on('exit', () => {
             browserSync.exit();
             done();
         });
 
     });
 };
-

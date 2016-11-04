@@ -2,25 +2,23 @@
  * View Compilation Helpers
  */
 
-'use strict';
+const random = require('lodash/random');
+const defaults = require('lodash/defaults');
+const nunjucks = require('nunjucks');
+const marked = require('marked');
+const Markdown = require('nunjucks-markdown/lib/markdown_tag');
+const loremIpsum = require('lorem-ipsum');
 
-
-var _ = require('lodash'),
-    nunjucks = require('nunjucks'),
-    marked = require('marked'),
-    Markdown = require('nunjucks-markdown/lib/markdown_tag'),
-    loremIpsum = require('lorem-ipsum');
-
-module.exports.helpers = function (options) {
+module.exports.helpers = function (/*options*/) {
 
     return {
         lorem: function (min, max, config) {
-            var count = max ? _.random(min, max) : min,
-                defaults = {
-                    units: 'words',
-                    count: count
-                },
-                conf = _.defaults(config || {}, defaults);
+            const count = max ? random(min, max) : min;
+            const loremDefaults = {
+                units: 'words',
+                count: count
+            };
+            const conf = defaults(config || {}, loremDefaults);
 
             return loremIpsum(conf);
         }
@@ -29,11 +27,11 @@ module.exports.helpers = function (options) {
 };
 
 module.exports.nunjucks = function (viewPath) {
-    var env = nunjucks.configure(viewPath, {
+    const env = nunjucks.configure(viewPath, {
         noCache: true
     });
 
-    var markdownTag = new Markdown(env, marked);
+    const markdownTag = new Markdown(env, marked);
 
     markdownTag.fileTag = function (context, file) {
         return new nunjucks.runtime.SafeString(marked(env.render(file, context)));
@@ -43,15 +41,14 @@ module.exports.nunjucks = function (viewPath) {
     // it through the markdown renderer.
     markdownTag.blockTag = function (context, bodFn, tabStartFn) {
 
-        var body = bodFn();
-        var tabStart = tabStartFn(); // The column postion of the {% markdown %} tag.
+        var body = bodFn(); //eslint-disable-line no-var
+        const tabStart = tabStartFn(); // The column postion of the {% markdown %} tag.
 
         if (tabStart > 0) { // If the {% markdown %} tag is tabbed in, normalize the content to the same depth.
             body = body.split(/\r?\n/); // Split into lines.
-            body = body.map(function (line) {
-                return line.slice(tabStart); // Subtract the column postion from the start of the string.
-            });
-            body = body.join("\n"); // Rejoin into one string.
+            // Subtract the column postion from the start of the string.
+            body = body.map((line) => line.slice(tabStart));
+            body = body.join('\n'); // Rejoin into one string.
         }
 
         return new nunjucks.runtime.SafeString(marked(body));
