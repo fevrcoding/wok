@@ -5,14 +5,13 @@
 
 module.exports = function (gulp, $, options) {
 
-    var path = require('path'),
-        del = require('del');
+    const path = require('path');
+    const del = require('del');
 
-    var paths = options.paths,
-        assetsPath = options.assetsPath,
-        folders;
+    const paths = options.paths;
+    const assetsPath = options.assetsPath;
 
-    folders = [
+    const folders = [
         paths.tmp,
         '.tmp',
         assetsPath('dist.images'),
@@ -21,7 +20,7 @@ module.exports = function (gulp, $, options) {
         assetsPath('dist.js'),
         assetsPath('dist.css'),
         assetsPath('dist.fonts'),
-        paths.dist.views + '/' +  options.viewmatch,
+        paths.dist.views + '/' + options.viewmatch,
         paths.dist.views + '/{partials,templates,components}',
         assetsPath('dist.vendors'),
         path.join(paths.dist.root, 'styleguide'),
@@ -29,18 +28,18 @@ module.exports = function (gulp, $, options) {
     ];
 
 
-    gulp.task('clean', function (done) {
-        del(folders, {dot: true}).then(function () {
+    gulp.task('clean', (done) => {
+        del(folders, { dot: true }).then(() => {
             done();
-        }, function (err) {
+        }, (err) => {
             done(err);
         });
     });
 
-    gulp.task('clean:tmp', function (done) {
-        del([ paths.tmp, '.tmp'], {dot: true}).then(function () {
+    gulp.task('clean:tmp', (done) => {
+        del([paths.tmp, '.tmp'], { dot: true }).then(() => {
             done();
-        }, function (err) {
+        }, (err) => {
             done(err);
         });
     });

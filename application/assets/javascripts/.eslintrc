@@ -1,8 +1,20 @@
 {
-    "env": {
-        "browser": false
-    },
     "extends": "airbnb-base",
+
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "browser": true
+    },
+
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": false,
+            "jsx": false
+        }
+    },
 
     "rules": {
         "indent": [2, 4],

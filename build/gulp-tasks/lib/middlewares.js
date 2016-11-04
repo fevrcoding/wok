@@ -31,9 +31,9 @@
 //}
 
 
-module.exports = function  (options) {
+module.exports = function (/*options*/) {
 
-    var middlewares = [];
+    const middlewares = [];
 
     //middlewares.push(APIMiddleware(options));
 

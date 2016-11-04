@@ -21,9 +21,9 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 
 ## Requirements
 
-* Node.js >= 0.12.7 ([install wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager))
-* bower (`sudo npm install -g bower`)
-* gulp cli (`sudo npm install -g gulp`)
+* Node.js >= 4.0.0 (we strongly succest to use something like [nvm](https://github.com/creationix/nvm))
+* bower (`npm install -g bower`)
+* gulp cli (`npm install -g gulp`)
 
 ## Installation
 
@@ -38,31 +38,36 @@ From project root:
 
 ### Linting
 
-To enable **JavaScript linting** with eslint install npm packages globally:
+#### JavaScript linting
 
-```
-npm install -g eslint@2.2.0 babel-eslint
-```
-
-Then install the required linter for [your editor](http://eslint.org/docs/user-guide/integrations#editors)
-
-For **SCSS linting** you need [Ruby 2+](http://rubyinstaller.org/downloads/) and scss-lint package:
-
-```
-gem install scss_lint
-```
-
-Then install the [integration plugin](https://github.com/brigade/scss-lint#editor-integration) for your editor
+Wok comes with preconfigured [eslint](http://eslint.org/) linting based on the [airbnb base preset](https://www.npmjs.com/package/eslint-config-airbnb-base). 
+You can lint your JavaScript files by running: `gulp lint:js`.
  
+If you want to use _in editor_ linting, please follow the setup instructions [your editor](http://eslint.org/docs/user-guide/integrations#editors)
+
+*Note*: eslint preset expects ES6 syntax, anyway Wok doesn't provide any transpiler (ie: Babel) out of the box. The wiki provides recipes to use [webpack 1.x](https://github.com/fevrcoding/wok/wiki/Gulp:-webpack-and-ES6) or [Browserify](https://github.com/fevrcoding/wok/wiki/Gulp:-browserify-and-ES6)
+
+#### SCSS linting
+
+For **SCSS linting** you can choose [stylelint](http://stylelint.io/) or [scss-lint](https://github.com/brigade/scss-lint). 
+The latter 
+
+Linting via **stylelint** is available as a gulp task: `gulp list:scss`. 
+Available editor extensions for in-editor linting are listed [here](http://stylelint.io/user-guide/complementary-tools/)
+
+Linting via **scss-lint** requires [Ruby 2+](http://rubyinstaller.org/downloads/) installed on your system and the global scss-lint gem (`gem install scss_lint`) 
+It's available as a npm script: `npm run scss-lint`.  
+Available editor extensions for in-editor linting are listed [here](https://github.com/brigade/scss-lint#editor-integration) for your editor
 
 ## Configuration
 
 On a plain HTML project, the default configuration should work just fine. On other setups you might need to tweak some paths/options:
 
-
 1. customize paths and options in `hosts.js`, `paths.js` and `properties.js` files within the `build/gulp-config` folder
 
 1. if needed, edit/add/remove tasks by editing tasks' configuration in `build/gulp-tasks/`.
+
+**Note**: you may override `hosts.js`, `paths.js` and `properties.js` files just for your local codebase by creating a `.local.js` file. Those local files won't be committed in git
 
 ## Project Structure
 
@@ -141,13 +146,14 @@ To switch to ftp mode, set `deployStrategy` in `build/gulp-config/properties.js`
 
 **Note** Rollback and backup tasks won't be available with this configuration.
 
-#### Usage with extarnal tools
+#### Usage with external tools
 
 When paired with Phing or other deployment systems, remember to set `buildOnly` to `true` in `build/gulp-config/properties.js` to delegate deploy tasks.
 
 ### Other Gulp tasks
 
 * `dev`: one time development build (also runs as default task)
+* `lint`: runs both JavaScript and SCSS linters
 * `bump`: bumps semver version of `package.json` and `bower.json` files. Accepts a `--type` parameter with value `major|minor|patch|prerelease`. Defaults to `patch`. 
 
 ## Project Info

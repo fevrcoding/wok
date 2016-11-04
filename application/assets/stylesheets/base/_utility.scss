@@ -3,10 +3,12 @@
    Utilities
    ====
 
+   Application wide utilities
+
    ========================================================================== */
 
 /* ==========================================================================
-   Section Title
+   ### Text utilities
 
    ```
    <p class="u-text--left">Left aligned text</p>
@@ -14,6 +16,7 @@
    <p class="u-text--center">Centered text</p>
    <p class="u-text--hide">Hidden text</p>
    <p class="u-text--ellipsis">This text is one line with ellipsis</p>
+
    ```
    ========================================================================== */
 
@@ -43,6 +46,8 @@
     @include text-ellipsis;
 }
 
+
+
 /* ==========================================================================
    ##Box model helpers
 
@@ -66,7 +71,6 @@
    ```
    ========================================================================== */
 
-
 .u-clearfix,
 .clearfix {
     @include clearfix;
@@ -77,9 +81,9 @@
 }
 
 .u-centered {
+    float: none;
     margin-right: auto;
     margin-left: auto;
-    float: none;
 }
 
 .u-float,
@@ -89,11 +93,6 @@
 
 .u-float--right {
     float: right;
-}
-
-//DEPRECATED
-%u-inline {
-    display: inline-block;
 }
 
 //inline children
@@ -131,13 +130,14 @@
    ========================================================================== */
 
 @each $font-size-key, $font-size-value in $font-sizes {
+
     .u-type--#{$font-size-key} {
-        font-size: rem($font-size-value) !important;
+        font-size: rem($font-size-value) !important; // scss-lint:disable ImportantRule
     }
 }
 
 .u-type--default {
-    font-size: rem($font-size-default) !important;
+    font-size: rem($font-size-default) !important; // scss-lint:disable ImportantRule
 }
 
 .u-type--larger {
@@ -149,17 +149,18 @@
 }
 
 @each $font-weight-key, $font-weight-value in $font-weights {
+
     .u-weight--#{$font-weight-key} {
-       font-weight: $font-weight-value !important;
+        font-weight: $font-weight-value !important; // scss-lint:disable ImportantRule
     }
 }
 
 .u-weight--strong {
-    @extend .u-weight--bold;
+    @extend .u-weight--bold; // scss-lint:disable PlaceholderInExtend
 }
 
 .u-weight--medium {
-    @extend .u-weight--regular;
+    @extend .u-weight--regular; // scss-lint:disable PlaceholderInExtend
 }
 
 
@@ -179,14 +180,16 @@
 .u-hidden,
 .is-hidden, //DEPRECATED: also as global state
 .js .is-jshidden {
-    display: none !important;
+    display: none !important; // scss-lint:disable ImportantRule
     visibility: hidden;
 }
 
 .is-visuallyhidden, //DEPRECATED: also as global state
 .u-visuallyhidden {
     @include visually-hidden;
+
     .focusable {
+
         &:active,
         &:focus {
             position: static;
@@ -206,17 +209,18 @@
 }
 
 @each $mq-key, $mq-value in $mq-breakpoints {
-
     @include mq($mq-key) {
+
         .u-hidden--from-#{$mq-key} {
-            display: none !important;
+            display: none !important; // scss-lint:disable ImportantRule
             visibility: hidden;
         }
     }
 
     @include mq($until: $mq-key) {
+
         .u-hidden--until-#{$mq-key} {
-            display: none !important;
+            display: none !important; // scss-lint:disable ImportantRule
             visibility: hidden;
         }
     }

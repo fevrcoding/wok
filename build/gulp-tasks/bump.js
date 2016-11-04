@@ -5,13 +5,13 @@
 
 module.exports = function (gulp, $, options) {
 
-    var argv = require('yargs').argv;
+    const argv = require('yargs').argv;
 
-    gulp.task('bump:type', function (done) {
+    gulp.task('bump:type', (done) => {
 
-        var allowed = ['major', 'minor', 'patch'],
-            semver = require('semver'),
-            inquirer = require('inquirer');
+        const allowed = ['major', 'minor', 'patch'];
+        const semver = require('semver');
+        const inquirer = require('inquirer');
 
         //if --type is set and valid, use it
         if (semver.inc(options.pkg.version, argv.type) !== null) {
@@ -24,16 +24,18 @@ module.exports = function (gulp, $, options) {
             type: 'list',
             message: 'New version number?',
             default: (allowed.length - 1),
-            choices: allowed.map(function (type) { return { name: type + ' (' + semver.inc(options.pkg.version, type)  + ')', value: type}; })
-        }]).then(function (answers) {
+            choices: allowed.map((type) => (
+                { name: type + ' (' + semver.inc(options.pkg.version, type) + ')', value: type }
+            ))
+        }]).then((answers) => {
             argv.type = answers.version;
             done();
         });
     });
 
-    gulp.task('bump', ['bump:type'], function () {
+    gulp.task('bump', ['bump:type'], () => {
         return gulp.src(['package.json', 'bower.json'])
-            .pipe($.bump({type: argv.type || 'patch'}))
+            .pipe($.bump({ type: argv.type || 'patch' }))
             .pipe(gulp.dest('./'));
     });
 };
