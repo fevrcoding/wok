@@ -56,11 +56,12 @@ module.exports = function (gulp, $, options) {
     gulp.task('modernizr', ['modernizr:html5shiv'], (done) => {
         const fs = require('fs');
         const filePath = options.assetsPath('dist.vendors', '/modernizr');
+        var modernizr; //eslint-disable-line no-var
 
         require('mkdirp').sync(filePath);
 
         if (options.production) {
-            const modernizr = require('customizr');
+            modernizr = require('customizr');
             modernizr(distConfig, (obj) => {
                 const tests = obj.options['feature-detects'];
                 const colors = $.util.colors;
@@ -83,7 +84,7 @@ module.exports = function (gulp, $, options) {
             });
         } else {
             //full build
-            const modernizr = require('modernizr');
+            modernizr = require('modernizr');
             const fullConfig = require('../gulp-config/modernizr.conf.json');
             modernizr.build(fullConfig, (result) => {
                 fs.writeFile(filePath + '/modernizr.js', result, done);
