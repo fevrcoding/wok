@@ -8,18 +8,19 @@
     "rules": {
         "indentation": 4,
         "max-empty-lines": 3,
-        "rule-nested-empty-line-before": ["always", { "ignore": ["after-comment"]}],
-        "no-missing-end-of-source-newline": null,
-        "at-rule-empty-line-before": ["always", {
-            "except": [
-                "blockless-group", "first-nested"
-            ],
-            "ignoreAtRules": ["import", "if", "each", "for", "else", "content", "return", "warn"],
+        "rule-nested-empty-line-before": ["always", {
             "ignore": ["after-comment"]
         }],
-        "block-closing-brace-newline-after": ["always", {
-            "ignoreAtRules": ["if", "else"]
+        "at-rule-empty-line-before": [ "always", {
+            "ignore": ["after-comment", "blockless-group", "all-nested"],
+            "ignoreAtRules": ["else", "content", "return", "warn"]
         }],
+        "block-closing-brace-newline-after": ["always", {
+            "ignoreAtRules": ["if", "else", "content", "return", "warn"]
+        }],
+        "declaration-colon-newline-after": null,
+        "function-comma-newline-after": null,
+        "no-missing-end-of-source-newline": null,
         "declaration-empty-line-before": "never",
         "declaration-block-properties-order": [
 
