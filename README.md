@@ -16,12 +16,13 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 * Development server and asset live-reload with [BrowserSync](http://www.browsersync.io/) and [Weinre](http://people.apache.org/~pmuellr/weinre/) remote debugging
 * Incremental deploy with [rsync](https://rsync.samba.org/) or [lftp](http://lftp.yar.ru/)
 * Remote backup / rollback (UNIX SSH environments only)
-* more to come... (project scaffolding, jade support)
+
 
 
 ## Requirements
 
-* Node.js >= 4.0.0 (we strongly succest to use something like [nvm](https://github.com/creationix/nvm))
+* Node.js >= 4.0.0 (we strongly suggest to use something like [nvm](https://github.com/creationix/nvm))
+* npm3 (`npm install -g npm@3`)
 * bower (`npm install -g bower`)
 * gulp cli (`npm install -g gulp`)
 
@@ -40,23 +41,23 @@ From project root:
 
 #### JavaScript linting
 
-Wok comes with preconfigured [eslint](http://eslint.org/) linting based on the [airbnb base preset](https://www.npmjs.com/package/eslint-config-airbnb-base). 
+Wok comes with preconfigured [eslint](http://eslint.org/) linting based on the [airbnb base preset](https://www.npmjs.com/package/eslint-config-airbnb-base).
 You can lint your JavaScript files by running: `gulp lint:js`.
- 
+
 If you want to use _in editor_ linting, please follow the setup instructions [your editor](http://eslint.org/docs/user-guide/integrations#editors)
 
 *Note*: eslint preset expects ES6 syntax, anyway Wok doesn't provide any transpiler (ie: Babel) out of the box. The wiki provides recipes to use [webpack 1.x](https://github.com/fevrcoding/wok/wiki/Gulp:-webpack-and-ES6) or [Browserify](https://github.com/fevrcoding/wok/wiki/Gulp:-browserify-and-ES6)
 
 #### SCSS linting
 
-For **SCSS linting** you can choose [stylelint](http://stylelint.io/) or [scss-lint](https://github.com/brigade/scss-lint). 
-The latter 
+For **SCSS linting** you can choose [stylelint](http://stylelint.io/) or [scss-lint](https://github.com/brigade/scss-lint).
+The latter
 
-Linting via **stylelint** is available as a gulp task: `gulp list:scss`. 
+Linting via **stylelint** is available as a gulp task: `gulp lint:scss`.
 Available editor extensions for in-editor linting are listed [here](http://stylelint.io/user-guide/complementary-tools/)
 
-Linting via **scss-lint** requires [Ruby 2+](http://rubyinstaller.org/downloads/) installed on your system and the global scss-lint gem (`gem install scss_lint`) 
-It's available as a npm script: `npm run scss-lint`.  
+Linting via **scss-lint** requires [Ruby 2+](http://rubyinstaller.org/downloads/) installed on your system and the global scss-lint gem (`gem install scss_lint`)
+It's available as a npm script: `npm run scss-lint`.
 Available editor extensions for in-editor linting are listed [here](https://github.com/brigade/scss-lint#editor-integration) for your editor
 
 ## Configuration
@@ -119,22 +120,22 @@ To generate a production ready build add the `--production` parameter:
 
 
     gulp --production
-    
+
 
 ### Deploy and rollback:
 
 #### SSH and rsync
 
-By default WOK implements a simple set of deploy tasks requiring SSH remote access and [rsync](https://rsync.samba.org).  
+By default WOK implements a simple set of deploy tasks requiring SSH remote access and [rsync](https://rsync.samba.org).
 
 To deploy and rollback with rsync first setup your remote hosts in `build/gulp-config/hosts.js`, then run:
- 
+
     #deploy to remote staging server. A backup of the deploy target folder (`paths.dist.root`) will be stored in `paths.backup`.
     gulp deploy --remotehost=staging
-    
+
     #deploy a production build to remote production server
     gulp deploy --production --remotehost=production
-    
+
     #rollback to the previous version in the remote production server
     gulp remote --command=rollback --remotehost=production
 
@@ -154,11 +155,11 @@ When paired with Phing or other deployment systems, remember to set `buildOnly` 
 
 * `dev`: one time development build (also runs as default task)
 * `lint`: runs both JavaScript and SCSS linters
-* `bump`: bumps semver version of `package.json` and `bower.json` files. Accepts a `--type` parameter with value `major|minor|patch|prerelease`. Defaults to `patch`. 
+* `bump`: bumps semver version of `package.json` and `bower.json` files. Accepts a `--type` parameter with value `major|minor|patch|prerelease`. Defaults to `patch`.
 
 ## Project Info
 
 WOK was created by [Marco Solazzi](https://github.com/dwightjack) with contributions from [Matteo Guidotto](https://github.com/mguidotto) and [Umberto Quintarelli](https://github.com/quincia).
 
-Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.  
+Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.
 Modified work Copyright © 2015-2016 Marco Solazzi, released under the MIT license.
