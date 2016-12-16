@@ -6,6 +6,8 @@
 module.exports = function (gulp, $, options) {
 
     const defaultConfig = require('../gulp-config/modernizr.conf.json');
+    const paths = options.paths;
+    const tmpPath = options.assetsPath('dist.vendors').replace(paths.dist.root, paths.tmp);
 
     const distConfig = {
 
@@ -13,7 +15,7 @@ module.exports = function (gulp, $, options) {
 
         devFile: false,
 
-        dest: options.paths.tmp + '/assets/vendors/modernizr/modernizr.js',
+        dest: tmpPath + '/modernizr/modernizr.js',
 
         // Based on default settings on http://modernizr.com/download/
         options: defaultConfig.options,
