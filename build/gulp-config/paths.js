@@ -2,12 +2,13 @@
 
 const srcRoot = 'application';
 const distRoot = 'public';
+const assetsPath = 'assets';
 
 const paths = {
 
     src: {
         root: srcRoot,
-        assets: srcRoot + '/assets',
+        assets: srcRoot + '/' + assetsPath,
         fixtures: srcRoot + '/fixtures',
         documents: srcRoot + '/documents',
         views: srcRoot + '/views'
@@ -15,10 +16,9 @@ const paths = {
 
     dist: {
         root: distRoot, //where static files are to be saved
-        assets: distRoot + '/assets',
-        views: distRoot, //when working on with CMS, views may be stored in a diffrent folder
-        revmap: 'assets/assets-map.json', //map of revved files
-        usemin: distRoot  //path to views to be processed by usemin/htmlrefs
+        assets: distRoot + '/' + assetsPath,
+        views: distRoot, //when working on with CMS, views may be stored in a different folder
+        revmap: assetsPath + '/assets-map.json' //map of revved files
     },
 
     js: 'javascripts',

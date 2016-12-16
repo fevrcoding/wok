@@ -18,7 +18,7 @@ module.exports = function (gulp, $, options) {
     const fixturesPath = path.join(process.cwd(), options.paths.src.fixtures);
 
 
-    var userRefPipe; //eslint-disable-line no-var
+    var useRef; //eslint-disable-line no-var
 
 
     baseData.PRODUCTION = options.production;
@@ -59,15 +59,16 @@ module.exports = function (gulp, $, options) {
 
         const styleFilter = $.filter('**/*.min.css', { restore: true });
         const jsFilter = $.filter('**/*.min.js', { restore: true });
+        const assetsFilter = $.filter(['**/*.*', '!**/' + options.viewmatch], { restore: true });
 
-        userRefPipe = require('lazypipe')()
+        useRef = require('lazypipe')()
             .pipe($.useref, {
                 types: ['css', 'js', 'replace', 'remove'],
                 searchPath: [paths.dist.root, paths.tmp],
                 //just replace src
-                replace: function (blockContent, target, attbs) {
-                    if (attbs) {
-                        return '<script src="' + target + '" ' + attbs + '></script>';
+                replace: function (blockContent, target, attrs) {
+                    if (attrs) {
+                        return '<script src="' + target + '" ' + attrs + '></script>';
                     }
                     return '<script src="' + target + '"></script>';
                 }
@@ -89,15 +90,20 @@ module.exports = function (gulp, $, options) {
             .pipe(() => {
                 const vendorRegexp = new RegExp(paths.vendors);
                 return $.if(vendorRegexp, $.header(options.banners.vendors, { pkg: options.pkg }));
-            });
+            })
+            .pipe(() => assetsFilter)
+            .pipe(gulp.dest, paths.dist.root)
+            .pipe(() => assetsFilter.restore);
 
     } else {
-        userRefPipe = $.util.noop;
+        useRef = $.util.noop;
     }
 
     gulp.task('views', () => {
 
         const data = {};
+        const htmlFilter = $.filter('**/' + options.viewmatch, { restore: true });
+
 
         glob.sync('{,*/}*.json', { cwd: fixturesPath }).forEach((filename) => {
             const id = _.camelCase(filename.toLowerCase().replace('.json', ''));
@@ -109,11 +115,13 @@ module.exports = function (gulp, $, options) {
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
             .pipe(map((code) => env.renderString(code, Object.assign({}, baseData, data || {}))))
-            .pipe(userRefPipe())
+            .pipe(useRef())
             .pipe($.rename((filepath) => {
                 filepath.basename = filepath.basename.replace('.nunj', ''); //eslint-disable-line no-param-reassign
             }))
+            .pipe(htmlFilter)
             .pipe(gulp.dest(paths.dist.views))
+            .pipe(htmlFilter.restore)
             .pipe($.if(options.production, $.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), { merge: true })))
             .pipe($.if(options.production, gulp.dest('.')))
             .pipe($.if(options.isWatching, $.notify({ message: 'Views rendered', onLast: true })));
