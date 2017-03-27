@@ -84,8 +84,9 @@
     "run-sequence": "1.2.2",
     "semver": "5.3.0",
     "ssh2": "0.5.4",
-    "stylelint": "7.6.0",
-    "stylelint-config-standard": "15.0.0",
+    "stylelint": "7.9.0",
+    "stylelint-config-standard": "16.0.0",
+    "stylelint-order": "0.4.1",
     "stylelint-scss": "1.4.3",
     "through2": "2.0.3",
     "yargs": "7.0.2"
