@@ -3,15 +3,15 @@
  * ===============================
  */
 
-module.exports = function (gulp, $, options) {
+module.exports = (gulp, $, options) => {
 
-    const destFolder = options.assetsPath('dist.fonts');
+    const paths = require('../gulp-config/paths');
+
+    const destFolder = paths.toPath('dist.assets/fonts');
     const filesMatch = '**/*.{eot,svg,ttf,woff,woff2}';
 
-
     gulp.task('fonts', () => {
-
-        return gulp.src([options.assetsPath('src.fonts', filesMatch)])
+        return gulp.src([paths.toPath(`src.assets/fonts/${filesMatch}`)])
             .pipe($.changed(destFolder))
             .pipe(gulp.dest(destFolder))
             .pipe($.if(options.isWatching, $.notify({ message: 'Fonts synced', onLast: true })))

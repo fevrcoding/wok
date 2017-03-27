@@ -3,17 +3,14 @@
  * ===============================
  */
 
-module.exports = function (gulp, $, options) {
+module.exports = (gulp, $, options) => {
 
-    const srcPath = options.assetsPath('src.js');
-    var destPath = options.assetsPath('dist.js'); //eslint-disable-line no-var
-
-    if (options.production) {
-        destPath = destPath.replace(options.paths.dist.root, options.paths.tmp);
-    }
+    const paths = require('../gulp-config/paths');
+    const srcPath = paths.toPath('src.assets/js');
+    const jsPath = paths.toPath('dist.assets/js');
+    const destPath = options.production ? jsPath.replace(paths.toPath('dist.root'), paths.get('tmp')) : jsPath;
 
     gulp.task('scripts', () => {
-
 
         return gulp.src([srcPath + '/**/*.js', '!' + srcPath + '/**/*.{spec,conf}.js'])
             .pipe($.plumber({

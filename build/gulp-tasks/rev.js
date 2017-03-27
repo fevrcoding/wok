@@ -3,17 +3,16 @@
  * ===============================
  */
 
-module.exports = function (gulp, $, options) {
+module.exports = (gulp, $) => {
 
-    const paths = options.paths;
+    const paths = require('../gulp-config/paths');
 
     gulp.task('rev', () => {
-        const path = require('path');
-        const manifest = gulp.src(path.join(paths.dist.root, paths.dist.revmap));
+        const manifest = gulp.src(paths.toPath('dist.root/dist.revmap'));
 
-        return gulp.src(paths.dist.root + '/**/*.*')
-            .pipe($.revReplace({ manifest: manifest }))
-            .pipe(gulp.dest(paths.dist.root));
+        return gulp.src(paths.toPath('dist.root') + '/**/*.*')
+            .pipe($.revReplace({ manifest }))
+            .pipe(gulp.dest(paths.toPath('dist.root')));
     });
 
 };

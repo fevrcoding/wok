@@ -3,25 +3,23 @@
  * ===============================
  */
 
-module.exports = function (gulp, $, options) {
+module.exports = (gulp, $) => {
+
+    const paths = require('../gulp-config/paths');
 
     gulp.task('lint:js', () => {
 
-        const fail = options.isWatching ? $.util.noop : $.eslint.failAfterError;
-
-        return gulp.src(options.assetsPath('src.js', '**/*.js'))
-            .pipe($.eslint())
-            .pipe($.eslint.format())
-            .pipe(fail());
+        return gulp.src(paths.toPath('src.assets/js/**/*.js'))
+            .pipe($.eslint({
+                configFile: paths.toPath('src.assets/js/.eslintrc.json')
+            }))
+            .pipe($.eslint.format());
     });
 
 
-    gulp.task('lint:scss', () => {
+    gulp.task('lint:styles', () => {
 
-        return gulp.src([
-            options.assetsPath('src.sass', '**/*.{sass,scss}'),
-            '!' + options.assetsPath('src.sass', '**/*scsslint_tmp*.{sass,scss}') //exclude scss lint files
-        ])
+        return gulp.src(paths.toPath('src.assets/styles/**/*.{css,sass,scss}'))
         .pipe($.stylelint({
             reporters: [
                 { formatter: 'string', console: true }
@@ -29,6 +27,6 @@ module.exports = function (gulp, $, options) {
         }));
     });
 
-    gulp.task('lint', ['lint:js', 'lint:scss']);
+    gulp.task('lint', ['lint:js', 'lint:styles']);
 
 };
