@@ -3,11 +3,11 @@
  * ===============================
  */
 
-module.exports = function (gulp, $, options) {
+module.exports = (gulp, $, options) => {
 
     const defaultConfig = require('../gulp-config/modernizr.conf.json');
-    const paths = options.paths;
-    const tmpPath = options.assetsPath('dist.vendors').replace(paths.dist.root, paths.tmp);
+    const paths = require('../gulp-config/paths');
+    const tmpPath = paths.toPath('dist.assets/vendors').replace(paths.toPath('dist.root'), paths.get('tmp'));
 
     const distConfig = {
 
@@ -15,7 +15,7 @@ module.exports = function (gulp, $, options) {
 
         devFile: false,
 
-        dest: tmpPath + '/modernizr/modernizr.js',
+        dest: `${tmpPath}/modernizr/modernizr.js`,
 
         // Based on default settings on http://modernizr.com/download/
         options: defaultConfig.options,
@@ -44,9 +44,9 @@ module.exports = function (gulp, $, options) {
         // By default, this task will crawl all *.js, *.css, *.scss files.
         files: {
             src: [
-                options.assetsPath('src.js', '**/*.js'),
-                '!' + options.assetsPath('src.js', '**/*.{spec,conf}.js'),
-                options.assetsPath('dist.css', '**/*.css')
+                paths.toPath('src.assets/js/**/*.js'),
+                '!' + paths.toPath('src.assets/js/**/*.{spec,conf}.js'),
+                paths.toPath('dist.assets/css/**/*.css')
             ]
         },
 
@@ -57,22 +57,22 @@ module.exports = function (gulp, $, options) {
 
     gulp.task('modernizr', ['modernizr:html5shiv'], (done) => {
         const fs = require('fs');
-        const filePath = options.assetsPath('dist.vendors', '/modernizr');
-        var modernizr; //eslint-disable-line no-var
+        const filePath = paths.toPath('dist.assets/vendors/modernizr');
+
 
         require('mkdirp').sync(filePath);
 
         if (options.production) {
-            modernizr = require('customizr');
-            modernizr(distConfig, (obj) => {
+            const customizr = require('customizr');
+            customizr(distConfig, (obj) => {
                 const tests = obj.options['feature-detects'];
                 const colors = $.util.colors;
-
-                var logStr = 'The production build includes the following tests: '; //eslint-disable-line no-var
-
+                let logStr = 'The production build includes the following tests: ';
                 if (tests.length > 0) {
 
-                    logStr += colors.bold(tests.map((test) => test.replace('test/', '')).join(', '));
+                    logStr += colors.bold(tests.map((test) => {
+                        return test.replace('test/', '');
+                    }).join(', '));
 
                     $.util.log(logStr);
 
@@ -86,7 +86,7 @@ module.exports = function (gulp, $, options) {
             });
         } else {
             //full build
-            modernizr = require('modernizr');
+            const modernizr = require('modernizr');
             const fullConfig = require('../gulp-config/modernizr.conf.json');
             modernizr.build(fullConfig, (result) => {
                 fs.writeFile(filePath + '/modernizr.js', result, done);
@@ -103,7 +103,7 @@ module.exports = function (gulp, $, options) {
         const html5shivPath = path.join(path.dirname(require.resolve('html5shiv')), '*.min.js');
 
         return gulp.src([html5shivPath])
-            .pipe(gulp.dest(options.assetsPath('dist.vendors', 'html5shiv/dist')));
+            .pipe(gulp.dest(paths.toPath('dist.assets/vendors/html5shiv') + '/dist'));
     });
 
 };

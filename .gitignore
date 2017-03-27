@@ -72,7 +72,6 @@ $RECYCLE.BIN/
 .DS_Store?
 .AppleDouble
 .LSOverride
-Icon
 ._*
 .Spotlight-V100
 .Trashes
@@ -105,8 +104,6 @@ log
 .phptidy-cache
 _svn
 node_modules
-bin
-etc
 /lib
 assets.json
 public/*

@@ -11,8 +11,8 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 * [Sass](http://sass-lang.com/) 3.4+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
 * [BEM](http://blog.kaelig.fr/post/48196348743/fifty-shades-of-bem)-like naming convention
 * Em based media-queries via [sass-mq](https://github.com/sass-mq/sass-mq)
+* ES2015 support with [Babel](https://babeljs.io/) (polyfill loaded from CDN.js)
 * [Gulp.js](http://gulpjs.com/) build and deploy workflow
-* [Bower](http://bower.io/)
 * Development server and asset live-reload with [BrowserSync](http://www.browsersync.io/) and [Weinre](http://people.apache.org/~pmuellr/weinre/) remote debugging
 * Incremental deploy with [rsync](https://rsync.samba.org/) or [lftp](http://lftp.yar.ru/)
 * Remote backup / rollback (UNIX SSH environments only)
@@ -21,9 +21,7 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 
 ## Requirements
 
-* Node.js >= 4.0.0 (we strongly suggest to use something like [nvm](https://github.com/creationix/nvm))
-* npm3 (`npm install -g npm@3`)
-* bower (`npm install -g bower`)
+* Node.js >= 6.9.0 (we strongly suggest to use something like [nvm](https://github.com/creationix/nvm))
 * gulp cli (`npm install -g gulp`)
 
 ## Installation
@@ -34,31 +32,21 @@ Clone this repo:
 
 From project root:
 
-* `bower install` (vendors)
 * `npm install` (gulp deps)
 
 ### Linting
 
 #### JavaScript linting
 
-Wok comes with preconfigured [eslint](http://eslint.org/) linting based on the [airbnb base preset](https://www.npmjs.com/package/eslint-config-airbnb-base).
+Wok comes with pre-configured [eslint](http://eslint.org/) linting based on the [airbnb base preset](https://www.npmjs.com/package/eslint-config-airbnb-base).
 You can lint your JavaScript files by running: `gulp lint:js`.
 
 If you want to use _in editor_ linting, please follow the setup instructions [your editor](http://eslint.org/docs/user-guide/integrations#editors)
 
-*Note*: eslint preset expects ES6 syntax, anyway Wok doesn't provide any transpiler (ie: Babel) out of the box. The wiki provides recipes to use [webpack 1.x](https://github.com/fevrcoding/wok/wiki/Gulp:-webpack-and-ES6) or [Browserify](https://github.com/fevrcoding/wok/wiki/Gulp:-browserify-and-ES6)
-
 #### SCSS linting
 
-For **SCSS linting** you can choose [stylelint](http://stylelint.io/) or [scss-lint](https://github.com/brigade/scss-lint).
-The latter
-
-Linting via **stylelint** is available as a gulp task: `gulp lint:scss`.
+Linting via **stylelint** is available as a gulp task: `gulp lint:styles`.
 Available editor extensions for in-editor linting are listed [here](http://stylelint.io/user-guide/complementary-tools/)
-
-Linting via **scss-lint** requires [Ruby 2+](http://rubyinstaller.org/downloads/) installed on your system and the global scss-lint gem (`gem install scss_lint`)
-It's available as a npm script: `npm run scss-lint`.
-Available editor extensions for in-editor linting are listed [here](https://github.com/brigade/scss-lint#editor-integration) for your editor
 
 ## Configuration
 
@@ -83,7 +71,7 @@ Project sources are located into `application` folder. Don't edit files in `publ
         + stylesheets #SASS files
         + audio #audio files
         + video #video files
-        + vendors #vendors packages installed by bower
+        + vendors #vendors packages not installed via npm
     documents #Markdown files or any other txt-like file to be included in HTMLs
     fixtures #JSON files
     views #HTML files
@@ -91,6 +79,12 @@ Project sources are located into `application` folder. Don't edit files in `publ
         +   templates #Nunjucks templates
         index.nunj.html #Main views
     ...
+
+### JavaScript Development
+
+Wok supports cross browser ES2015 by parsing individual source files with [Babel](https://babeljs.io/). To support old browsers polyfills are loaded via CDN.
+
+To use ES2015 modules follow the [webpack2 recipe](https://github.com/fevrcoding/wok/wiki/Gulp:-webpack-and-ES6). 
 
 ### View Templates
 
@@ -101,10 +95,6 @@ With Nunjucks you can setup extensible page templates. See [official docs](https
 View partials in `application/views/partials` are rendered to `public` folder like every other file. To prevent rendering prepend a `_` to the filename.
 
 To limit performance issues, just first level sub-folders will be included in the parse process.
-
-### Vendors
-
-You may use [bower](http://bower.io/) to manage vendors. Installed packages will be stored into the `application/assets/vendors` folder. It's up to you to provide dev and dist configuration to deploy vendors' files to `public`.
 
 ### *More docs to come...*
 
@@ -131,13 +121,13 @@ By default WOK implements a simple set of deploy tasks requiring SSH remote acce
 To deploy and rollback with rsync first setup your remote hosts in `build/gulp-config/hosts.js`, then run:
 
     #deploy to remote staging server. A backup of the deploy target folder (`paths.dist.root`) will be stored in `paths.backup`.
-    gulp deploy --remotehost=staging
+    gulp deploy --target=staging
 
     #deploy a production build to remote production server
-    gulp deploy --production --remotehost=production
+    gulp deploy --production --target=production
 
     #rollback to the previous version in the remote production server
-    gulp remote --command=rollback --remotehost=production
+    gulp remote --command=rollback --target=production
 
 #### FTP
 
@@ -154,12 +144,12 @@ When paired with Phing or other deployment systems, remember to set `buildOnly` 
 ### Other Gulp tasks
 
 * `dev`: one time development build (also runs as default task)
-* `lint`: runs both JavaScript and SCSS linters
-* `bump`: bumps semver version of `package.json` and `bower.json` files. Accepts a `--type` parameter with value `major|minor|patch|prerelease`. Defaults to `patch`.
+* `lint`: runs both JavaScript and style linters
+* `bump`: bumps semver version of `package.json` file.
 
 ## Project Info
 
 WOK was created by [Marco Solazzi](https://github.com/dwightjack) with contributions from [Matteo Guidotto](https://github.com/mguidotto) and [Umberto Quintarelli](https://github.com/quincia).
 
 Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.
-Modified work Copyright © 2015-2016 Marco Solazzi, released under the MIT license.
+Modified work Copyright © 2015-2017 Marco Solazzi, released under the MIT license.

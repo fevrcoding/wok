@@ -3,16 +3,17 @@
         "stylelint-config-standard"
     ],
     "plugins": [
-        "stylelint-scss"
+        "stylelint-scss",
+        "stylelint-order"
     ],
     "rules": {
         "indentation": 4,
         "max-empty-lines": 3,
-        "rule-nested-empty-line-before": ["always", {
+        "rule-empty-line-before": ["always", {
             "ignore": ["after-comment"]
         }],
         "at-rule-empty-line-before": [ "always", {
-            "ignore": ["after-comment", "blockless-group", "all-nested"],
+            "ignore": ["after-comment", "inside-block", "blockless-after-same-name-blockless"],
             "ignoreAtRules": ["else", "content", "return", "warn"]
         }],
         "block-closing-brace-newline-after": ["always", {
@@ -22,7 +23,8 @@
         "function-comma-newline-after": null,
         "no-missing-end-of-source-newline": null,
         "declaration-empty-line-before": "never",
-        "declaration-block-properties-order": [
+
+        "order/properties-order": [
 
             "position",
             "top",

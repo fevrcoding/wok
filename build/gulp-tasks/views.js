@@ -5,52 +5,27 @@
 
 
 
-module.exports = function (gulp, $, options) {
+module.exports = (gulp, $, options) => {
 
     const path = require('path');
     const fs = require('fs');
     const _ = require('lodash');
     const glob = require('glob');
-    const through = require('through2');
+    const map = require('./lib/plugins').map;
+
     const baseData = {};
-    const paths = options.paths;
-    const viewPath = path.join(process.cwd(), paths.src.views);
-    const fixturesPath = path.join(process.cwd(), options.paths.src.fixtures);
+    const paths = require('../gulp-config/paths');
+    const viewPath = paths.toAbsPath('src.views');
+    const fixturesPath = paths.toAbsPath('src.fixtures');
 
 
-    var useRef; //eslint-disable-line no-var
+    let useRef; //eslint-disable-line no-var
 
 
     baseData.PRODUCTION = options.production;
     baseData.page = {};
 
-
-    function map(renderFn) {
-
-        return through.obj(function (file, enc, cb) { //eslint-disable-line consistent-return
-            if (file.isNull()) {
-                this.push(file);
-                return cb();
-            }
-            if (file.isStream()) {
-                this.emit(
-                    'error',
-                    new $.util.PluginError('view-task', 'Streaming not supported')
-                );
-            }
-            try {
-                file.contents = new Buffer(renderFn(file.contents.toString(), file.path, file)); //eslint-disable-line no-param-reassign
-            } catch (err) {
-                this.emit('error', new $.util.PluginError('view-task', err.toString()));
-            }
-            this.push(file);
-            cb();
-        });
-
-    }
-
-
-    const env = require('./lib/view-helpers').nunjucks([viewPath, paths.src.documents], options);
+    const env = require('./lib/view-helpers').nunjucks([viewPath, paths.toPath('src.documents')], options);
 
     env.addGlobal('helpers', require('./lib/view-helpers').helpers(options));
     env.addGlobal('_', _);
@@ -64,11 +39,11 @@ module.exports = function (gulp, $, options) {
         useRef = require('lazypipe')()
             .pipe($.useref, {
                 types: ['css', 'js', 'replace', 'remove'],
-                searchPath: [paths.dist.root, paths.tmp],
+                searchPath: [paths.toPath('dist.root'), paths.get('tmp')],
                 //just replace src
-                replace: function (blockContent, target, attrs) {
+                replace(blockContent, target, attrs) {
                     if (attrs) {
-                        return '<script src="' + target + '" ' + attrs + '></script>';
+                        return `<script src="${target}" ${attrs}></script>`;
                     }
                     return '<script src="' + target + '"></script>';
                 }
@@ -88,11 +63,11 @@ module.exports = function (gulp, $, options) {
             .pipe($.rev)
             .pipe(() => jsFilter.restore)
             .pipe(() => {
-                const vendorRegexp = new RegExp(paths.vendors);
+                const vendorRegexp = new RegExp(paths.get('vendors'));
                 return $.if(vendorRegexp, $.header(options.banners.vendors, { pkg: options.pkg }));
             })
             .pipe(() => assetsFilter)
-            .pipe(gulp.dest, paths.dist.root)
+            .pipe(gulp.dest, paths.toPath('dist.root'))
             .pipe(() => assetsFilter.restore);
 
     } else {
@@ -120,9 +95,9 @@ module.exports = function (gulp, $, options) {
                 filepath.basename = filepath.basename.replace('.nunj', ''); //eslint-disable-line no-param-reassign
             }))
             .pipe(htmlFilter)
-            .pipe(gulp.dest(paths.dist.views))
+            .pipe(gulp.dest(paths.toPath('dist.views')))
             .pipe(htmlFilter.restore)
-            .pipe($.if(options.production, $.rev.manifest(path.join(paths.dist.root, paths.dist.revmap), { merge: true })))
+            .pipe($.if(options.production, $.rev.manifest(paths.toPath('dist.root/dist.revmap'), { merge: true })))
             .pipe($.if(options.production, gulp.dest('.')))
             .pipe($.if(options.isWatching, $.notify({ message: 'Views rendered', onLast: true })));
     });

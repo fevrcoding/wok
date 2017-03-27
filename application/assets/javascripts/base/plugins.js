@@ -13,7 +13,7 @@
         'timeStamp', 'trace', 'warn'
     ];
     var length = methods.length;
-    var console = (window.console = window.console || {});
+    var console = (window.console = window.console || {}); //eslint-disable-line no-multi-assign
     var method;
 
     function noop() {}

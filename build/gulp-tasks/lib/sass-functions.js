@@ -9,7 +9,7 @@ const escapeRegExp = require('lodash/escapeRegExp');
 const sizeOf = require('image-size');
 const datauri = require('datauri').sync;
 
-var types; //eslint-disable-line no-var
+let types;
 
 try {
     types = require('node-sass').types;
@@ -17,20 +17,31 @@ try {
     types = require('gulp-sass/node_modules/node-sass').types; //eslint-disable-line import/no-unresolved
 }
 
-module.exports = function (options) {
+module.exports = (options) => {
 
-
-    const rootPath = path.join(process.cwd(), options.paths.src.root);
+    const paths = require('../../gulp-config/paths');
+    const rootPath = paths.toAbsPath('src.root');
+    const imgPath = paths.toAbsPath('src.assets/images');
     const baseRegExp = new RegExp('^' + escapeRegExp(rootPath + path.sep));
 
-    const baseUrl = '/' + path.join(process.cwd(), options.assetsPath('src.images')).replace(baseRegExp, '').replace(path.sep, '/').trim('/') + '/';
+    const baseUrl = '/' + paths.toAbsPath('src.assets/images').replace(baseRegExp, '').replace(path.sep, '/').trim('/') + '/';
+
+
+    const getFilePath = (filepath) => {
+        const imagePath = path.join(imgPath, filepath.getValue());
+        if (!fs.existsSync(imagePath)) {
+            console.warn('File %s not found', imagePath); //eslint-disable-line no-console
+            return false;
+        }
+        return imagePath;
+    };
 
     return {
 
-        'build-env()': function () {
+        'build-env()': function buildEnv() {
             return new types.String(options.production ? 'production' : 'development');
         },
-        'map-to-JSON($map)': function (map) {
+        'map-to-JSON($map)': function toJSON(map) {
             const obj = {};
             times(map.getLength(), (i) => {
                 const key = map.getKey(i).getValue().toString();
@@ -38,9 +49,9 @@ module.exports = function (options) {
             });
             return new types.String(JSON.stringify(obj));
         },
-        'image-url($path)': function (filepath) {
-            const imagePath = path.join(process.cwd(), options.assetsPath('src.images'), filepath.getValue());
-            var imageUrl = (baseUrl + filepath.getValue()); //eslint-disable-line no-var
+        'image-url($path)': function imageUrlFn(filepath) {
+            const imagePath = path.join(imgPath, filepath.getValue());
+            let imageUrl = (baseUrl + filepath.getValue());
             if (!fs.existsSync(imagePath)) {
                 console.warn('File %s not found', imagePath); //eslint-disable-line no-console
                 return false;
@@ -50,30 +61,26 @@ module.exports = function (options) {
             }
             return new types.String('url(\'' + imageUrl + '\')');
         },
-        'image-width($path)': function (filepath) {
-            const imagePath = path.join(process.cwd(), options.assetsPath('src.images'), filepath.getValue());
-            if (!fs.existsSync(imagePath)) {
-                console.warn('File %s not found', imagePath); //eslint-disable-line no-console
-                return false;
+        'image-width($path)': function imageWidth(filepath) {
+            const imagePath = getFilePath(filepath);
+            if (imagePath) {
+                return new types.Number(sizeOf(imagePath).width, 'px');
             }
-            return new types.Number(sizeOf(imagePath).width, 'px');
+            return null;
         },
-        'image-height($path)': function (filepath) {
-            const imagePath = path.join(process.cwd(), options.assetsPath('src.images'), filepath.getValue());
-            if (!fs.existsSync(imagePath)) {
-                console.warn('File %s not found', imagePath); //eslint-disable-line no-console
-                return false;
+        'image-height($path)': function imageHeight(filepath) {
+            const imagePath = getFilePath(filepath);
+            if (imagePath) {
+                return new types.Number(sizeOf(imagePath).height, 'px');
             }
-            return new types.Number(sizeOf(imagePath).height, 'px');
+            return null;
         },
-        'inline-image($path)': function (filepath) {
-            const imagePath = path.join(process.cwd(), options.assetsPath('src.images'), filepath.getValue());
-            if (!fs.existsSync(imagePath)) {
-                console.warn('File %s not found', imagePath); //eslint-disable-line no-console
-                return false;
+        'inline-image($path)': function inlineImage(filepath) {
+            const imagePath = getFilePath(filepath);
+            if (imagePath) {
+                return new types.String('url(\'' + datauri(imagePath) + '\')');
             }
-            return new types.String('url(\'' + datauri(imagePath) + '\')');
-
+            return null;
         }
     };
 };
