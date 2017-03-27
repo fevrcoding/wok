@@ -3,7 +3,7 @@
  * ===============================
  */
 
-module.exports = function (gulp, $, options) {
+module.exports = (gulp, $, options) => {
 
     const argv = require('yargs').argv;
 
@@ -34,7 +34,7 @@ module.exports = function (gulp, $, options) {
     });
 
     gulp.task('bump', ['bump:type'], () => {
-        return gulp.src(['package.json', 'bower.json'])
+        return gulp.src(['package.json'])
             .pipe($.bump({ type: argv.type || 'patch' }))
             .pipe(gulp.dest('./'));
     });
