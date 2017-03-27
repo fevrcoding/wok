@@ -3,29 +3,26 @@
  * ===============================
  */
 
-module.exports = function (gulp, $, options) {
+module.exports = (gulp, $, options) => {
 
-    const path = require('path');
     const del = require('del');
 
-    const paths = options.paths;
-    const assetsPath = options.assetsPath;
+    const paths = require('../gulp-config/paths');
 
     const folders = [
-        paths.tmp,
-        '.tmp',
-        assetsPath('dist.images'),
-        assetsPath('dist.audio'),
-        assetsPath('dist.video'),
-        assetsPath('dist.js'),
-        assetsPath('dist.css'),
-        assetsPath('dist.fonts'),
-        paths.dist.views + '/' + options.viewmatch,
-        paths.dist.views + '/{partials,templates,components}',
-        assetsPath('dist.vendors'),
-        path.join(paths.dist.root, 'styleguide'),
-        path.join(paths.dist.root, paths.dist.revmap)
-    ];
+        'tmp',
+        'dist.assets/images',
+        'dist.assets/audio',
+        'dist.assets/video',
+        'dist.assets/js',
+        'dist.assets/css',
+        'dist.assets/fonts',
+        `dist.views/${options.viewmatch}`,
+        'dist.views/{partials,templates,components}',
+        'dist.assets/vendors',
+        'dist.root/styleguide',
+        'dist.root/dist.revmap'
+    ].map(paths.toPath);
 
 
     gulp.task('clean', (done) => {
@@ -37,7 +34,7 @@ module.exports = function (gulp, $, options) {
     });
 
     gulp.task('clean:tmp', (done) => {
-        del([paths.tmp, '.tmp'], { dot: true }).then(() => {
+        del([paths.toPath('tmp')], { dot: true }).then(() => {
             done();
         }, (err) => {
             done(err);
