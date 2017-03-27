@@ -7,11 +7,11 @@
 // Generic
 // ==========================================================================
 
-@function perc($width, $container-width: $container-width) {
+@function perc($width, $container-width) {
     @return percentage($width / $container-width);
 }
 
-@function perc-image-width($image-src, $container-width: $container-width) {
+@function perc-image-width($image-src, $container-width) {
     @return percentage(image-width($image-src) / $container-width);
 }
 
@@ -46,7 +46,7 @@
 }
 
 @mixin clearfix {
-    *zoom: 1; // scss-lint:disable PropertySpelling
+    *zoom: 1;
 
     &::before,
     &::after {
@@ -64,43 +64,6 @@
     height: image-height($image-url);
     background: image-url($image-url) no-repeat 0 0;
     background-size: 100% auto;
-}
-
-@mixin pseudo-img($image-url, $width: false, $height: false) {
-    display: block;
-    background: image-url($image-url) no-repeat 0 0;
-    content: ' ';
-
-    @if $height {
-        height: $height;
-    } @else {
-        height: image-height($image-url);
-    }
-
-    @if $width {
-        width: $width;
-    } @else {
-        width: image-width($image-url);
-    }
-}
-
-@mixin fit-background-image($image-url, $inline: false, $ratio: 1, $line-height: false) {
-    @if $line-height {
-        line-height: ceil(image-height($image-url) * $ratio);
-    } @else {
-        width: ceil(image-width($image-url) * $ratio);
-        height: ceil(image-height($image-url) * $ratio);
-    }
-    @if $inline {
-        background-image: inline-image($image-url);
-        background-repeat: no-repeat;
-        background-position: 0 0;
-    } @else {
-        background: image-url($image-url) no-repeat 0 0;
-    }
-    @if $ratio != 1 {
-        background-size: ceil(image-width($image-url) * $ratio) auto;
-    }
 }
 
 @mixin img-responsive($display: block) {
@@ -138,11 +101,11 @@
         @content;
     }
 
-    &:-moz-placeholder { // scss-lint:disable VendorPrefix, PseudoElement
+    &:-moz-placeholder {
         @content;
     }
 
-    &::-moz-placeholder { // scss-lint:disable VendorPrefix
+    &::-moz-placeholder {
         @content;
     }
 
