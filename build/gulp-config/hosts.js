@@ -15,8 +15,8 @@ module.exports = {
     },
 
 
-    //remote host of developer box for mobile debug with weinre
-    devbox: {
+    development: {
+        host: 'localhost',
         ports: {
             weinre: 8080,
             connect: 8000 //optional port for standalone static server

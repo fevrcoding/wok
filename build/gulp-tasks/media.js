@@ -3,13 +3,21 @@
  * ===============================
  */
 
-module.exports = function (gulp, $, options) {
+module.exports = (gulp, $, options) => {
+
+    const paths = require('../gulp-config/paths');
+
 
     gulp.task('media', () => {
 
-        return gulp.src([options.assetsPath('src.video', '**/*.*'), options.assetsPath('src.audio', '**/*.*')], { base: options.assetsPath('src') })
-            .pipe($.changed(options.assetsPath('dist')))
-            .pipe(gulp.dest(options.assetsPath('dist')))
+        const distPath = paths.toPath('dist.assets');
+
+        return gulp.src([
+            paths.toPath('src.assets/video/**/*.*'),
+            paths.toPath('src.assets/audio/**/*.*')
+        ], { base: paths.toPath('src.assets') })
+            .pipe($.changed(distPath))
+            .pipe(gulp.dest(distPath))
             .pipe($.if(options.isWatching, $.notify({ message: 'Media files synced', onLast: true })))
             .pipe($.size({ title: 'media' }));
     });

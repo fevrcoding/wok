@@ -25,8 +25,8 @@
     <script src="/assets/vendors/html5shiv/dist/html5shiv-printshiv.min.js"></script>
     <![endif]-->
 
-    <!-- build:replace /assets/vendors/modernizr/modernizr.min.js -->
-    <script src="/assets/vendors/modernizr/modernizr.js"></script>
+    <!-- build:replace /assets/vendors/modernizr/modernizr.min.js defer -->
+    <script defer src="/assets/vendors/modernizr/modernizr.js"></script>
     <!-- endbuild -->
 
 
@@ -41,9 +41,11 @@
     {% block main %}
     {% endblock %}
 
-    <!-- build:js /assets/javascripts/application.min.js -->
-    <script src="/assets/javascripts/base/plugins.js"></script>
-    <script src="/assets/javascripts/application.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
+
+    <!-- build:js /assets/javascripts/application.min.js defer -->
+    <script defer src="/assets/javascripts/base/plugins.js"></script>
+    <script defer src="/assets/javascripts/application.js"></script>
     <!-- endbuild -->
 
 </body>

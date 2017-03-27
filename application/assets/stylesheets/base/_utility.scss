@@ -178,13 +178,11 @@
 
 
 .u-hidden,
-.is-hidden, //DEPRECATED: also as global state
 .js .is-jshidden {
     display: none !important; // scss-lint:disable ImportantRule
     visibility: hidden;
 }
 
-.is-visuallyhidden, //DEPRECATED: also as global state
 .u-visuallyhidden {
     @include visually-hidden;
 
@@ -202,9 +200,7 @@
     }
 }
 
-//also as global state
-.is-invisible,
-.u-invisible { //DEPRECATED: also as global state
+.u-invisible {
     visibility: hidden;
 }
 
@@ -212,7 +208,7 @@
     @include mq($mq-key) {
 
         .u-hidden--from-#{$mq-key} {
-            display: none !important; // scss-lint:disable ImportantRule
+            display: none !important;
             visibility: hidden;
         }
     }
@@ -220,7 +216,7 @@
     @include mq($until: $mq-key) {
 
         .u-hidden--until-#{$mq-key} {
-            display: none !important; // scss-lint:disable ImportantRule
+            display: none !important;
             visibility: hidden;
         }
     }

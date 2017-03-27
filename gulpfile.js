@@ -3,10 +3,7 @@
  */
 
 /*eslint-env node */
-/*eslint one-var: 0, no-new: 0, func-names: 0, strict: 0, prefer-template: 0 */
-/*eslint import/no-dynamic-require: 0, import/no-extraneous-dependencies: [2, {"devDependencies": true, "optionalDependencies": true, "peerDependencies": true}], global-require: 0 */
-
-'use strict';
+/*eslint one-var: 0, no-new: 0, func-names: 0, strict: 0, import/no-extraneous-dependencies: 0 */
 
 const fs = require('fs');
 const path = require('path');
@@ -16,30 +13,32 @@ const _ = require('lodash');
 const $ = require('gulp-load-plugins')();
 const argv = require('yargs').argv || {};
 const pkg = require('./package.json');
+const paths = require('./build/gulp-config/paths');
 
 const taskPath = path.join(process.cwd(), 'build', 'gulp-tasks');
 const optionsPath = path.join(process.cwd(), 'build', 'gulp-config');
 const options = {};
 const banners = {};
 
+const logError = (...args) => $.util.log($.util.colors.red(...args));
+
 
 pkg.year = new Date().getFullYear();
-
 /* eslint-disable */
 banners.application = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= pkg.year %> <%= pkg.author.company %> */\n";
 banners.vendors = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n";
 /* eslint-enable */
 
 
-//load configuration from yaml files
-['hosts', 'properties', 'paths'].forEach((filename) => {
+//load configuration from files
+['hosts', 'properties'].forEach((filename) => {
 
-    const configFilePath = path.join(optionsPath, filename + '.js');
-    const configLocalFilePath = path.join(optionsPath, filename + '.local.js');
-    var conf = {}; //eslint-disable-line no-var
+    const configFilePath = path.join(optionsPath, `${filename}.js`);
+    const configLocalFilePath = path.join(optionsPath, `${filename}.local.js`);
+    let conf = {};
 
     if (fs.existsSync(configFilePath)) {
-        conf = Object.assign(conf, require(configFilePath));
+        conf = _.assign(conf, require(configFilePath));
     }
 
     if (fs.existsSync(configLocalFilePath)) {
@@ -47,17 +46,27 @@ banners.vendors = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.auth
     }
 
     if (filename === 'properties') {
-        Object.assign(options, conf);
+        _.assign(options, conf);
     } else {
         options[filename] = conf;
     }
 
 });
 
+if (fs.existsSync(path.join(optionsPath, 'paths.local.js'))) {
+    paths.merge(require(path.join(optionsPath, 'paths.local.js')));
+}
+
+if (_.has(argv, 'remotehost')) {
+    logError('WARNING: param `--remotehost` is deprecated use `--target` instead');
+    argv.target = argv.remotehost;
+}
+
+
 _.forOwn({
     production: false,
     command: null,
-    remotehost: null //be explicit!
+    target: null //be explicit!
 }, (value, key) => {
     options[key] = _.has(argv, key) ? argv[key] : value;
 });
@@ -67,35 +76,29 @@ if (options.production) {
     process.env.NODE_ENV = 'production';
 }
 
+if (options.target === null) {
+    options.target = options.production ? 'production' : 'development';
+}
+
 options.pkg = pkg;
 options.banners = banners;
 
 //unique build identifier
-options.buildHash = 'buildhash' + (Date.now());
+options.buildHash = `buildhash${(Date.now())}`;
 
-
-options.assetsPath = function (type, match) {
-    const parts = type.split('.');
-    const paths = options.paths;
-
-    var folderPath; //eslint-disable-line no-var
-
-    if (parts.length > 1) {
-        folderPath = path.join(paths[parts[0]].assets, paths[parts[1]]);
-    } else {
-        folderPath = path.normalize(paths[parts[0]].assets);
+options.getDeployTarget = (target) => {
+    const targets = Object.keys(options.hosts).filter((host) => !!options.hosts[host].host);
+    if (!target || targets.indexOf(target) === -1) {
+        logError('ERROR: Deploy target unavailable. Specify it via `--target` argument. Allowed targets are: ' + targets.join(', ')); //eslint-disable-line
+        return false;
     }
-    if (match) {
-        folderPath = path.join(folderPath, match);
-    }
-    return folderPath;
+    return options.hosts[target];
 };
-//accept just js files
-fs.readdirSync(taskPath).filter((taskFile) => (
-    path.extname(taskFile) === '.js'
-)).forEach((taskFile) => {
-    require(taskPath + '/' + taskFile)(gulp, $, options);
+
+fs.readdirSync(taskPath).filter((taskFile) => path.extname(taskFile) === '.js').forEach((taskFile) => {
+    require(`${taskPath}/${taskFile}`)(gulp, $, options); //eslint-disable-line global-require
 });
+
 
 
 gulp.task('default', ['clean'], (done) => {
@@ -118,14 +121,14 @@ gulp.task('default', ['clean'], (done) => {
 
 
     tasks.push(done);
-    runSequence.apply(null, tasks); //eslint-disable-line prefer-spread
+    runSequence(...tasks);
 });
 
 gulp.task('dev', ['default']);
 
 
 gulp.task('dist', function () {
-    $.util.log($.util.colors.red('`dist` task has been removed. Please run `gulp --production`'));
+    logError('`dist` task has been removed. Please run `gulp --production`');
     // emit the end event, to properly end the task
     this.emit('end');
 });
@@ -136,13 +139,13 @@ if (options.buildOnly) {
         const testHash = require('crypto').createHash('md5').update(fs.readFileSync(__filename, { encoding: 'utf8' })).digest('hex');
 
         if (!argv.grunthash) {
-            $.util.log($.util.colors.red('Cannot run this task directly'));
+            logError('Cannot run this task directly');
             this.emit('end');
             return;
         }
 
         if (argv.grunthash !== testHash) {
-            $.util.log($.util.colors.red('Safety hash check not passed'));
+            logError('Safety hash check not passed');
             this.emit('end');
             return;
         }
@@ -155,19 +158,27 @@ if (options.buildOnly) {
 
     gulp.task('deploy', (done) => {
         const tasks = ['default'];
+        const host = options.getDeployTarget(options.target);
+        const deployStrategy = host.deployStrategy || options.deployStrategy;
 
-        switch (options.deployStrategy) {
+        if (!deployStrategy) {
+            $.util.warn('No deploy strategy set as default or in the host config');
+            done();
+            return;
+        }
+
+        switch (deployStrategy) {
         case 'rsync':
             //force backup
             options.command = 'backup';
             tasks.push('remote', 'rsync');
             break;
         default:
-            tasks.push(options.deployStrategy);
+            tasks.push(deployStrategy);
             break;
         }
         tasks.push(done);
 
-        runSequence.apply(null, tasks); //eslint-disable-line prefer-spread
+        runSequence(...tasks);
     });
 }
