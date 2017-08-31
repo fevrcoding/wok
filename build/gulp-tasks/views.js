@@ -58,7 +58,7 @@ module.exports = (gulp, $, options) => {
             .pipe($.rev)
             .pipe(() => styleFilter.restore)
             .pipe(() => jsFilter)
-            .pipe($.uglify, { preserveComments: 'license' })
+            .pipe($.uglify, { output: { comments: 'some' } })
             .pipe($.header, options.banners.application, { pkg: options.pkg })
             .pipe($.rev)
             .pipe(() => jsFilter.restore)

@@ -172,4 +172,3 @@ module.exports = (gulp, $, options) => {
 
     });
 };
-
