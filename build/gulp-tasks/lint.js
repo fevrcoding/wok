@@ -20,11 +20,11 @@ module.exports = (gulp, $) => {
     gulp.task('lint:styles', () => {
 
         return gulp.src(paths.toPath('src.assets/styles/**/*.{css,sass,scss}'))
-        .pipe($.stylelint({
-            reporters: [
-                { formatter: 'string', console: true }
-            ]
-        }));
+            .pipe($.stylelint({
+                reporters: [
+                    { formatter: 'string', console: true }
+                ]
+            }));
     });
 
     gulp.task('lint', ['lint:js', 'lint:styles']);
