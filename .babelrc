@@ -3,7 +3,7 @@
         ["env", {
             "modules": false,
             "loose": true,
-            "useBuiltIns": true,
+            "useBuiltIns": false,
             "targets": {
                 "browsers": ["> 1%", "last 2 versions", "not ie < 11"]
             }
