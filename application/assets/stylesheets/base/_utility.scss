@@ -32,16 +32,6 @@
     text-align: center;
 }
 
-//@see bootstrap
-.u-text--hide {
-    border: 0;
-    background-color: transparent;
-    color: transparent;
-    font: 0 / 0 a;
-    font-size: 0.1px;
-    text-shadow: none;
-}
-
 .u-text--ellipsis {
     @include text-ellipsis;
 }
