@@ -71,7 +71,7 @@
     "gulp-sass": "3.1.0",
     "gulp-size": "2.1.0",
     "gulp-sourcemaps": "2.6.4",
-    "gulp-stylelint": "4.0.0",
+    "gulp-stylelint": "7.0.0",
     "gulp-uglify": "3.0.0",
     "gulp-useref": "3.1.4",
     "gulp-util": "3.0.8",
@@ -91,10 +91,10 @@
     "run-sequence": "2.2.1",
     "semver": "5.5.0",
     "ssh2": "0.5.5",
-    "stylelint": "8.0.0",
-    "stylelint-config-standard": "17.0.0",
-    "stylelint-order": "0.6.0",
-    "stylelint-scss": "2.1.0",
+    "stylelint": "9.1.1",
+    "stylelint-config-standard": "18.2.0",
+    "stylelint-order": "0.8.1",
+    "stylelint-scss": "2.5.0",
     "through2": "2.0.3",
     "yargs": "8.0.2"
   }
