@@ -99,14 +99,6 @@ input::-moz-focus-inner {
 }
 
 
-/* ==========================================================================
-   ##prevent 300ms delay in FF, Chrome and IE on touch devices
-   ========================================================================== */
-
-a[href], // scss-lint:disable QualifyingElement
-button {
-    touch-action: manipulation;
-}
 
 /* ==========================================================================
    ##Headings and Base
