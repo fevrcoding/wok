@@ -12,7 +12,7 @@
         'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
         'timeStamp', 'trace', 'warn'
     ];
-    var length = methods.length;
+    var length = methods.length; //eslint-disable-line prefer-destructuring
     var console = (window.console = window.console || {}); //eslint-disable-line no-multi-assign
     var method;
 
