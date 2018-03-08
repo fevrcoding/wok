@@ -96,8 +96,6 @@ View partials in `application/views/partials` are rendered to `public` folder li
 
 To limit performance issues, just first level sub-folders will be included in the parse process.
 
-### *More docs to come...*
-
 ## Building
 
 From project root:
@@ -152,4 +150,4 @@ When paired with Phing or other deployment systems, remember to set `buildOnly` 
 WOK was created by [Marco Solazzi](https://github.com/dwightjack) with contributions from [Matteo Guidotto](https://github.com/mguidotto) and [Umberto Quintarelli](https://github.com/quincia).
 
 Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.
-Modified work Copyright © 2015-2017 Marco Solazzi, released under the MIT license.
+Modified work Copyright © 2015-2018 Marco Solazzi, released under the MIT license.
