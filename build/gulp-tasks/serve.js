@@ -67,6 +67,10 @@ module.exports = (gulp, $, options) => {
             middleware: require('./lib/middlewares')(options, browserSync)
         }, conf || {});
 
+        if (options.production) {
+            serverConf.middleware.unshift(require('compression')());
+        }
+
         browserSync.init(serverConf, (err, bs) => {
 
             if (err) {
