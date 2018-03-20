@@ -142,6 +142,7 @@ When paired with Phing or other deployment systems, remember to set `buildOnly` 
 ### Other Gulp tasks
 
 * `dev`: one time development build (also runs as default task)
+* `server`: runs a local static server in `public` folder. Use flag `--production` to enable gzip compression
 * `lint`: runs both JavaScript and style linters
 * `bump`: bumps semver version of `package.json` file.
 
