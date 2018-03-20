@@ -44,12 +44,12 @@
     }
 }
 
-/* Responsive Grid System
+@if $grid-enabled {
+    /* Responsive Grid System
 
    Adapted from [Twitter Bootstrap 3](https://github.com/twbs/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/_grid.scss)
    ========================================================================== */
 
-@if $grid-enabled {
     @-ms-viewport {
         width: device-width;
     }
@@ -105,9 +105,11 @@
     }
 }
 
+@import 'base/flex-grid';
+
 /* MQ Relative Visibility
    ========================================================================== */
-@if $grid-enabled {
+@if $grid-enabled != false {
     @include mq(xs) {
 
         .l-hidden--from-xs {

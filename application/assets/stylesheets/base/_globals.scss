@@ -2,7 +2,7 @@
 $rem-to-px-fallback: false !default;
 
 //use custom grid
-$grid-enabled: true;
+$grid-enabled: 'flex';
 
 $mq-breakpoints: (
     xs: 480px,
