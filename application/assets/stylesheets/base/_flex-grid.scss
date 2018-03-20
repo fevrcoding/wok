@@ -1,0 +1,134 @@
+@if $grid-enabled == 'flex' {
+    /* Responsive Flexbox Grid System
+
+    Adapted from https://github.com/kristoferjoseph/flexboxgrid/issues/270
+    ========================================================================== */
+
+
+
+    .l-flex,
+    .l-flex--fluid {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .l-flex--fluid {
+        padding-right: $grid-gutter-width / 2;
+        padding-left: $grid-gutter-width / 2;
+    }
+
+
+    // rows
+    .l-flex__row {
+        display: flex;
+        flex-direction: row;
+        flex: 0 1 auto;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+        margin-right: $grid-gutter-width / -2;
+        margin-left: $grid-gutter-width / -2;
+    }
+
+    .l-flex__row--reverse {
+        flex-direction: row-reverse;
+    }
+
+    .l-flex__col--reverse {
+        flex-direction: column-reverse;
+    }
+
+    // column helpers
+    @mixin flex-col-offset($flex-column) {
+        margin-left: 100% / 12 * $flex-column;
+    }
+
+    @mixin flex-col-numbered($flex-column) {
+        flex-basis: 100% / 12 * $flex-column;
+        max-width: 100% / 12 * $flex-column;
+    }
+
+    %flex-col {
+        box-sizing: border-box;
+        flex: 0 0 auto;
+        padding-right: $grid-gutter-width / 2;
+        padding-left: $grid-gutter-width / 2;
+    }
+
+    %flex-col-auto {
+        flex-grow: 1;
+        flex-basis: 0;
+        max-width: 100%;
+    }
+
+    .l-flex__col {
+        @extend %flex-col;
+        flex-grow: 1;
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+
+
+    // build columns for each size is sizes map
+    @each $mq-size, $mq-key in $mq-breakpoints {
+
+        @include mq($mq-key) {
+
+            @for $num from 0 through 12 {
+
+                .l-flex__col--#{$mq-size}-offset-#{$num} {
+                    @include flex-col-offset($num);
+                }
+            }
+
+            @for $num from 1 through 12 {
+
+                .l-flex__col--#{$mq-size}-#{$num} {
+                    @include flex-col-numbered($num);
+                }
+            }
+
+            .l-flex__col--start-#{$mq-size} {
+                justify-content: flex-start;
+                text-align: start;
+            }
+
+            .l-flex__col--center-#{$mq-size} {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .l-flex__col--end-#{$mq-size} {
+                justify-content: flex-end;
+                text-align: end;
+            }
+
+            .l-flex__col--top-#{$mq-size} {
+                align-items: flex-start;
+            }
+
+            .l-flex__col--middle-#{$mq-size} {
+                align-items: center;
+            }
+
+            .l-flex__col--bottom-#{$mq-size} {
+                align-items: flex-end;
+            }
+
+            .l-flex__col--around-#{$mq-size} {
+                justify-content: space-around;
+            }
+
+            .l-flex__col--between-#{$mq-size} {
+                justify-content: space-between;
+            }
+
+            .l-flex__col--first-#{$mq-size} {
+                order: -1;
+            }
+
+            .l-flex__col--last-#{$mq-size} {
+                order: 1;
+            }
+        }
+    }
+}
