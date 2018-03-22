@@ -3,11 +3,15 @@
  * ===============================
  */
 
+const log = require('fancy-log');
+const { bold } = require('ansi-colors');
+const defaultConfig = require('../gulp-config/modernizr.conf.json');
+const paths = require('../gulp-config/paths');
+
+const tmpPath = paths.toPath('dist.assets/vendors').replace(paths.toPath('dist.root'), paths.get('tmp'));
+
 module.exports = (gulp, $, options) => {
 
-    const defaultConfig = require('../gulp-config/modernizr.conf.json');
-    const paths = require('../gulp-config/paths');
-    const tmpPath = paths.toPath('dist.assets/vendors').replace(paths.toPath('dist.root'), paths.get('tmp'));
 
     const distConfig = {
 
@@ -54,8 +58,16 @@ module.exports = (gulp, $, options) => {
         customTests: []
     };
 
+    const html5shiv = () => {
 
-    gulp.task('modernizr', ['modernizr:html5shiv'], (done) => {
+        const path = require('path');
+        const html5shivPath = path.join(path.dirname(require.resolve('html5shiv')), '*.min.js');
+
+        return gulp.src([html5shivPath])
+            .pipe(gulp.dest(paths.toPath('dist.assets/vendors/html5shiv') + '/dist'))
+    };
+
+    const build = (done) => {
         const fs = require('fs');
         const filePath = paths.toPath('dist.assets/vendors/modernizr');
 
@@ -66,17 +78,16 @@ module.exports = (gulp, $, options) => {
             const customizr = require('customizr');
             customizr(distConfig, (obj) => {
                 const tests = obj.options['feature-detects'];
-                const colors = $.util.colors;
                 let logStr = 'The production build includes the following tests: ';
                 if (tests.length > 0) {
 
-                    logStr += colors.bold(tests.map((test) => {
+                    logStr += bold(tests.map((test) => {
                         return test.replace('test/', '');
                     }).join(', '));
 
-                    $.util.log(logStr);
+                    log(logStr);
 
-                    $.util.log(
+                    log(
                         'For optimal performances you might add a `defer` attribute to the script tag. ' +
                         'Refer to https://github.com/Modernizr/Modernizr/issues/878#issuecomment-41448059 for guidelines'
                     );
@@ -92,18 +103,10 @@ module.exports = (gulp, $, options) => {
                 fs.writeFile(filePath + '/modernizr.js', result, done);
             });
         }
+    };
 
-
-
-    });
-
-    gulp.task('modernizr:html5shiv', () => {
-
-        const path = require('path');
-        const html5shivPath = path.join(path.dirname(require.resolve('html5shiv')), '*.min.js');
-
-        return gulp.src([html5shivPath])
-            .pipe(gulp.dest(paths.toPath('dist.assets/vendors/html5shiv') + '/dist'));
-    });
+    return (done) => {
+        gulp.series(html5shiv, build, done);
+    };
 
 };

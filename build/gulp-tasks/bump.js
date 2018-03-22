@@ -3,39 +3,32 @@
  * ===============================
  */
 
-module.exports = (gulp, $, options) => {
+module.exports = (gulp, $, { pkg }) => (done) {
+    const semver = require('semver');
+    const prompts = require('prompts');
+    const { type = 'patch' } = require('yargs').argv;
+    const allowed = ['major', 'minor', 'patch'];
 
-    const argv = require('yargs').argv;
-
-    gulp.task('bump:type', (done) => {
-
-        const allowed = ['major', 'minor', 'patch'];
-        const semver = require('semver');
-        const inquirer = require('inquirer');
-
-        //if --type is set and valid, use it
-        if (semver.inc(options.pkg.version, argv.type) !== null) {
-            done();
-            return;
-        }
-        //else ask!
-        inquirer.prompt([{
-            name: 'version',
-            type: 'list',
+    let bump;
+    //if --type is set and valid, use it
+    if (semver.inc(pkg.version, type) === null) {
+        bump = Promise.resolve({ type });
+    } else {
+        bump = prompts.prompt([{
+            name: 'type',
+            type: 'select',
             message: 'New version number?',
-            default: (allowed.length - 1),
-            choices: allowed.map((type) => (
-                { name: type + ' (' + semver.inc(options.pkg.version, type) + ')', value: type }
+            initial: allowed.indexOf('patch'),
+            choices: allowed.map((value) => (
+                { name: `${value} (${semver.inc(pkg.version, value)})`, value }
             ))
-        }]).then((answers) => {
-            argv.type = answers.version;
-            done();
-        });
-    });
+        }]);
+    }
 
-    gulp.task('bump', ['bump:type'], () => {
-        return gulp.src(['package.json'])
-            .pipe($.bump({ type: argv.type || 'patch' }))
-            .pipe(gulp.dest('./'));
+    bump.then(({ type }) => {
+        gulp.src(['package.json'])
+            .pipe($.bump({ type }))
+            .pipe(gulp.dest('./'))
+            .on('all', done);
     });
-};
+});

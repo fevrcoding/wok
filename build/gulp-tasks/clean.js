@@ -4,9 +4,6 @@
  */
 
 module.exports = (gulp, $, options) => {
-
-    const del = require('del');
-
     const paths = require('../gulp-config/paths');
 
     const folders = [
@@ -18,26 +15,16 @@ module.exports = (gulp, $, options) => {
         'dist.assets/css',
         'dist.assets/fonts',
         `dist.views/${options.viewmatch}`,
-        'dist.views/{partials,templates,components}',
+        'dist.views/*',
         'dist.assets/vendors',
         'dist.root/styleguide',
         'dist.root/dist.revmap'
     ].map(paths.toPath);
 
+    return () => {
 
-    gulp.task('clean', (done) => {
-        del(folders, { dot: true }).then(() => {
-            done();
-        }, (err) => {
-            done(err);
-        });
-    });
+        const del = require('del');
 
-    gulp.task('clean:tmp', (done) => {
-        del([paths.toPath('tmp')], { dot: true }).then(() => {
-            done();
-        }, (err) => {
-            done(err);
-        });
-    });
+        return del(folders, { dot: true });
+    };
 };

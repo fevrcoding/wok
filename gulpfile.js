@@ -86,15 +86,6 @@ options.banners = banners;
 //unique build identifier
 options.buildHash = `buildhash${(Date.now())}`;
 
-options.getDeployTarget = (target) => {
-    const targets = Object.keys(options.hosts).filter((host) => !!options.hosts[host].host);
-    if (!target || targets.indexOf(target) === -1) {
-        logError('ERROR: Deploy target unavailable. Specify it via `--target` argument. Allowed targets are: ' + targets.join(', ')); //eslint-disable-line
-        return false;
-    }
-    return options.hosts[target];
-};
-
 fs.readdirSync(taskPath).filter((taskFile) => path.extname(taskFile) === '.js').forEach((taskFile) => {
     require(`${taskPath}/${taskFile}`)(gulp, $, options); //eslint-disable-line global-require
 });
@@ -158,8 +149,6 @@ if (options.buildOnly) {
 
     gulp.task('deploy', (done) => {
         const tasks = ['default'];
-        const host = options.getDeployTarget(options.target);
-        const deployStrategy = host.deployStrategy || options.deployStrategy;
 
         if (!deployStrategy) {
             $.util.warn('No deploy strategy set as default or in the host config');
