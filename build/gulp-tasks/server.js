@@ -5,9 +5,6 @@
 
 module.exports = (gulp, $, options) => {
 
-    const del = require('del');
-    const path = require('path');
-
     const paths = require('../gulp-config/paths');
     const { ports } = options.hosts.development;
 
@@ -25,18 +22,14 @@ module.exports = (gulp, $, options) => {
             rule: {
                 match: /<\/head[^>]*>/i,
                 fn(snippet, match) {
+                    if (!options.livereload) {
+                        return match;
+                    }
                     return ['<!--[if (gt IE 9) | (IEMobile)]><!-->', snippet, '<!--<![endif]-->', match].join('\n');
                 }
             }
         }
     };
-
-    if (!options.livereload) {
-        serverConfigDefault.ui = false;
-        serverConfigDefault.snippetOptions.rule.fn = (snippet, match) => {
-            return match;
-        };
-    }
 
     process.on('SIGINT', () => {
         process.exit();
@@ -44,110 +37,38 @@ module.exports = (gulp, $, options) => {
 
     return (done) => {
 
-        const browserSync = require('browser-sync').create(options.buildHash);
+        const { production, buildHash, livereload } = options;
+        const browserSync = require('browser-sync').create(buildHash);
 
         const serverConf = Object.assign({}, serverConfigDefault, {
             middleware: require('./lib/middlewares')(options, browserSync)
-        }, conf);
+        }, (livereload ? {
+                ui: {
+                    port: 3001,
+                    weinre: {
+                        port: ports.weinre
+                    }
+                }
+            } : {
+                open: false,
+                ui: false
+            })
+        );
+
+        if (production) {
+            serverConf.middleware.unshift(require('compression')());
+        }
 
         browserSync.init(serverConf, (err) => {
             if (err) {
                 done(err);
-            }
-        });
-
-        process.on('exit', () => {
-            browserSync.exit();
-            done();
-        });
-    };
-
-
-
-    function deleteListener(fileType) {
-
-        return (event) => {
-
-            if (event.type === 'deleted') {
-                // Simulating the {base: 'src'} used with gulp.src in the scripts task
-                const filePathFromSrc = path.relative(paths.toPath(`src.assets/${fileType}`), event.path);
-
-                // Concatenating the 'build' absolute path used by gulp.dest in the scripts task
-                const destFilePath = path.resolve(paths.toPath(`dist.assets/${fileType}`), filePathFromSrc);
-
-                del.sync(destFilePath);
-            }
-        };
-    }
-
-
-
-    //just a static server
-    gulp.task('server', (done) => {
-
-        const browserSync = createServer({
-            open: false,
-            ui: false
-        });
-
-        process.on('exit', () => {
-            browserSync.exit();
-            done();
-        });
-
-    });
-
-
-
-    // Watch Files For Changes & Reload
-    return (done) => {
-
-        options.isWatching = true; //eslint-disable-line no-param-reassign
-
-        const browserSync = createServer({
-            ui: {
-                port: 3001,
-                weinre: {
-                    port: ports.weinre
-                }
-            }
-        }, (err) => {
-
-            if (err) {
-                done(err);
                 return;
             }
-
-            ['images', 'scripts', 'fonts', 'fonts', 'media', 'views'].forEach((task) => {
-                gulp.task(task + '-watch', [task], (doneWatch) => {
-                    browserSync.reload();
-                    doneWatch();
-                });
-            });
-
-            gulp.watch([paths.toPath('src.assets/styles/**/*.{css,scss,sass}')], (options.styleguideDriven ? ['styles', 'styleguide'] : ['styles']));
-            gulp.watch([paths.toPath('src.assets/images/**/*.{png,jpg,jpeg,gif,svg,webp}')], ['images-watch']).on('change', deleteListener('images'));
-            gulp.watch([paths.toPath('src.assets/fonts/**/*.{eot,svg,ttf,woff,woff2}')], ['fonts-watch']).on('change', deleteListener('fonts'));
-            gulp.watch([paths.toPath('src.assets/video/{,*/}*.*')], ['media-watch']).on('change', deleteListener('video'));
-            gulp.watch([paths.toPath('src.assets/audio/{,*/}*.*')], ['media-watch']).on('change', deleteListener('audio'));
-            gulp.watch([
-                paths.toPath('src.assets/js/**/*.js'),
-                '!' + paths.toPath('src.assets/js/**/*.{spec,conf}.js')
-            ], ['scripts-watch']);
-            gulp.watch([
-                paths.toPath(`src.views/{,*/}${options.viewmatch}`),
-                paths.toPath('src.documents/*.md'),
-                paths.toPath('src.fixtures/*.json')
-            ], ['views-watch']);
-
+            done();
         });
 
         process.on('exit', () => {
             browserSync.exit();
-            done();
         });
-
     };
-
-
 };
