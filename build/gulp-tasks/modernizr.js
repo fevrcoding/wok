@@ -105,8 +105,6 @@ module.exports = (gulp, $, options) => {
         }
     };
 
-    return (done) => {
-        gulp.series(html5shiv, build, done);
-    };
+    return gulp.series(html5shiv, build);
 
 };

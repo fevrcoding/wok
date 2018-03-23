@@ -29,8 +29,6 @@ module.exports = (gulp, $) => {
     gulp.task('lint:js', js);
     gulp.task('lint:styles', styles);
 
-    return (done) => {
-        gulp.parallel(js, styles, done);
-    };
+    return gulp.parallel(js, styles);
 
 };

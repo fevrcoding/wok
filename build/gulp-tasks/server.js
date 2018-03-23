@@ -3,32 +3,13 @@
  * ===============================
  */
 
-
 module.exports = (gulp, $, options) => {
 
-    const assign = require('lodash/assign');
     const del = require('del');
     const path = require('path');
 
     const paths = require('../gulp-config/paths');
     const { ports } = options.hosts.development;
-
-
-    function deleteListener(fileType) {
-
-        return (event) => {
-
-            if (event.type === 'deleted') {
-                // Simulating the {base: 'src'} used with gulp.src in the scripts task
-                const filePathFromSrc = path.relative(paths.toPath(`src.assets/${fileType}`), event.path);
-
-                // Concatenating the 'build' absolute path used by gulp.dest in the scripts task
-                const destFilePath = path.resolve(paths.toPath(`dist.assets/${fileType}`), filePathFromSrc);
-
-                del.sync(destFilePath);
-            }
-        };
-    }
 
     const serverConfigDefault = {
         notify: false,
@@ -61,38 +42,65 @@ module.exports = (gulp, $, options) => {
         process.exit();
     });
 
-    const createServer = (conf, cb) => {
+    return (done) => {
+
         const browserSync = require('browser-sync').create(options.buildHash);
-        const serverConf = assign({}, serverConfigDefault, {
+
+        const serverConf = Object.assign({}, serverConfigDefault, {
             middleware: require('./lib/middlewares')(options, browserSync)
-        }, conf || {});
+        }, conf);
 
-        if (options.production) {
-            serverConf.middleware.unshift(require('compression')());
-        }
-
-        browserSync.init(serverConf, (err, bs) => {
-
+        browserSync.init(serverConf, (err) => {
             if (err) {
-                cb(err);
-                return;
+                done(err);
             }
-
-            if (cb) {
-                cb(err, bs);
-            }
-
         });
 
         process.on('exit', () => {
             browserSync.exit();
+            done();
         });
-
-        return browserSync;
     };
 
+
+
+    function deleteListener(fileType) {
+
+        return (event) => {
+
+            if (event.type === 'deleted') {
+                // Simulating the {base: 'src'} used with gulp.src in the scripts task
+                const filePathFromSrc = path.relative(paths.toPath(`src.assets/${fileType}`), event.path);
+
+                // Concatenating the 'build' absolute path used by gulp.dest in the scripts task
+                const destFilePath = path.resolve(paths.toPath(`dist.assets/${fileType}`), filePathFromSrc);
+
+                del.sync(destFilePath);
+            }
+        };
+    }
+
+
+
+    //just a static server
+    gulp.task('server', (done) => {
+
+        const browserSync = createServer({
+            open: false,
+            ui: false
+        });
+
+        process.on('exit', () => {
+            browserSync.exit();
+            done();
+        });
+
+    });
+
+
+
     // Watch Files For Changes & Reload
-    gulp.task('serve', ['default'], (done) => {
+    return (done) => {
 
         options.isWatching = true; //eslint-disable-line no-param-reassign
 
@@ -139,20 +147,7 @@ module.exports = (gulp, $, options) => {
             done();
         });
 
-    });
+    };
 
-    //just a static server
-    gulp.task('server', (done) => {
 
-        const browserSync = createServer({
-            open: false,
-            ui: false
-        });
-
-        process.on('exit', () => {
-            browserSync.exit();
-            done();
-        });
-
-    });
 };
