@@ -88,13 +88,12 @@ options.banners = banners;
 //unique build identifier
 options.buildHash = `buildhash${(Date.now())}`;
 
-glob.sync('*.js', { cwd: taskPath }).forEach((taskFile) => {
+
+glob.sync('./*.js', { cwd: taskPath }).forEach((taskFile) => {
     const name = taskFile.replace(/\.js$/, '');
     const task = require(`${taskPath}/${taskFile}`)(gulp, $, options);
     gulp.task(name, task);
 });
-
-
 
 gulp.task('default', (done) => {
 

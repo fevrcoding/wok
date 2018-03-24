@@ -22,9 +22,8 @@ module.exports = (gulp, $, options) => {
     ].map(paths.toPath);
 
     return () => {
-
         const del = require('del');
 
-        return del(folders, { dot: true });
+        return del(folders, { dot: true, allowEmpty: true });
     };
 };
