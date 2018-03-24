@@ -8,37 +8,37 @@
 const fs = require('fs');
 const path = require('path');
 const gulp = require('gulp');
-const runSequence = require('run-sequence');
+const glob = require('globby');
 const _ = require('lodash');
+const log = require('fancy-log');
+const { red } = require('ansi-colors');
 const $ = require('gulp-load-plugins')();
-const argv = require('yargs').argv || {};
+const { argv = {} } = require('yargs');
 const pkg = require('./package.json');
 const paths = require('./build/gulp-config/paths');
 
 const taskPath = path.join(process.cwd(), 'build', 'gulp-tasks');
 const optionsPath = path.join(process.cwd(), 'build', 'gulp-config');
-const options = {};
-const banners = {};
+const banners = {
+    application: `/*! ${pkg.description} v${pkg.version} - ${pkg.author.name} - Copyright ${pkg.year} ${pkg.author.company} */\n`,
+    vendors: `/*! ${pkg.description} v${pkg.version} - ${pkg.author.name} - Vendor package */\n`
+};
 
-const logError = (...args) => $.util.log($.util.colors.red(...args));
+const logError = (...args) => log(red(...args));
 
 
 pkg.year = new Date().getFullYear();
-/* eslint-disable */
-banners.application = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Copyright <%= pkg.year %> <%= pkg.author.company %> */\n";
-banners.vendors = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.author.name %> - Vendor package */\n";
-/* eslint-enable */
 
 
 //load configuration from files
-['hosts', 'properties'].forEach((filename) => {
+const options = ['hosts', 'properties'].reduce((obj, filename) => {
 
     const configFilePath = path.join(optionsPath, `${filename}.js`);
     const configLocalFilePath = path.join(optionsPath, `${filename}.local.js`);
     let conf = {};
 
     if (fs.existsSync(configFilePath)) {
-        conf = _.assign(conf, require(configFilePath));
+        Object.assign(conf, require(configFilePath));
     }
 
     if (fs.existsSync(configLocalFilePath)) {
@@ -46,12 +46,14 @@ banners.vendors = "/*! <%= pkg.description %> v<%= pkg.version %> - <%= pkg.auth
     }
 
     if (filename === 'properties') {
-        _.assign(options, conf);
-    } else {
-        options[filename] = conf;
+        return Object.assign(obj, conf);
     }
 
-});
+    obj[filename] = conf; //eslint-disable-line no-param-reassign
+
+    return obj;
+
+}, {});
 
 if (fs.existsSync(path.join(optionsPath, 'paths.local.js'))) {
     paths.merge(require(path.join(optionsPath, 'paths.local.js')));
@@ -68,7 +70,7 @@ _.forOwn({
     command: null,
     target: null //be explicit!
 }, (value, key) => {
-    options[key] = _.has(argv, key) ? argv[key] : value;
+    options[key] = _.get(argv, key, value);
 });
 
 //force production env
@@ -86,17 +88,19 @@ options.banners = banners;
 //unique build identifier
 options.buildHash = `buildhash${(Date.now())}`;
 
-fs.readdirSync(taskPath).filter((taskFile) => path.extname(taskFile) === '.js').forEach((taskFile) => {
-    require(`${taskPath}/${taskFile}`)(gulp, $, options); //eslint-disable-line global-require
+glob.sync('*.js', { cwd: taskPath }).forEach((taskFile) => {
+    const name = taskFile.replace(/\.js$/, '');
+    const task = require(`${taskPath}/${taskFile}`)(gulp, $, options);
+    gulp.task(name, task);
 });
 
 
 
-gulp.task('default', ['clean'], (done) => {
+gulp.task('default', (done) => {
 
     const tasks = [
         'images',
-        ['fonts', 'media', 'styles', 'scripts'],
+        gulp.parallel('fonts', 'media', 'styles', 'scripts'),
         'modernizr',
         'views'
     ];
@@ -106,68 +110,51 @@ gulp.task('default', ['clean'], (done) => {
     }
 
     if (options.production) {
-        //rev production files and cleanup temp files
-        tasks.push('rev', 'clean:tmp');
+        tasks.push('rev');
     }
 
-
-    tasks.push(done);
-    runSequence(...tasks);
+    gulp.series(...tasks, done);
 });
 
-gulp.task('dev', ['default']);
+gulp.task('serve', (done) => {
+    gulp.series('default', gulp.parallel('server', 'watch'), done);
+});
+
+gulp.task('dev', (done) => {
+    logError('`dev` task has been removed. Please run `gulp`');
+    done();
+});
 
 
-gulp.task('dist', function () {
+gulp.task('dist', (done) => {
     logError('`dist` task has been removed. Please run `gulp --production`');
-    // emit the end event, to properly end the task
-    this.emit('end');
+    done();
 });
 
 if (options.buildOnly) {
-    gulp.task('build', function (done) {
+    gulp.task('build', (done) => {
 
         const testHash = require('crypto').createHash('md5').update(fs.readFileSync(__filename, { encoding: 'utf8' })).digest('hex');
 
         if (!argv.grunthash) {
             logError('Cannot run this task directly');
-            this.emit('end');
+            done();
             return;
         }
 
         if (argv.grunthash !== testHash) {
             logError('Safety hash check not passed');
-            this.emit('end');
+            done();
             return;
         }
 
-        runSequence('default', done);
+        gulp.series('default', done);
 
     });
 
 } else {
 
     gulp.task('deploy', (done) => {
-        const tasks = ['default'];
-
-        if (!deployStrategy) {
-            $.util.warn('No deploy strategy set as default or in the host config');
-            done();
-            return;
-        }
-
-        switch (deployStrategy) {
-        case 'rsync':
-            //force backup
-            options.command = 'backup';
-            tasks.push('remote', 'rsync');
-            break;
-        default:
-            tasks.push(deployStrategy);
-            break;
-        }
-        tasks.push(done);
-
-        runSequence(...tasks);
+        gulp.series('default', 'remote', done);
     });
 }

@@ -25,10 +25,10 @@ module.exports = (gulp, $, { pkg }) => (done) => {
         }]);
     }
 
-    bump.then(({ type }) => {
+    bump.then(({ type }) => { //eslint-disable-line no-shadow
         gulp.src(['package.json'])
             .pipe($.bump({ type }))
             .pipe(gulp.dest('./'))
             .on('all', done);
     });
-});
+};

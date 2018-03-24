@@ -64,7 +64,7 @@ module.exports = (gulp, $, options) => {
         const html5shivPath = path.join(path.dirname(require.resolve('html5shiv')), '*.min.js');
 
         return gulp.src([html5shivPath])
-            .pipe(gulp.dest(paths.toPath('dist.assets/vendors/html5shiv') + '/dist'))
+            .pipe(gulp.dest(paths.toPath('dist.assets/vendors/html5shiv') + '/dist'));
     };
 
     const build = (done) => {

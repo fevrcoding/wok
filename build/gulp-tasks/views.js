@@ -10,15 +10,15 @@ module.exports = (gulp, $, options) => {
     const path = require('path');
     const fs = require('fs');
     const _ = require('lodash');
-    const glob = require('glob');
-    const through = require('through2')
+    const glob = require('globby');
+    const through = require('through2');
     const { map } = require('./lib/plugins');
 
     const baseData = {};
     const paths = require('../gulp-config/paths');
     const viewPath = paths.toAbsPath('src.views');
     const fixturesPath = paths.toAbsPath('src.fixtures');
-    const { production, viewmatch, banners, pkg } = options;
+    const { production, viewmatch, banners } = options;
 
     let useRef = () => through.obj();
 
@@ -43,7 +43,7 @@ module.exports = (gulp, $, options) => {
                 searchPath: [paths.toPath('dist.root'), paths.get('tmp')],
                 //just replace src
                 replace: (blockContent, target, attrs) => (
-                    `<script src="${target}"${attrs ? ` ${attrs}` : ''}></script>`;
+                    `<script src="${target}"${attrs ? ` ${attrs}` : ''}></script>`
                 )
             })
             .pipe(() => styleFilter)
@@ -57,12 +57,12 @@ module.exports = (gulp, $, options) => {
             .pipe(() => styleFilter.restore)
             .pipe(() => jsFilter)
             .pipe($.uglify, { output: { comments: 'some' } })
-            .pipe($.header, banners.application, { pkg })
+            .pipe($.header, banners.application, {})
             .pipe($.rev)
             .pipe(() => jsFilter.restore)
             .pipe(() => {
                 const vendorRegexp = new RegExp(paths.get('vendors'));
-                return $.if(vendorRegexp, $.header(banners.vendors, { pkg }));
+                return $.if(vendorRegexp, $.header(banners.vendors, {}));
             })
             .pipe(() => assetsFilter)
             .pipe(gulp.dest, paths.toPath('dist.root'))
@@ -75,7 +75,7 @@ module.exports = (gulp, $, options) => {
 
         const data = glob.sync('{,*/}*.json', { cwd: fixturesPath }).reduce((obj, filename) => {
             const id = _.camelCase(filename.toLowerCase().replace('.json', ''));
-            obj[id] = JSON.parse(fs.readFileSync(path.join(fixturesPath, filename), { encoding: 'utf8' }));
+            obj[id] = JSON.parse(fs.readFileSync(path.join(fixturesPath, filename), { encoding: 'utf8' })); //eslint-disable-line no-param-reassign
             return obj;
         }, {});
 
@@ -83,7 +83,7 @@ module.exports = (gulp, $, options) => {
             .pipe($.plumber({
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
-            .pipe(map((code) => env.renderString(code, Object.assign({}, baseData, data || {}))))
+            .pipe(map((code) => env.renderString(code, Object.assign({}, baseData, data))))
             .pipe(useRef())
             .pipe($.rename((filepath) => {
                 filepath.basename = filepath.basename.replace('.nunj', ''); //eslint-disable-line no-param-reassign

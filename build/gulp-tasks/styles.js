@@ -7,11 +7,11 @@ module.exports = (gulp, $, options) => {
 
     const path = require('path');
     const autoprefixer = require('autoprefixer');
-    const through = require('through2')
+    const through = require('through2');
     const paths = require('../gulp-config/paths');
     const sassFunctions = require('./lib/sass-functions')(options);
 
-    const { production, banners, pkg } = options;
+    const { production, banners } = options;
     let destPath = paths.toPath('dist.assets/css');
     let optimizePipe = () => through.obj();
 
@@ -21,7 +21,7 @@ module.exports = (gulp, $, options) => {
 
     if (production) {
         optimizePipe = require('lazypipe')()
-            .pipe($.header, banners.application, { pkg })
+            .pipe($.header, banners.application, {})
             .pipe(() => gulp.dest(destPath))
             .pipe($.cleanCss, {
                 advanced: false,
@@ -65,5 +65,6 @@ module.exports = (gulp, $, options) => {
             //.pipe(reloadStreamFn()({ match: '**/*.css' }))
             .pipe($.if(options.isWatching, $.notify({ message: 'SASS Compiled', onLast: true })))
             .pipe($.size({ title: 'styles' }));
+    };
 
 };
