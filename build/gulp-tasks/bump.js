@@ -3,7 +3,7 @@
  * ===============================
  */
 
-module.exports = (gulp, $, { pkg }) => (done) {
+module.exports = (gulp, $, { pkg }) => (done) => {
     const semver = require('semver');
     const prompts = require('prompts');
     const { type = 'patch' } = require('yargs').argv;

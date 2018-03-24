@@ -11,18 +11,19 @@ module.exports = (gulp, $, options) => {
     const fs = require('fs');
     const _ = require('lodash');
     const glob = require('glob');
-    const map = require('./lib/plugins').map;
+    const through = require('through2')
+    const { map } = require('./lib/plugins');
 
     const baseData = {};
     const paths = require('../gulp-config/paths');
     const viewPath = paths.toAbsPath('src.views');
     const fixturesPath = paths.toAbsPath('src.fixtures');
+    const { production, viewmatch, banners, pkg } = options;
+
+    let useRef = () => through.obj();
 
 
-    let useRef; //eslint-disable-line no-var
-
-
-    baseData.PRODUCTION = options.production;
+    baseData.PRODUCTION = production;
     baseData.page = {};
 
     const env = require('./lib/view-helpers').nunjucks([viewPath, paths.toPath('src.documents')], options);
@@ -30,23 +31,20 @@ module.exports = (gulp, $, options) => {
     env.addGlobal('helpers', require('./lib/view-helpers').helpers(options));
     env.addGlobal('_', _);
 
-    if (options.production) {
+    if (production) {
 
         const styleFilter = $.filter('**/*.min.css', { restore: true });
         const jsFilter = $.filter('**/*.min.js', { restore: true });
-        const assetsFilter = $.filter(['**/*.*', '!**/' + options.viewmatch], { restore: true });
+        const assetsFilter = $.filter(['**/*.*', `!**/${viewmatch}`], { restore: true });
 
         useRef = require('lazypipe')()
             .pipe($.useref, {
                 types: ['css', 'js', 'replace', 'remove'],
                 searchPath: [paths.toPath('dist.root'), paths.get('tmp')],
                 //just replace src
-                replace(blockContent, target, attrs) {
-                    if (attrs) {
-                        return `<script src="${target}" ${attrs}></script>`;
-                    }
-                    return '<script src="' + target + '"></script>';
-                }
+                replace: (blockContent, target, attrs) => (
+                    `<script src="${target}"${attrs ? ` ${attrs}` : ''}></script>`;
+                )
             })
             .pipe(() => styleFilter)
             .pipe($.cleanCss, {
@@ -59,33 +57,29 @@ module.exports = (gulp, $, options) => {
             .pipe(() => styleFilter.restore)
             .pipe(() => jsFilter)
             .pipe($.uglify, { output: { comments: 'some' } })
-            .pipe($.header, options.banners.application, { pkg: options.pkg })
+            .pipe($.header, banners.application, { pkg })
             .pipe($.rev)
             .pipe(() => jsFilter.restore)
             .pipe(() => {
                 const vendorRegexp = new RegExp(paths.get('vendors'));
-                return $.if(vendorRegexp, $.header(options.banners.vendors, { pkg: options.pkg }));
+                return $.if(vendorRegexp, $.header(banners.vendors, { pkg }));
             })
             .pipe(() => assetsFilter)
             .pipe(gulp.dest, paths.toPath('dist.root'))
             .pipe(() => assetsFilter.restore);
-
-    } else {
-        useRef = $.util.noop;
     }
 
-    gulp.task('views', () => {
+    return () => {
 
-        const data = {};
-        const htmlFilter = $.filter('**/' + options.viewmatch, { restore: true });
+        const htmlFilter = $.filter(`**/${viewmatch}`, { restore: true });
 
-
-        glob.sync('{,*/}*.json', { cwd: fixturesPath }).forEach((filename) => {
+        const data = glob.sync('{,*/}*.json', { cwd: fixturesPath }).reduce((obj, filename) => {
             const id = _.camelCase(filename.toLowerCase().replace('.json', ''));
-            data[id] = JSON.parse(fs.readFileSync(path.join(fixturesPath, filename), { encoding: 'utf8' }));
-        });
+            obj[id] = JSON.parse(fs.readFileSync(path.join(fixturesPath, filename), { encoding: 'utf8' }));
+            return obj;
+        }, {});
 
-        return gulp.src([viewPath + '/{,*/}' + options.viewmatch, '!' + viewPath + '/{,*/}_*.*'])
+        return gulp.src([`${viewPath}/{,*/}${viewmatch}`, `!${viewPath}/{,*/}_*.*`])
             .pipe($.plumber({
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
@@ -97,8 +91,8 @@ module.exports = (gulp, $, options) => {
             .pipe(htmlFilter)
             .pipe(gulp.dest(paths.toPath('dist.views')))
             .pipe(htmlFilter.restore)
-            .pipe($.if(options.production, $.rev.manifest(paths.toPath('dist.root/dist.revmap'), { merge: true })))
-            .pipe($.if(options.production, gulp.dest('.')))
+            .pipe($.if(production, $.rev.manifest(paths.toPath('dist.root/dist.revmap'), { merge: true })))
+            .pipe($.if(production, gulp.dest('.')))
             .pipe($.if(options.isWatching, $.notify({ message: 'Views rendered', onLast: true })));
-    });
+    };
 };
