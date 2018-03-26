@@ -10,10 +10,11 @@ module.exports = (gulp, $, options) => {
     const through = require('through2');
     const paths = require('../gulp-config/paths');
     const sassFunctions = require('./lib/sass-functions')(options);
+    const noop = () => through.obj();
 
     const { production, banners } = options;
     let destPath = paths.toPath('dist.assets/css');
-    let optimizePipe = () => through.obj();
+    let optimizePipe = noop;
 
     if (production) {
         destPath = path.normalize(destPath.replace(paths.toPath('dist.root'), paths.get('tmp')));
@@ -35,13 +36,13 @@ module.exports = (gulp, $, options) => {
     return () => {
 
 
-        //let reloadStream;
-        // function reloadStreamFn() {
-        //     if (options.isWatching && options.livereload) {
-        //         return reloadStream || (reloadStream = require('browser-sync').get(options.buildHash).stream); //eslint-disable-line no-return-assign
-        //     }
-        //     return $.util.noop;
-        // }
+        let reloadStream;
+        function reloadStreamFn() {
+            if (options.isWatching && options.livereload) {
+                return reloadStream || (reloadStream = require('browser-sync').get(options.buildHash).stream); //eslint-disable-line no-return-assign
+            }
+            return noop;
+        }
 
         return gulp.src([
             paths.toPath('src.assets/styles/**/*.{sass,scss}')
@@ -62,7 +63,7 @@ module.exports = (gulp, $, options) => {
             .pipe($.if(production, optimizePipe()))
             .pipe($.sourcemaps.write('.'))
             .pipe(gulp.dest(paths.toPath('dist.assets/css')))
-            //.pipe(reloadStreamFn()({ match: '**/*.css' }))
+            .pipe(reloadStreamFn()({ match: '**/*.css' }))
             .pipe($.if(options.isWatching, $.notify({ message: 'SASS Compiled', onLast: true })))
             .pipe($.size({ title: 'styles' }));
     };

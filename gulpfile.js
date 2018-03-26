@@ -95,7 +95,7 @@ glob.sync('./*.js', { cwd: taskPath }).forEach((taskFile) => {
     gulp.task(name, task);
 });
 
-gulp.task('default', (done) => {
+gulp.task('default', (() => {
 
     const tasks = [
         'images',
@@ -112,12 +112,10 @@ gulp.task('default', (done) => {
         tasks.push('rev');
     }
 
-    gulp.series(...tasks, done);
-});
+    return gulp.series(...tasks);
+})());
 
-gulp.task('serve', (done) => {
-    gulp.series('default', gulp.parallel('server', 'watch'), done);
-});
+gulp.task('serve', gulp.series('default', gulp.parallel('server', 'watch')));
 
 gulp.task('dev', (done) => {
     logError('`dev` task has been removed. Please run `gulp`');
@@ -131,8 +129,8 @@ gulp.task('dist', (done) => {
 });
 
 if (options.buildOnly) {
-    gulp.task('build', (done) => {
 
+    const buildCheck = (done) => {
         const testHash = require('crypto').createHash('md5').update(fs.readFileSync(__filename, { encoding: 'utf8' })).digest('hex');
 
         if (!argv.grunthash) {
@@ -146,14 +144,12 @@ if (options.buildOnly) {
             done();
             return;
         }
+        done();
+    };
 
-        gulp.series('default', done);
-
-    });
+    gulp.task('build', gulp.series(buildCheck, 'default'));
 
 } else {
 
-    gulp.task('deploy', (done) => {
-        gulp.series('default', 'remote', done);
-    });
+    gulp.task('deploy', gulp.series('default', 'remote'));
 }

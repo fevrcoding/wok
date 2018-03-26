@@ -37,29 +37,35 @@ module.exports = (gulp, $, options) => {
 
     const list = [{
         pattern: 'src.assets/styles/**/*.{css,scss,sass}',
-        task: styleguideDriven ? gulp.paralled('styles', 'styleguide') : 'styles'
+        task: styleguideDriven ? gulp.paralled('styles', 'styleguide') : 'styles',
+        reload: false
     }, {
         pattern: 'src.assets/images/**/*.{png,jpg,jpeg,gif,svg,webp}',
-        task: 'images'
+        task: 'images',
+        reload: true
     }, {
         pattern: 'src.assets/fonts/**/*.{eot,svg,ttf,woff,woff2}',
-        task: 'fonts'
+        task: 'fonts',
+        reload: true
     }, {
         pattern: 'src.assets/{video,audio}/{,*/}*.*',
-        task: 'media'
+        task: 'media',
+        reload: true
     }, {
         pattern: [
             'src.assets/js/**/*.js',
             'src.assets/js/**/*.{spec,conf}.js'
         ],
-        task: 'scripts'
+        task: 'scripts',
+        reload: true
     }, {
         pattern: [
             `src.views/{,*/}${viewmatch}`,
             'src.documents/*.md',
             'src.fixtures/*.json'
         ],
-        task: 'views'
+        task: 'views',
+        reload: true
     }];
 
     return (done) => {
@@ -68,13 +74,17 @@ module.exports = (gulp, $, options) => {
 
         options.isWatching = true; //eslint-disable-line no-param-reassign
 
-        const reload = (d) => {
+        const reloadTask = (d) => {
             bs.reload();
             d();
         };
 
-        list.forEach(({ pattern, task }) => {
-            gulp.watch(normalizePattern(pattern), gulp.series(task, reload));
+        list.forEach(({ pattern, task, reload }) => {
+            const tasks = [task];
+            if (reload) {
+                tasks.push(reloadTask);
+            }
+            gulp.watch(normalizePattern(pattern), gulp.series(...tasks));
         });
         done();
     };
