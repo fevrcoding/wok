@@ -8,16 +8,27 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 
 * [HTML5 Boilerplate](http://html5boilerplate.com/)
 * Static HTML templating with [Nunjucks](https://mozilla.github.io/nunjucks/)
-* [Sass](http://sass-lang.com/) 3.4+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
+* [Sass](http://sass-lang.com/) 3.5+ with [node-sass](https://github.com/sass/node-sass) and CSS [post-processing](https://github.com/postcss/postcss)
 * [BEM](http://blog.kaelig.fr/post/48196348743/fifty-shades-of-bem)-like naming convention
 * Em based media-queries via [sass-mq](https://github.com/sass-mq/sass-mq)
-* ES support with [Babel](https://babeljs.io/) (supports [babel-env](https://github.com/babel/babel-preset-env) for IE11 and [stage2](https://babeljs.io/docs/plugins/preset-stage-2/). Polyfill loaded from CDN.js)
+* ES2015+ support with [Babel](https://babeljs.io/) (supports [babel-env](https://github.com/babel/babel-preset-env) for IE10+, evergreen browsers and [stage2](https://babeljs.io/docs/plugins/preset-stage-2/). Polyfill loaded from CDN.js)
 * [Gulp.js](http://gulpjs.com/) build and deploy workflow
 * Development server and asset live-reload with [BrowserSync](http://www.browsersync.io/) and [Weinre](http://people.apache.org/~pmuellr/weinre/) remote debugging
 * Incremental deploy with [rsync](https://rsync.samba.org/) or [lftp](http://lftp.yar.ru/)
 * Remote backup / rollback (UNIX SSH environments only)
 
+## Supported browsers (via [browserslist](https://github.com/browserslist/browserslist))
 
+* last 1 major version
+* >= 1%
+* Chrome >= 45
+* Firefox >= 38
+* Edge >= 12
+* Explorer >= 10
+* iOS >= 9
+* Safari >= 9
+* Android >= 4.4
+* Opera >= 30
 
 ## Requirements
 
@@ -134,6 +145,22 @@ If you are on a shared hosting with FTP access, you can switch to the more basic
 To switch to ftp mode, set `deployStrategy` in `build/gulp-config/properties.js` to `'ftp'`, then config hosts and run deploy commands as explained above.
 
 **Note** Rollback and backup tasks won't be available with this configuration.
+
+#### Customize host related deploy options
+
+Instead of globally setting the deploy strategy, you can setup a deploy strategy for each host in your `hosts[.local].js` file by setting a `deployStrategy` key. Custom host configuration will take precedence over global configuration.
+
+Configuration options may vary based on the deploy strategy. Common options are:
+
+* `host`: Remote host IP address,
+* `username`: remote username,
+* `password`: remote password,
+* `path`: path to which files will be saved.
+* `port`: port the deploy service is listening to
+* `deployStrategy`: the deploy strategy to use
+
+**Note**: `path` configuration differs from strategy to strategy. For **ftp** use a relative path (ie: `'public'`) without trailing slashes. For **rsync/SSH** it might be safer to use an absolute path (ie: `/var/wwwroot/my-site/public`).
+
 
 #### Usage with external tools
 

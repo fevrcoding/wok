@@ -31,7 +31,7 @@
 //}
 
 
-module.exports = function (/*options*/) {
+module.exports = (/*options*/) => {
 
     const middlewares = [];
 

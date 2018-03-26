@@ -2,17 +2,23 @@
  * Resource Revving Task
  * ===============================
  */
+const paths = require('../gulp-config/paths');
+const del = require('del');
 
 module.exports = (gulp, $) => {
 
-    const paths = require('../gulp-config/paths');
+    const rootPath = `${paths.toPath('dist.root')}/**/*.*`;
+    const tmpPath = paths.toPath('tmp');
 
-    gulp.task('rev', () => {
+    const rev = () => {
         const manifest = gulp.src(paths.toPath('dist.root/dist.revmap'));
-
-        return gulp.src(paths.toPath('dist.root') + '/**/*.*')
+        return gulp.src(rootPath)
             .pipe($.revReplace({ manifest }))
             .pipe(gulp.dest(paths.toPath('dist.root')));
-    });
+    };
 
+    const delTmp = () => del(tmpPath);
+
+    //rev production files and cleanup temp files
+    return gulp.series(rev, delTmp);
 };
