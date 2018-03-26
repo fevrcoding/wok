@@ -3,10 +3,7 @@
         ["env", {
             "modules": false,
             "loose": true,
-            "useBuiltIns": false,
-            "targets": {
-                "browsers": ["> 1%", "last 2 versions", "not ie < 11"]
-            }
+            "useBuiltIns": false
         }],
         "stage-2"
     ],

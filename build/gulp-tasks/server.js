@@ -25,7 +25,7 @@ module.exports = (gulp, $, options) => {
                     if (!options.livereload) {
                         return match;
                     }
-                    return ['<!--[if (gt IE 9) | (IEMobile)]><!-->', snippet, '<!--<![endif]-->', match].join('\n');
+                    return snippet + match;
                 }
             }
         }

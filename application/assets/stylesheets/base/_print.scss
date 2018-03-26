@@ -32,9 +32,8 @@
         font-size: $font-size-default;
         content: ' (' attr(title) ')';
     }
-    // Don't show links for images, or javascript/internal links
+    // Don't show links for javascript/internal links
     // scss-lint:disable QualifyingElement
-    .ir a::after,
     a[href^="javascript:"]::after,
     a[href^="#"]::after {
         content: '';
