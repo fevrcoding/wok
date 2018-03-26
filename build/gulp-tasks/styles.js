@@ -7,29 +7,22 @@ module.exports = (gulp, $, options) => {
 
     const path = require('path');
     const autoprefixer = require('autoprefixer');
-    const production = options.production;
+    const through = require('through2');
     const paths = require('../gulp-config/paths');
     const sassFunctions = require('./lib/sass-functions')(options);
+    const noop = () => through.obj();
 
-    let productionPipe;
+    const { production, banners } = options;
     let destPath = paths.toPath('dist.assets/css');
-    let reloadStream;
-
-    function reloadStreamFn() {
-        if (options.isWatching && options.livereload) {
-            return reloadStream || (reloadStream = require('browser-sync').get(options.buildHash).stream); //eslint-disable-line no-return-assign
-        }
-        return $.util.noop;
-    }
-
+    let optimizePipe = noop;
 
     if (production) {
         destPath = path.normalize(destPath.replace(paths.toPath('dist.root'), paths.get('tmp')));
     }
 
     if (production) {
-        productionPipe = require('lazypipe')()
-            .pipe($.header, options.banners.application, { pkg: options.pkg })
+        optimizePipe = require('lazypipe')()
+            .pipe($.header, banners.application, {})
             .pipe(() => gulp.dest(destPath))
             .pipe($.cleanCss, {
                 advanced: false,
@@ -38,13 +31,18 @@ module.exports = (gulp, $, options) => {
                 rebase: false
             })
             .pipe($.rename, { suffix: '.min' });
-    } else {
-        productionPipe = $.util.noop;
     }
 
+    return () => {
 
 
-    gulp.task('styles', () => {
+        let reloadStream;
+        function reloadStreamFn() {
+            if (options.isWatching && options.livereload) {
+                return reloadStream || (reloadStream = require('browser-sync').get(options.buildHash).stream); //eslint-disable-line no-return-assign
+            }
+            return noop;
+        }
 
         return gulp.src([
             paths.toPath('src.assets/styles/**/*.{sass,scss}')
@@ -62,12 +60,12 @@ module.exports = (gulp, $, options) => {
             .pipe($.postcss([
                 autoprefixer({ browsers: ['> 1%', 'last 2 versions', 'ie 9'] })
             ]))
-            .pipe($.if(production, productionPipe()))
+            .pipe($.if(production, optimizePipe()))
             .pipe($.sourcemaps.write('.'))
             .pipe(gulp.dest(paths.toPath('dist.assets/css')))
             .pipe(reloadStreamFn()({ match: '**/*.css' }))
             .pipe($.if(options.isWatching, $.notify({ message: 'SASS Compiled', onLast: true })))
             .pipe($.size({ title: 'styles' }));
-    });
+    };
 
 };

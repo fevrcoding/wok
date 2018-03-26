@@ -2,6 +2,7 @@
  * View Compilation Helpers
  */
 
+const _ = require('lodash');
 const random = require('lodash/random');
 const defaults = require('lodash/defaults');
 const nunjucks = require('nunjucks');
@@ -9,24 +10,7 @@ const marked = require('marked');
 const Markdown = require('nunjucks-markdown/lib/markdown_tag');
 const loremIpsum = require('lorem-ipsum');
 
-module.exports.helpers = (/*options*/) => {
-
-    return {
-        lorem(min, max, config) {
-            const count = max ? random(min, max) : min;
-            const loremDefaults = {
-                units: 'words',
-                count
-            };
-            const conf = defaults(config || {}, loremDefaults);
-
-            return loremIpsum(conf);
-        }
-    };
-
-};
-
-module.exports.nunjucks = (viewPath) => {
+const nunjucksEnv = (viewPath) => {
     const env = nunjucks.configure(viewPath, {
         noCache: true
     });
@@ -58,4 +42,38 @@ module.exports.nunjucks = (viewPath) => {
 
     return env;
 
+};
+
+const defaultHelpers = (/*options*/) => {
+
+    return {
+        lorem(min, max, config) {
+            const count = max ? random(min, max) : min;
+            const loremDefaults = {
+                units: 'words',
+                count
+            };
+            const conf = defaults(config || {}, loremDefaults);
+
+            return loremIpsum(conf);
+        }
+    };
+
+};
+
+const noopHelper = () => ({});
+
+module.exports.createRenderer = (viewPaths, options, helpers = noopHelper) => {
+
+    const env = nunjucksEnv(viewPaths, options);
+
+    env.addGlobal('helpers', Object.assign(helpers(options), defaultHelpers(options)));
+    env.addGlobal('_', _);
+
+    return {
+        env,
+        render(string, locals) {
+            return env.renderString(string, locals);
+        }
+    };
 };

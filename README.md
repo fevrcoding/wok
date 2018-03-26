@@ -135,6 +135,22 @@ To switch to ftp mode, set `deployStrategy` in `build/gulp-config/properties.js`
 
 **Note** Rollback and backup tasks won't be available with this configuration.
 
+#### Customize host related deploy options
+
+Instead of globally setting the deploy strategy, you can setup a deploy strategy for each host in your `hosts[.local].js` file by setting a `deployStrategy` key. Custom host configuration will take precedence over global configuration.
+
+Configuration options may vary based on the deploy strategy. Common options are:
+
+* `host`: Remote host IP address,
+* `username`: remote username,
+* `password`: remote password,
+* `path`: path to which files will be saved.
+* `port`: port the deploy service is listening to
+* `deployStrategy`: the deploy strategy to use
+
+**Note**: `path` configuration differs from strategy to strategy. For **ftp** use a relative path (ie: `'public'`) without trailing slashes. For **rsync/SSH** it might be safer to use an absolute path (ie: `/var/wwwroot/my-site/public`).
+
+
 #### Usage with external tools
 
 When paired with Phing or other deployment systems, remember to set `buildOnly` to `true` in `build/gulp-config/properties.js` to delegate deploy tasks.
