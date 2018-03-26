@@ -32,13 +32,14 @@ const ftp = (host) => {
         throw new Error('[deploy] FTP: required `lftp` binary not found in PATH.');
     }
 
-    const { password, username, path, src = paths.toPath('dist.root') } = host;
+    const { password, username, path, port = 21, protocol = 'ftp', src = paths.toPath('dist.root') } = host;
 
     const ftps = new FTPS({
         host: host.host,
         password,
         username,
-        protocol: 'ftp',
+        port,
+        protocol,
         escape: false
     });
 
@@ -137,15 +138,18 @@ const rsync = (host) => {
 
     const rsyncWrapper = require('rsyncwrapper');
 
+    const { username, port = 22, path } = host;
+
     const rsyncConf = {
         src: paths.get('rsync'),
-        dest: host.path,
-        host: `${host.username}@${host.host}`,
+        dest: path,
+        host: `${username}@${host.host}`,
         recursive: true,
         compareMode: 'checksum',
         delete: true,
         args: ['--verbose', '--progress', '--cvs-exclude'],
-        exclude
+        exclude,
+        port
     };
 
     return remote('backup', host, { excludes: exclude }).then(() =>

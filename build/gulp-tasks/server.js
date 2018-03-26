@@ -6,12 +6,12 @@
 module.exports = (gulp, $, options) => {
 
     const paths = require('../gulp-config/paths');
-    const { ports } = options.hosts.development;
+    const { port, ui } = options.hosts.development;
 
     const serverConfigDefault = {
         notify: false,
         ghostMode: false,
-        port: ports.connect,
+        port,
         server: {
             baseDir: [paths.toPath('dist.root')]
         },
@@ -43,12 +43,7 @@ module.exports = (gulp, $, options) => {
         const serverConf = Object.assign({}, serverConfigDefault, {
             middleware: require('./lib/middlewares')(options, browserSync)
         }, (livereload ? {
-                ui: {
-                    port: 3001,
-                    weinre: {
-                        port: ports.weinre
-                    }
-                }
+                ui
             } : {
                 open: false,
                 ui: false
