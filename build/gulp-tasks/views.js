@@ -13,6 +13,7 @@ module.exports = (gulp, $, options) => {
     const glob = require('globby');
     const through = require('through2');
     const { map } = require('./lib/plugins');
+    const { createRenderer } = require('./lib/view-helpers');
 
     const baseData = {};
     const paths = require('../gulp-config/paths');
@@ -26,10 +27,9 @@ module.exports = (gulp, $, options) => {
     baseData.PRODUCTION = production;
     baseData.page = {};
 
-    const env = require('./lib/view-helpers').nunjucks([viewPath, paths.toPath('src.documents')], options);
+    const helpers = () => ({});
 
-    env.addGlobal('helpers', require('./lib/view-helpers').helpers(options));
-    env.addGlobal('_', _);
+    const renderer = createRenderer([viewPath, paths.toPath('src.documents')], options, helpers);
 
     if (production) {
 
@@ -83,7 +83,7 @@ module.exports = (gulp, $, options) => {
             .pipe($.plumber({
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
-            .pipe(map((code) => env.renderString(code, Object.assign({}, baseData, data))))
+            .pipe(map((code) => renderer.render(code, Object.assign({}, baseData, data || {}))))
             .pipe(useRef())
             .pipe($.rename((filepath) => {
                 filepath.basename = filepath.basename.replace('.nunj', ''); //eslint-disable-line no-param-reassign
