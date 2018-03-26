@@ -90,7 +90,7 @@ options.buildHash = `buildhash${(Date.now())}`;
 
 
 glob.sync('./*.js', { cwd: taskPath }).forEach((taskFile) => {
-    const name = taskFile.replace(/\.js$/, '');
+    const name = path.basename(taskFile, '.js');
     const task = require(`${taskPath}/${taskFile}`)(gulp, $, options);
     gulp.task(name, task);
 });
