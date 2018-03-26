@@ -58,7 +58,7 @@ module.exports = (gulp, $, options) => {
                 functions: sassFunctions
             }).on('error', $.sass.logError))
             .pipe($.postcss([
-                autoprefixer({ browsers: ['> 1%', 'last 2 versions', 'ie 9'] })
+                autoprefixer()
             ]))
             .pipe($.if(production, optimizePipe()))
             .pipe($.sourcemaps.write('.'))
