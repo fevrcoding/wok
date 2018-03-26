@@ -74,7 +74,7 @@ module.exports = (gulp, $, options) => {
 
         options.isWatching = true; //eslint-disable-line no-param-reassign
 
-        const reloadTask = (d) => {
+        const livereload = (d) => {
             bs.reload();
             d();
         };
@@ -82,7 +82,7 @@ module.exports = (gulp, $, options) => {
         list.forEach(({ pattern, task, reload }) => {
             const tasks = [task];
             if (reload) {
-                tasks.push(reloadTask);
+                tasks.push(livereload);
             }
             gulp.watch(normalizePattern(pattern), gulp.series(...tasks));
         });
