@@ -137,7 +137,7 @@ To switch to ftp mode, set `deployStrategy` in `build/gulp-config/properties.js`
 
 #### Customize host related deploy options
 
-Instead of globally setting the deploy strategy, you can setup a deploy strategy for each host in your `hosts[.local].js` file by setting a `deployStrategy` key. Custom host configuration will take precedence over global configurations.
+Instead of globally setting the deploy strategy, you can setup a deploy strategy for each host in your `hosts[.local].js` file by setting a `deployStrategy` key. Custom host configuration will take precedence over global configuration.
 
 Configuration options may vary based on the deploy strategy. Common options are:
 
