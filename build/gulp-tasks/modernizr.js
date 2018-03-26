@@ -58,16 +58,16 @@ module.exports = (gulp, $, options) => {
         customTests: []
     };
 
-    const html5shiv = () => {
+    /*const html5shiv = () => {
 
         const path = require('path');
         const html5shivPath = path.join(path.dirname(require.resolve('html5shiv')), '*.min.js');
 
         return gulp.src([html5shivPath])
             .pipe(gulp.dest(paths.toPath('dist.assets/vendors/html5shiv') + '/dist'));
-    };
+    };*/
 
-    const build = (done) => {
+    return (done) => {
         const fs = require('fs');
         const filePath = paths.toPath('dist.assets/vendors/modernizr');
 
@@ -105,6 +105,6 @@ module.exports = (gulp, $, options) => {
         }
     };
 
-    return gulp.series(html5shiv, build);
+    //return gulp.series(html5shiv, build);
 
 };

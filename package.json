@@ -41,7 +41,6 @@
     "Opera >= 30"
   ],
   "dependencies": {
-    "html5shiv": "3.7.3",
     "normalize.css": "8.0.0",
     "sass-mq": "4.0.2"
   },
