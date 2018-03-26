@@ -72,7 +72,7 @@ module.exports = (gulp, $, options) => {
         const filePath = paths.toPath('dist.assets/vendors/modernizr');
 
 
-        require('mkdirp').sync(filePath);
+        require('make-dir').sync(filePath);
 
         if (options.production) {
             const customizr = require('customizr');
