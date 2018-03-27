@@ -10,22 +10,44 @@ module.exports = (gulp, $, options) => {
     const del = require('del');
     const path = require('path');
     const log = require('fancy-log');
+    const multimatch = require('multimatch');
     const { cyan } = require('ansi-colors');
 
-    const unlinkFactory = (fileType) => {
+    const srcToDistResolve = ({ src, dist }) => (filepath) => {
+        // Simulating the {base: 'src'} used with gulp.src in the scripts task
+        const filePathFromSrc = path.relative(src, filepath);
+        // Concatenating the 'build' absolute path used by gulp.dest in the scripts task
+        return path.resolve(dist, filePathFromSrc);
+    };
 
-        const srcPath = paths.toPath(`src.assets/${fileType}`);
-        const destPath = paths.toPath(`dist.assets/${fileType}`);
+
+    const unlinkFactory = (resolver) => {
+
+        let resolve;
+
+        if (typeof resolver === 'function') {
+            resolve = resolver;
+        } else if (Array.isArray(resolver)) {
+            resolve = (filepath) => {
+                const matched = resolver.find(({ match }) => multimatch([filepath], match));
+                if (matched && matched.resolve) {
+                    return matched.resolve(filepath);
+                }
+                return false;
+            };
+        } else {
+            resolve = srcToDistResolve({
+                src: paths.toPath(`src.assets/${resolver}`),
+                dist: paths.toPath(`dist.assets/${resolver}`)
+            });
+        }
 
         return (filepath) => {
+            const destFilePath = resolve(filepath);
+            if (destFilePath) {
+                del(destFilePath);
+            }
 
-            // Simulating the {base: 'src'} used with gulp.src in the scripts task
-            const filePathFromSrc = path.relative(srcPath, filepath);
-
-            // Concatenating the 'build' absolute path used by gulp.dest in the scripts task
-            const destFilePath = path.resolve(destPath, filePathFromSrc);
-            console.log(destFilePath);
-            del(destFilePath);
         };
     };
 
@@ -77,7 +99,17 @@ module.exports = (gulp, $, options) => {
             'src.fixtures/*.json'
         ],
         task: 'views',
-        reload: true
+        reload: true,
+        unlink: unlinkFactory([
+            {
+                match: `src.views/{,*/}${viewmatch}`,
+                resolve(filepath) {
+                    let src = path.relative(paths.toPath('src.views'), filepath);
+                    src = src.replace(/\.(nunj\.html|njk)$/, '.html');
+                    return path.resolve(paths.toPath('dist.views'), src);
+                }
+            }
+        ])
     }];
 
     return (done) => {
