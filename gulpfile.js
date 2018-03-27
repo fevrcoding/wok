@@ -11,7 +11,7 @@ const gulp = require('gulp');
 const glob = require('globby');
 const _ = require('lodash');
 const log = require('fancy-log');
-const { red } = require('ansi-colors');
+const { red, yellow } = require('ansi-colors');
 const $ = require('gulp-load-plugins')();
 const { argv = {} } = require('yargs');
 const pkg = require('./package.json');
@@ -24,7 +24,8 @@ const banners = {
     vendors: `/*! ${pkg.description} v${pkg.version} - ${pkg.author.name} - Vendor package */\n`
 };
 
-const logError = (...args) => log(red(...args));
+const logError = _.flow(red, log);
+const warn = _.flow(yellow, log.warn);
 
 
 pkg.year = new Date().getFullYear();
@@ -60,7 +61,7 @@ if (fs.existsSync(path.join(optionsPath, 'paths.local.js'))) {
 }
 
 if (_.has(argv, 'remotehost')) {
-    logError('WARNING: param `--remotehost` is deprecated use `--target` instead');
+    warn('WARNING: param `--remotehost` is deprecated use `--target` instead');
     argv.target = argv.remotehost;
 }
 
@@ -73,6 +74,10 @@ _.forOwn({
     options[key] = _.get(argv, key, value);
 });
 
+if (options.viewmatch) {
+    logError('`viewmatch` property has been removed. Use `viewsExt: [...]`');
+    process.exit();
+}
 options.viewmatch = `*.{${options.viewsExt.join(',')}}`;
 
 //force production env
