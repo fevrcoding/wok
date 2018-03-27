@@ -8,5 +8,5 @@ module.exports = {
 
     buildOnly: false, //set to `true` when paired with Phing
 
-    viewmatch: '*.{html,njk}' //for php projects use: '*.{html,php,phtml}'
+    viewsExt: ['html', 'njk'] //for php projects use: '*.{html,php,phtml}'
 };

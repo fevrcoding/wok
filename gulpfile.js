@@ -73,6 +73,8 @@ _.forOwn({
     options[key] = _.get(argv, key, value);
 });
 
+options.viewmatch = `*.{${options.viewsExt.join(',')}}`;
+
 //force production env
 if (options.production) {
     process.env.NODE_ENV = 'production';
