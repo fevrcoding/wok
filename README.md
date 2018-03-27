@@ -20,7 +20,7 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 ## Supported browsers (via [browserslist](https://github.com/browserslist/browserslist))
 
 * last 1 major version
-* >= 1%
+* \>= 1%
 * Chrome >= 45
 * Firefox >= 38
 * Edge >= 12

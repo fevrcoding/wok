@@ -13,13 +13,13 @@ module.exports = (gulp, $, options) => {
     const glob = require('globby');
     const through = require('through2');
     const { map } = require('./lib/plugins');
-    const { createRenderer } = require('./lib/view-helpers');
+    const rendererCreator = require('./lib/renderers');
 
     const baseData = {};
     const paths = require('../gulp-config/paths');
     const viewPath = paths.toAbsPath('src.views');
     const fixturesPath = paths.toAbsPath('src.fixtures');
-    const { production, viewmatch, banners } = options;
+    const { production, banners, viewmatch } = options;
 
     let useRef = () => through.obj();
 
@@ -27,9 +27,7 @@ module.exports = (gulp, $, options) => {
     baseData.PRODUCTION = production;
     baseData.page = {};
 
-    const helpers = () => ({});
-
-    const renderer = createRenderer([viewPath, paths.toPath('src.documents')], options, helpers);
+    const renderer = rendererCreator([viewPath, paths.toPath('src.documents')], options);
 
     if (production) {
 
@@ -83,11 +81,16 @@ module.exports = (gulp, $, options) => {
             .pipe($.plumber({
                 errorHandler: $.notify.onError('Error: <%= error.message %>')
             }))
-            .pipe(map((code) => renderer.render(code, Object.assign({}, baseData, data || {}))))
+            .pipe(map((code, filepath) => {
+                const engine = renderer.match(filepath);
+                if (engine) {
+                    return engine.render(code, Object.assign({}, baseData, data || {}));
+                }
+                return code;
+            }))
             .pipe(useRef())
-            .pipe($.rename((filepath) => {
-                filepath.basename = filepath.basename.replace('.nunj', ''); //eslint-disable-line no-param-reassign
-                filepath.extname = '.html'; //eslint-disable-line no-param-reassign
+            .pipe($.rename({
+                extname: '.html'
             }))
             .pipe(htmlFilter)
             .pipe(gulp.dest(paths.toPath('dist.views')))
