@@ -3,7 +3,7 @@
  */
 
 const through = require('through2');
-const gutils = require('gulp-util');
+const PluginError = require('plugin-error');
 
 module.exports.map = function map(fn) {
 
@@ -18,14 +18,14 @@ module.exports.map = function map(fn) {
         if (file.isStream()) {
             this.emit(
                 'error',
-                new gutils.PluginError('gulp-boilerplate', 'Streaming not supported')
+                new PluginError('wok-map', 'Streaming not supported')
             );
         }
 
         try {
-            file.contents = new Buffer(mapFn(file.contents.toString(), file.path, file)); //eslint-disable-line no-param-reassign
+            file.contents = Buffer.from(mapFn(file.contents.toString(), file.path, file)); //eslint-disable-line no-param-reassign
         } catch (err) {
-            this.emit('error', new gutils.PluginError('gulp-boilerplate', err.toString()));
+            this.emit('error', new PluginError('wok-map', err.toString()));
         }
 
         this.push(file);
