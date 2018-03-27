@@ -105,7 +105,8 @@ module.exports = (gulp, $, options) => {
                 match: `src.views/{,*/}${viewmatch}`,
                 resolve(filepath) {
                     let src = path.relative(paths.toPath('src.views'), filepath);
-                    src = src.replace(/\.(nunj\.html|njk)$/, '.html');
+                    const ext = path.extname(filepath);
+                    src = src.replace(ext, '.html');
                     return path.resolve(paths.toPath('dist.views'), src);
                 }
             }
