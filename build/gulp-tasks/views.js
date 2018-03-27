@@ -87,6 +87,7 @@ module.exports = (gulp, $, options) => {
             .pipe(useRef())
             .pipe($.rename((filepath) => {
                 filepath.basename = filepath.basename.replace('.nunj', ''); //eslint-disable-line no-param-reassign
+                filepath.extname = '.html'; //eslint-disable-line no-param-reassign
             }))
             .pipe(htmlFilter)
             .pipe(gulp.dest(paths.toPath('dist.views')))

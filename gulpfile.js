@@ -98,6 +98,7 @@ glob.sync('./*.js', { cwd: taskPath }).forEach((taskFile) => {
 gulp.task('default', (() => {
 
     const tasks = [
+        'clean',
         'images',
         gulp.parallel('fonts', 'media', 'styles', 'scripts'),
         'modernizr',

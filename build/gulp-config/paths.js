@@ -29,6 +29,7 @@ const paths = {
     styles: 'stylesheets',
     css: 'stylesheets',
     images: 'images',
+    media: 'media',
     fonts: 'fonts',
     audio: 'audio',
     video: 'video',
