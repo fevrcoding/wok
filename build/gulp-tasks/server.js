@@ -6,7 +6,8 @@
 module.exports = (gulp, $, options) => {
 
     const paths = require('../gulp-config/paths');
-    const { port, ui } = options.hosts.development;
+    const { ui } = options.hosts.development;
+    const port = options.hosts.development.ports.connect || 8000;
 
     const serverConfigDefault = {
         notify: false,
