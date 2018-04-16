@@ -19,7 +19,7 @@ module.exports = (gulp, $, options) => {
     const paths = require('../gulp-config/paths');
     const viewPath = paths.toAbsPath('src.views');
     const fixturesPath = paths.toAbsPath('src.fixtures');
-    const { production, banners, viewmatch } = options;
+    const { production, banners, viewmatch, isWatching, enableNotify } = options;
 
     let useRef = () => through.obj();
 
@@ -97,6 +97,6 @@ module.exports = (gulp, $, options) => {
             .pipe(htmlFilter.restore)
             .pipe($.if(production, $.rev.manifest(paths.toPath('dist.root/dist.revmap'), { merge: true })))
             .pipe($.if(production, gulp.dest('.')))
-            .pipe($.if(options.isWatching, $.notify({ message: 'Views rendered', onLast: true })));
+            .pipe($.if(isWatching && enableNotify, $.notify({ message: 'Views rendered', onLast: true })));
     };
 };

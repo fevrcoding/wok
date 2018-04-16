@@ -12,7 +12,7 @@ module.exports = (gulp, $, options) => {
     const sassFunctions = require('./lib/sass-functions')(options);
     const noop = () => through.obj();
 
-    const { production, banners } = options;
+    const { production, banners, isWatching, enableNotify, livereload, buildHash } = options;
     let destPath = paths.toPath('dist.assets/css');
     let optimizePipe = noop;
 
@@ -34,12 +34,10 @@ module.exports = (gulp, $, options) => {
     }
 
     return () => {
-
-
         let reloadStream;
         function reloadStreamFn() {
-            if (options.isWatching && options.livereload) {
-                return reloadStream || (reloadStream = require('browser-sync').get(options.buildHash).stream); //eslint-disable-line no-return-assign
+            if (isWatching && livereload) {
+                return reloadStream || (reloadStream = require('browser-sync').get(buildHash).stream); //eslint-disable-line no-return-assign
             }
             return noop;
         }
@@ -64,7 +62,7 @@ module.exports = (gulp, $, options) => {
             .pipe($.sourcemaps.write('.'))
             .pipe(gulp.dest(paths.toPath('dist.assets/css')))
             .pipe(reloadStreamFn()({ match: '**/*.css' }))
-            .pipe($.if(options.isWatching, $.notify({ message: 'SASS Compiled', onLast: true })))
+            .pipe($.if(isWatching && enableNotify, $.notify({ message: 'SASS Compiled', onLast: true })))
             .pipe($.size({ title: 'styles' }));
     };
 
