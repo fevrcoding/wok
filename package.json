@@ -26,7 +26,9 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "lint:build": "eslint -c ./.eslintrc.json ./build/**/*.js"
+    "lint:build": "eslint -c ./.eslintrc.json ./build/**/*.js",
+    "dev": "gulp serve",
+    "build": "gulp --production"
   },
   "browserslist": [
     "last 1 major version",
