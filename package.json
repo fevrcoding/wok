@@ -27,7 +27,7 @@
   },
   "scripts": {
     "lint:build": "eslint -c ./.eslintrc.json ./build/**/*.js",
-    "dev": "gulp serve",
+    "start": "gulp serve",
     "build": "gulp --production"
   },
   "browserslist": [
