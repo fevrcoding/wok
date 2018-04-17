@@ -8,5 +8,7 @@ module.exports = {
 
     buildOnly: false, //set to `true` when paired with Phing
 
-    viewsExt: ['html', 'njk'] //for php projects use: '*.{html,php,phtml}'
+    viewsExt: ['html', 'njk'], //for php projects use: '*.{html,php,phtml}'
+
+    enableNotify: true //set to `false` to disable gulp-notify plugin
 };
