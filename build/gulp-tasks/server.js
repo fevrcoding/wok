@@ -5,8 +5,15 @@
 
 module.exports = (gulp, $, options) => {
 
+    const isPlainObject = require('lodash/isPlainObject');
     const paths = require('../gulp-config/paths');
-    const { port, ui } = options.hosts.development;
+    const { development } = options.hosts;
+
+    if (isPlainObject(development) === false) {
+        throw new TypeError('You should define a `development` host object in your hosts.js file');
+    }
+
+    const { port = 8000, ui } = development;
 
     const serverConfigDefault = {
         notify: false,
@@ -47,8 +54,7 @@ module.exports = (gulp, $, options) => {
             } : {
                 open: false,
                 ui: false
-            })
-        );
+            }));
 
         if (production) {
             serverConf.middleware.unshift(require('compression')());

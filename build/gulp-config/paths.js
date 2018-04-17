@@ -45,12 +45,12 @@ module.exports.merge = (p) => merge(paths, p);
 module.exports.get = (frag) => (frag ? paths[frag] : paths);
 
 //excludes glob patterns from match (ie: `*.xxx`)
-const translatePath = (pathMatch) => pathMatch.split('/').map((frag) => (frag.indexOf('*') === -1 ? get(paths, frag, frag) : frag));
+const translatePath = (pathMatch) => pathMatch.split('/').map((frag) => (frag.includes('*') === false ? get(paths, frag, frag) : frag));
 
 module.exports.toPath = (pathMatch) => {
-    return path.join(...translatePath(pathMatch));
+    return path.posix.join(...translatePath(pathMatch));
 };
 
 module.exports.toAbsPath = (pathMatch) => {
-    return path.join(process.cwd(), ...translatePath(pathMatch));
+    return path.posix.join(process.cwd(), ...translatePath(pathMatch));
 };
