@@ -17,9 +17,6 @@ module.exports = {
 
     development: {
         host: 'localhost',
-        ports: {
-            weinre: 8080,
-            connect: 8000 //optional port for standalone static server
-        }
+        port: 8000
     }
 };
