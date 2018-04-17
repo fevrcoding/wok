@@ -7,12 +7,10 @@ module.exports = (gulp, $, options) => {
 
     const path = require('path');
     const autoprefixer = require('autoprefixer');
-    const through = require('through2');
+    const { noop, getReloadStream, getNotifier } = require('./lib/plugins');
     const paths = require('../gulp-config/paths');
     const sassFunctions = require('./lib/sass-functions')(options);
-    const noop = () => through.obj();
-
-    const { production, banners, isWatching, enableNotify, livereload, buildHash } = options;
+    const { production, banners } = options;
     let destPath = paths.toPath('dist.assets/css');
     let optimizePipe = noop;
 
@@ -34,20 +32,14 @@ module.exports = (gulp, $, options) => {
     }
 
     return () => {
-        let reloadStream;
-        function reloadStreamFn() {
-            if (isWatching && livereload) {
-                return reloadStream || (reloadStream = require('browser-sync').get(buildHash).stream); //eslint-disable-line no-return-assign
-            }
-            return noop;
-        }
+
+        const { notify, errorHandler } = getNotifier(options);
+
 
         return gulp.src([
             paths.toPath('src.assets/styles/**/*.{sass,scss}')
         ])
-            .pipe($.plumber({
-                errorHandler: $.notify.onError('Error: <%= error.message %>')
-            }))
+            .pipe($.plumber({ errorHandler }))
             .pipe($.sourcemaps.init())
             .pipe($.sass({
                 precision: 10,
@@ -61,8 +53,8 @@ module.exports = (gulp, $, options) => {
             .pipe($.if(production, optimizePipe()))
             .pipe($.sourcemaps.write('.'))
             .pipe(gulp.dest(paths.toPath('dist.assets/css')))
-            .pipe(reloadStreamFn()({ match: '**/*.css' }))
-            .pipe($.if(isWatching && enableNotify, $.notify({ message: 'SASS Compiled', onLast: true })))
+            .pipe(getReloadStream(options)({ match: '**/*.css' }))
+            .pipe(notify({ message: 'SASS Compiled', onLast: true }))
             .pipe($.size({ title: 'styles' }));
     };
 
