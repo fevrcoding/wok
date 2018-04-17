@@ -4,8 +4,9 @@
 
 const through = require('through2');
 const PluginError = require('plugin-error');
+const notify = require('gulp-notify');
 
-module.exports.map = function map(fn) {
+const map = function map(fn) {
 
     const mapFn = typeof fn === 'function' ? fn : (val) => val;
 
@@ -32,4 +33,34 @@ module.exports.map = function map(fn) {
 
         cb();
     });
+};
+
+const noop = () => through.obj();
+
+let reloadStream;
+const getReloadStream = ({ isWatching, livereload, buildHash }) => {
+    if (isWatching && livereload) {
+        return reloadStream || (reloadStream = require('browser-sync').get(buildHash).stream); //eslint-disable-line no-return-assign
+    }
+    return noop;
+};
+
+const getNotifier = ({ isWatching, enableNotify }) => {
+    if (isWatching && enableNotify) {
+        return {
+            notify,
+            errorHandler: notify.onError('Error: <%= error.message %>')
+        };
+    }
+    return {
+        notify: noop,
+        errorHandler: true
+    };
+};
+
+module.exports = {
+    map,
+    noop,
+    getReloadStream,
+    getNotifier
 };
