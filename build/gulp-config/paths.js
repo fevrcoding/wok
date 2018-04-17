@@ -48,9 +48,9 @@ module.exports.get = (frag) => (frag ? paths[frag] : paths);
 const translatePath = (pathMatch) => pathMatch.split('/').map((frag) => (frag.indexOf('*') === -1 ? get(paths, frag, frag) : frag));
 
 module.exports.toPath = (pathMatch) => {
-    return path.join(...translatePath(pathMatch));
+    return path.posix.join(...translatePath(pathMatch));
 };
 
 module.exports.toAbsPath = (pathMatch) => {
-    return path.join(process.cwd(), ...translatePath(pathMatch));
+    return path.posix.join(process.cwd(), ...translatePath(pathMatch));
 };
