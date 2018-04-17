@@ -11,12 +11,13 @@ const datauri = require('datauri').sync;
 
 let types;
 
+/* eslint-disable prefer-destructuring */
 try {
     types = require('node-sass').types;
 } catch (e) {
     types = require('gulp-sass/node_modules/node-sass').types; //eslint-disable-line import/no-unresolved
 }
-
+/* eslint-enable prefer-destructuring */
 module.exports = (options) => {
 
     const paths = require('../../gulp-config/paths');

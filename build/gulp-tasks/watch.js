@@ -137,7 +137,7 @@ module.exports = (gulp, $, options) => {
             if (reload && bs) {
                 tasks.push(livereload);
             }
-            const watcher = gulp.watch(normalizePattern(pattern), gulp.series(...tasks))
+            const watcher = gulp.watch(normalizePattern(pattern), gulp.series(...tasks));
             if (typeof unlink === 'function') {
                 watcher.on('unlink', unlink);
             }
