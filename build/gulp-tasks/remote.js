@@ -32,7 +32,9 @@ const ftp = (host) => {
         throw new Error('[deploy] FTP: required `lftp` binary not found in PATH.');
     }
 
-    const { password, username, path, port = 21, protocol = 'ftp', src = paths.toPath('dist.root') } = host;
+    const {
+        password, username, path, port = 21, protocol = 'ftp', src = paths.toPath('dist.root')
+    } = host;
 
     const ftps = new FTPS({
         host: host.host,
@@ -70,6 +72,7 @@ const remote = (command, host, { excludes }) => {
 
     const sshCommands = {
 
+        /* eslint-disable function-paren-newline */
         backup: template(
             'mkdir -p <%= paths.get("backup") %>;' +
             'filecount=$(ls -t <%= paths.get("backup") %> | grep .tgz | wc -l);' +
@@ -95,6 +98,7 @@ const remote = (command, host, { excludes }) => {
             'done;' +
             'fi;'
         )({ paths })
+        /* eslint-enable function-paren-newline */
     };
 
 
@@ -165,8 +169,7 @@ const rsync = (host) => {
                     resolve();
                 }
             });
-        })
-    );
+        }));
 };
 
 const deployModules = {

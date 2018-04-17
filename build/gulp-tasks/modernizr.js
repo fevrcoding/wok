@@ -87,10 +87,8 @@ module.exports = (gulp, $, options) => {
 
                     log(logStr);
 
-                    log(
-                        'For optimal performances you might add a `defer` attribute to the script tag. ' +
-                        'Refer to https://github.com/Modernizr/Modernizr/issues/878#issuecomment-41448059 for guidelines'
-                    );
+                    log('For optimal performances you might add a `defer` attribute to the script tag. ' +
+                        'Refer to https://github.com/Modernizr/Modernizr/issues/878#issuecomment-41448059 for guidelines');
                 }
 
                 done();

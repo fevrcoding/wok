@@ -54,8 +54,7 @@ module.exports = (gulp, $, options) => {
             } : {
                 open: false,
                 ui: false
-            })
-        );
+            }));
 
         if (production) {
             serverConf.middleware.unshift(require('compression')());
