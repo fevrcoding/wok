@@ -12,7 +12,7 @@ module.exports = (gulp, $, options) => {
     const _ = require('lodash');
     const glob = require('globby');
     const through = require('through2');
-    const { map } = require('./lib/plugins');
+    const { map, getNotifier } = require('./lib/plugins');
     const rendererCreator = require('./lib/renderers');
 
     const baseData = {};
@@ -70,6 +70,7 @@ module.exports = (gulp, $, options) => {
     return () => {
 
         const htmlFilter = $.filter(`**/${viewmatch}`, { restore: true });
+        const { notify, errorHandler } = getNotifier(options);
 
         const data = glob.sync('{,*/}*.json', { cwd: fixturesPath }).reduce((obj, filename) => {
             const id = _.camelCase(filename.toLowerCase().replace('.json', ''));
@@ -78,9 +79,7 @@ module.exports = (gulp, $, options) => {
         }, {});
 
         return gulp.src([`${viewPath}/{,*/}${viewmatch}`, `!${viewPath}/{,*/}_*.*`])
-            .pipe($.plumber({
-                errorHandler: $.notify.onError('Error: <%= error.message %>')
-            }))
+            .pipe($.plumber({ errorHandler }))
             .pipe(map((code, filepath) => {
                 const engine = renderer.match(filepath);
                 if (engine) {
@@ -97,6 +96,6 @@ module.exports = (gulp, $, options) => {
             .pipe(htmlFilter.restore)
             .pipe($.if(production, $.rev.manifest(paths.toPath('dist.root/dist.revmap'), { merge: true })))
             .pipe($.if(production, gulp.dest('.')))
-            .pipe($.if(options.isWatching, $.notify({ message: 'Views rendered', onLast: true })));
+            .pipe(notify({ message: 'Views rendered', onLast: true }));
     };
 };

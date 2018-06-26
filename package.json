@@ -1,7 +1,7 @@
 {
   "name": "wok",
   "description": "A Static Website Boilerplate",
-  "version": "7.0.1",
+  "version": "7.1.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -26,7 +26,9 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "lint:build": "eslint -c ./.eslintrc.json ./build/**/*.js"
+    "lint:build": "eslint -c ./.eslintrc.json ./build/**/*.js",
+    "start": "gulp serve",
+    "build": "gulp --production"
   },
   "browserslist": [
     "last 1 major version",
