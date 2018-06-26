@@ -33,7 +33,7 @@ WOK is a loosely opinionated boilerplate for web development built with flexibil
 ## Requirements
 
 * Node.js >= 6.9.0 (we strongly suggest to use something like [nvm](https://github.com/creationix/nvm))
-* gulp cli (`npm install -g gulp`)
+* gulp cli (`npm install -g gulp-cli`)
 
 ## Installation
 
