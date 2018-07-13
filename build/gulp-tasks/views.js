@@ -77,8 +77,8 @@ module.exports = (gulp, $, options) => {
             obj[id] = JSON.parse(fs.readFileSync(path.join(fixturesPath, filename), { encoding: 'utf8' })); //eslint-disable-line no-param-reassign
             return obj;
         }, {});
-
-        return gulp.src([`${viewPath}/{,*/}${viewmatch}`, `!${viewPath}/{,*/}_*.*`])
+        console.log(viewPath, [`${viewPath}/{,*/}${viewmatch}`, `!${viewPath}/{,*/}_*.*`])
+        return gulp.src([`${viewPath}/{,*/}${viewmatch}`])
             .pipe($.plumber({ errorHandler }))
             .pipe(map((code, filepath) => {
                 const engine = renderer.match(filepath);
@@ -87,10 +87,10 @@ module.exports = (gulp, $, options) => {
                 }
                 return code;
             }))
-            .pipe(useRef())
             .pipe($.rename({
                 extname: '.html'
             }))
+            .pipe(useRef())
             .pipe(htmlFilter)
             .pipe(gulp.dest(paths.toPath('dist.views')))
             .pipe(htmlFilter.restore)
