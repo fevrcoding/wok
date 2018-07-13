@@ -55,9 +55,7 @@
     }
 
     .l-row {
-        @include clearfix;
-        margin-right: $grid-gutter-width / -2;
-        margin-left: $grid-gutter-width / -2;
+        @include make-row;
     }
 
     @include make-grid-columns;
