@@ -77,7 +77,7 @@ module.exports = (gulp, $, options) => {
             obj[id] = JSON.parse(fs.readFileSync(path.join(fixturesPath, filename), { encoding: 'utf8' })); //eslint-disable-line no-param-reassign
             return obj;
         }, {});
-        console.log(viewPath, [`${viewPath}/{,*/}${viewmatch}`, `!${viewPath}/{,*/}_*.*`])
+
         return gulp.src([`${viewPath}/{,*/}${viewmatch}`])
             .pipe($.plumber({ errorHandler }))
             .pipe(map((code, filepath) => {
