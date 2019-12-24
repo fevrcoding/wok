@@ -10,38 +10,38 @@
    ========================================================================== */
 
 .l-wrapper {
-    @include clearfix;
-    position: relative;
+  @include clearfix;
+  position: relative;
 }
 
 .l-container {
-    @include clearfix;
-    margin-right: auto;
-    margin-left: auto;
+  @include clearfix;
+  margin-right: auto;
+  margin-left: auto;
 
-    @if $grid-enabled {
-        padding-right: $grid-gutter-width / 2;
-        padding-left: $grid-gutter-width / 2;
+  @if $grid-enabled {
+    padding-right: $grid-gutter-width / 2;
+    padding-left: $grid-gutter-width / 2;
 
-        @if $grid-fluid-breakpoints {
-            //fluid layout till max width
-            max-width: $container-lg;
-        } @else {
-            //no need for breakpoint fallbacks, since it's explicitly set below!
-            @include mq(sm) {
-                width: $container-sm;
-            }
+    @if $grid-fluid-breakpoints {
+      //fluid layout till max width
+      max-width: $container-lg;
+    } @else {
+      //no need for breakpoint fallbacks, since it's explicitly set below!
+      @include mq(sm) {
+        width: $container-sm;
+      }
 
-            @include mq(md) {
-                width: $container-md;
-            }
+      @include mq(md) {
+        width: $container-md;
+      }
 
-            @include mq(lg) {
-                width: 100%;
-                max-width: $container-lg;
-            }
-        }
+      @include mq(lg) {
+        width: 100%;
+        max-width: $container-lg;
+      }
     }
+  }
 }
 
 /* Responsive Grid System
@@ -50,117 +50,117 @@
    ========================================================================== */
 
 @if $grid-enabled {
-    @-ms-viewport {
-        width: device-width;
-    }
+  @-ms-viewport {
+    width: device-width;
+  }
 
-    .l-row {
-        @include make-row;
-    }
+  .l-row {
+    @include make-row;
+  }
 
-    @include make-grid-columns;
-    // Extra small grid
-    //
-    // Columns, offsets, pushes, and pulls for extra small devices like
-    // smartphones.
-    @include make-grid-columns-float(xs);
-    @include make-grid($grid-columns, xs, width);
-    @include make-grid($grid-columns, xs, pull);
-    @include make-grid($grid-columns, xs, push);
-    @include make-grid($grid-columns, xs, offset);
-    // Small grid
-    //
-    // Columns, offsets, pushes, and pulls for the small device range, from phones
-    // to tablets.
-    @include mq(sm) {
-        @include make-grid-columns-float(sm);
-        @include make-grid($grid-columns, sm, width);
-        @include make-grid($grid-columns, sm, pull);
-        @include make-grid($grid-columns, sm, push);
-        @include make-grid($grid-columns, sm, offset);
-    }
+  @include make-grid-columns;
+  // Extra small grid
+  //
+  // Columns, offsets, pushes, and pulls for extra small devices like
+  // smartphones.
+  @include make-grid-columns-float(xs);
+  @include make-grid($grid-columns, xs, width);
+  @include make-grid($grid-columns, xs, pull);
+  @include make-grid($grid-columns, xs, push);
+  @include make-grid($grid-columns, xs, offset);
+  // Small grid
+  //
+  // Columns, offsets, pushes, and pulls for the small device range, from phones
+  // to tablets.
+  @include mq(sm) {
+    @include make-grid-columns-float(sm);
+    @include make-grid($grid-columns, sm, width);
+    @include make-grid($grid-columns, sm, pull);
+    @include make-grid($grid-columns, sm, push);
+    @include make-grid($grid-columns, sm, offset);
+  }
 
-    // Medium grid
-    //
-    // Columns, offsets, pushes, and pulls for the desktop device range.
-    @include mq(md) {
-        @include make-grid-columns-float(md);
-        @include make-grid($grid-columns, md, width);
-        @include make-grid($grid-columns, md, pull);
-        @include make-grid($grid-columns, md, push);
-        @include make-grid($grid-columns, md, offset);
-    }
+  // Medium grid
+  //
+  // Columns, offsets, pushes, and pulls for the desktop device range.
+  @include mq(md) {
+    @include make-grid-columns-float(md);
+    @include make-grid($grid-columns, md, width);
+    @include make-grid($grid-columns, md, pull);
+    @include make-grid($grid-columns, md, push);
+    @include make-grid($grid-columns, md, offset);
+  }
 
-    // Large grid
-    //
-    // Columns, offsets, pushes, and pulls for the large desktop device range.
-    @include mq(lg) {
-        @include make-grid-columns-float(lg);
-        @include make-grid($grid-columns, lg, width);
-        @include make-grid($grid-columns, lg, pull);
-        @include make-grid($grid-columns, lg, push);
-        @include make-grid($grid-columns, lg, offset);
-    }
+  // Large grid
+  //
+  // Columns, offsets, pushes, and pulls for the large desktop device range.
+  @include mq(lg) {
+    @include make-grid-columns-float(lg);
+    @include make-grid($grid-columns, lg, width);
+    @include make-grid($grid-columns, lg, pull);
+    @include make-grid($grid-columns, lg, push);
+    @include make-grid($grid-columns, lg, offset);
+  }
 }
 
 /* MQ Relative Visibility
    ========================================================================== */
 @if $grid-enabled {
-    @include mq(xs) {
+  @include mq(xs) {
 
-        .l-hidden--from-xs {
-            display: none !important; // scss-lint:disable ImportantRule
-        }
+    .l-hidden--from-xs {
+      display: none !important; // scss-lint:disable ImportantRule
     }
+  }
 
-    @include mq(sm) {
+  @include mq(sm) {
 
-        .l-hidden--from-sm {
-            display: none !important; // scss-lint:disable ImportantRule
-        }
+    .l-hidden--from-sm {
+      display: none !important; // scss-lint:disable ImportantRule
     }
+  }
 
-    @include mq(md) {
+  @include mq(md) {
 
-        .l-hidden--from-md {
-            display: none !important; // scss-lint:disable ImportantRule
-        }
+    .l-hidden--from-md {
+      display: none !important; // scss-lint:disable ImportantRule
     }
+  }
 
-    @include mq(lg) {
+  @include mq(lg) {
 
-        .l-hidden--from-lg {
-            display: none !important; // scss-lint:disable ImportantRule
-        }
+    .l-hidden--from-lg {
+      display: none !important; // scss-lint:disable ImportantRule
     }
+  }
 
-    @include mq($until: xs) {
+  @include mq($until: xs) {
 
-        .l-hidden--until-xs {
-            display: none !important; // scss-lint:disable ImportantRule
-        }
+    .l-hidden--until-xs {
+      display: none !important; // scss-lint:disable ImportantRule
     }
+  }
 
-    @include mq($until: sm) {
+  @include mq($until: sm) {
 
-        .l-hidden--until-sm {
-            display: none !important; // scss-lint:disable ImportantRule
-        }
+    .l-hidden--until-sm {
+      display: none !important; // scss-lint:disable ImportantRule
     }
+  }
 
-    @include mq($until: md) {
+  @include mq($until: md) {
 
-        .l-hidden--until-md {
-            display: none !important; // scss-lint:disable ImportantRule
-        }
+    .l-hidden--until-md {
+      display: none !important; // scss-lint:disable ImportantRule
     }
+  }
 
-    @include mq($until: lg) {
+  @include mq($until: lg) {
 
-        .l-hidden--until-lg {
-            display: none !important; // scss-lint:disable ImportantRule
-        }
+    .l-hidden--until-lg {
+      display: none !important; // scss-lint:disable ImportantRule
     }
+  }
 }
 
 /* Shared Layout Styles

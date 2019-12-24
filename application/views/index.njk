@@ -5,11 +5,11 @@
 
     {% include 'partials/_readme.html' %}
 
-    <h3>{{ readme._comment }}</h3>
-    <p>{{ helpers.lorem(10, 20) }}</p>
+    <h3>{{ comments._comment }}</h3>
+    <p>{{ faker.lorem.words(_.random(10, 20)) }}</p>
 
     {% markdown %}
-    {% include '../documents/readme.md' %}
+    {% include '../fixtures/readme.md' %}
     {% endmarkdown %}
 
 {% endblock %}

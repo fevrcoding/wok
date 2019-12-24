@@ -10,68 +10,68 @@
 
 @media print {
 
-    * {
-        background: transparent !important; // scss-lint:disable ImportantRule
-        color: #000 !important; // scss-lint:disable all
-        box-shadow: none !important; // scss-lint:disable ImportantRule
-        text-shadow: none !important; // scss-lint:disable ImportantRule
-    }
+  * {
+    background: transparent !important; // scss-lint:disable ImportantRule
+    color: #000 !important; // scss-lint:disable all
+    box-shadow: none !important; // scss-lint:disable ImportantRule
+    text-shadow: none !important; // scss-lint:disable ImportantRule
+  }
 
-    a,
-    a:visited {
-        color: #000 !important; // scss-lint:disable ImportantRule, ColorVariable
-        text-decoration: underline;
-    }
+  a,
+  a:visited {
+    color: #000 !important; // scss-lint:disable ImportantRule, ColorVariable
+    text-decoration: underline;
+  }
 
-    a[href]::after { // scss-lint:disable QualifyingElement
-        font-size: $font-size-default;
-        content: ' (' attr(href) ')';
-    }
+  a[href]::after { // scss-lint:disable QualifyingElement
+    font-size: $font-size-default;
+    content: ' (' attr(href) ')';
+  }
 
-    abbr[title]::after { // scss-lint:disable QualifyingElement
-        font-size: $font-size-default;
-        content: ' (' attr(title) ')';
-    }
-    // Don't show links for javascript/internal links
-    // scss-lint:disable QualifyingElement
-    a[href^="javascript:"]::after,
-    a[href^="#"]::after {
-        content: '';
-    }
+  abbr[title]::after { // scss-lint:disable QualifyingElement
+    font-size: $font-size-default;
+    content: ' (' attr(title) ')';
+  }
+  // Don't show links for javascript/internal links
+  // scss-lint:disable QualifyingElement
+  a[href^="javascript:"]::after,
+  a[href^="#"]::after {
+    content: '';
+  }
 
-    pre,
-    blockquote {
-        border: 1px solid #999; // scss-lint:disable ColorVariable
-        page-break-inside: avoid;
-    }
+  pre,
+  blockquote {
+    border: 1px solid #999; // scss-lint:disable ColorVariable
+    page-break-inside: avoid;
+  }
 
-    thead {
-        display: table-header-group;
-    }
+  thead {
+    display: table-header-group;
+  }
 
-    tr,
-    img {
-        page-break-inside: avoid;
-    }
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
 
-    img {
-        max-width: 100% !important; // scss-lint:disable ImportantRule
-    }
+  img {
+    max-width: 100% !important; // scss-lint:disable ImportantRule
+  }
 
-    @page {
-        margin: 0.5cm;
-    }
+  @page {
+    margin: 0.5cm;
+  }
 
-    p,
-    h2,
-    h3 {
-        color: $color-dark !important; // scss-lint:disable ImportantRule
-        widows: 3;
-        orphans: 3;
-    }
+  p,
+  h2,
+  h3 {
+    color: $color-dark !important; // scss-lint:disable ImportantRule
+    widows: 3;
+    orphans: 3;
+  }
 
-    h2,
-    h3 {
-        page-break-after: avoid;
-    }
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
 }

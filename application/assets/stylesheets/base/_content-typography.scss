@@ -2,72 +2,72 @@
 //   Content typography and styles
 //  ============================================================================
 %typography {
-    overflow-wrap: break-word;
-    color: $color-text;
-    word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: $color-text;
+  word-wrap: break-word;
 
-    a {
-        color: $color-link;
-        text-decoration: underline;
+  a {
+    color: $color-link;
+    text-decoration: underline;
 
-        &:hover {
-            text-decoration: none;
-        }
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  p {
+    margin-top: 0;
+  }
+
+  ol,
+  ul {
+    overflow: hidden;
+    margin-top: 0.1em;
+    padding-left: 1.5em;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-right: auto;
+    margin-bottom: 1em;
+    margin-left: auto;
+  }
+
+  table {
+    overflow-x: auto;
+    margin-bottom: 2em;
+
+    &.table--large {
+      width: 100%;
     }
 
-    p {
-        margin-top: 0;
+    td,
+    th {
+      padding: 0.2em 0.5em;
+      border-bottom: 1px solid $color-border;
+      text-align: left;
     }
 
-    ol,
-    ul {
-        overflow: hidden;
-        margin-top: 0.1em;
-        padding-left: 1.5em;
+    th {
+      font-weight: bold;
+      text-align: center;
     }
 
-    img {
-        display: block;
-        max-width: 100%;
-        height: auto;
-        margin-right: auto;
-        margin-bottom: 1em;
-        margin-left: auto;
+    th.numeric { // scss-lint:disable QualifyingElement
+      text-align: right;
     }
+  }
 
-    table {
-        overflow-x: auto;
-        margin-bottom: 2em;
+  blockquote {
+    margin-bottom: 2em;
+    font-style: italic;
+  }
 
-        &.table--large {
-            width: 100%;
-        }
-
-        td,
-        th {
-            padding: 0.2em 0.5em;
-            border-bottom: 1px solid $color-border;
-            text-align: left;
-        }
-
-        th {
-            font-weight: bold;
-            text-align: center;
-        }
-
-        th.numeric { // scss-lint:disable QualifyingElement
-            text-align: right;
-        }
-    }
-
-    blockquote {
-        margin-bottom: 2em;
-        font-style: italic;
-    }
-
-    iframe,
-    object,
-    embed {
-        width: 100%;
-    }
+  iframe,
+  object,
+  embed {
+    width: 100%;
+  }
 }

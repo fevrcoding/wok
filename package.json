@@ -1,7 +1,7 @@
 {
   "name": "wok",
   "description": "A Static Website Boilerplate",
-  "version": "7.1.0",
+  "version": "8.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -21,97 +21,51 @@
       "url": "https://github.com/quincia"
     }
   ],
-  "main": "gulpfile.js",
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=10.0.0"
   },
   "scripts": {
-    "lint:build": "eslint -c ./.eslintrc.json ./build/**/*.js",
     "start": "gulp serve",
     "build": "gulp --production"
   },
-  "browserslist": [
-    "last 1 major version",
-    ">= 1%",
-    "Chrome >= 45",
-    "Firefox >= 38",
-    "Edge >= 12",
-    "Explorer >= 10",
-    "iOS >= 9",
-    "Safari >= 9",
-    "Android >= 4.4",
-    "Opera >= 30"
-  ],
   "dependencies": {
-    "normalize.css": "8.0.0",
-    "sass-mq": "4.0.2"
+    "normalize.css": "^8.0.0",
+    "sass-mq": "^4.0.2"
   },
   "devDependencies": {
-    "ansi-colors": "^1.1.0",
-    "autoprefixer": "8.2.0",
-    "babel-core": "6.26.0",
-    "babel-eslint": "8.2.2",
-    "babel-plugin-transform-runtime": "6.23.0",
-    "babel-preset-env": "1.6.1",
-    "babel-preset-stage-2": "6.24.1",
-    "babel-runtime": "6.26.0",
-    "browser-sync": "2.23.6",
-    "compression": "^1.7.2",
-    "customizr": "https://github.com/doctyper/customizr/tarball/develop",
-    "datauri": "1.1.0",
-    "del": "3.0.0",
-    "eslint": "4.18.2",
-    "eslint-config-airbnb-base": "12.1.0",
-    "eslint-plugin-import": "2.9.0",
-    "fancy-log": "^1.3.2",
-    "ftps": "1.1.0",
-    "globby": "^8.0.1",
+    "@babel/core": "^7.6.2",
+    "@wok-cli/core": "^1.0.0",
+    "@wok-cli/eslint-config-wok": "^1.0.0",
+    "@wok-cli/plugin-deploy-lftp": "^1.0.0",
+    "@wok-cli/plugin-deploy-rsync": "^1.0.0",
+    "@wok-cli/plugin-notifier": "^1.0.0",
+    "@wok-cli/preset-standard": "^1.0.2",
+    "@wok-cli/stylelint-config-wok": "^1.0.0",
+    "@wok-cli/task-ssh": "^1.0.0",
+    "@wok-cli/tasks": "^1.0.0",
+    "documentation": "^12.1.2",
+    "eslint": ">=6.5.1",
     "gulp": "^4.0.0",
-    "gulp-babel": "7.0.1",
-    "gulp-bump": "3.1.0",
-    "gulp-changed": "3.2.0",
-    "gulp-clean-css": "3.9.3",
-    "gulp-concat": "2.6.1",
-    "gulp-eslint": "^4.0.2",
-    "gulp-filter": "5.1.0",
-    "gulp-header": "2.0.5",
-    "gulp-if": "2.0.2",
-    "gulp-imagemin": "4.1.0",
-    "gulp-load-plugins": "1.5.0",
-    "gulp-notify": "3.2.0",
-    "gulp-plumber": "1.2.0",
-    "gulp-postcss": "7.0.1",
-    "gulp-rename": "1.2.2",
-    "gulp-rev": "8.1.1",
-    "gulp-rev-replace": "0.4.4",
-    "gulp-sass": "3.2.1",
-    "gulp-size": "3.0.0",
-    "gulp-sourcemaps": "2.6.4",
-    "gulp-stylelint": "7.0.0",
-    "gulp-uglify": "3.0.0",
-    "gulp-useref": "3.1.5",
-    "hasbin": "1.2.3",
-    "image-size": "0.6.2",
-    "lazypipe": "1.0.1",
-    "lodash": "4.17.5",
-    "lorem-ipsum": "1.0.4",
-    "make-dir": "^1.2.0",
-    "marked": "0.3.19",
-    "modernizr": "3.6.0",
-    "multimatch": "^2.1.0",
-    "node-sass": "4.8.3",
-    "nunjucks": "3.1.2",
-    "nunjucks-markdown": "2.0.1",
-    "plugin-error": "^1.0.1",
-    "prompts": "^0.1.8",
-    "rsyncwrapper": "2.0.1",
-    "semver": "5.5.0",
-    "ssh2": "0.6.0",
-    "stylelint": "9.1.3",
-    "stylelint-config-standard": "18.2.0",
-    "stylelint-order": "0.8.1",
-    "stylelint-scss": "2.5.0",
-    "through2": "2.0.3",
-    "yargs": "11.0.0"
+    "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
+    "stylelint": "^12.0.0"
+  },
+  "browserslist": [
+    ">= 1%",
+    "last 1 Chrome version",
+    "last 1 ChromeAndroid version",
+    "last 1 Edge version",
+    "last 1 Firefox version",
+    "last 1 iOS version",
+    "last 1 Safari version",
+    "not ie < 11"
+  ],
+  "eslintConfig": {
+    "extends": "@wok-cli/eslint-config-wok/node"
+  },
+  "stylelint": {
+    "extends": [
+      "@wok-cli/stylelint-config-wok"
+    ]
   }
 }

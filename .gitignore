@@ -116,4 +116,5 @@ www/*
 !www/favicon.ico
 var/tmp
 _tmp
-build/gulp-config/*.local.js
+wok.config.local.js
+.wokrc.local.json

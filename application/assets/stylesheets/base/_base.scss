@@ -14,8 +14,8 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 html,
@@ -23,23 +23,23 @@ button,
 input,
 select,
 textarea {
-    color: $color-text;
+  color: $color-text;
 }
 
 html,
 body {
-    line-height: 1.2;
+  line-height: 1.2;
 }
 
 html {
-    font-size: percentage($font-size-default / 16px); //16px
+  font-size: percentage($font-size-default / 16px); //16px
 }
 
 body {
-    min-width: 320px;
-    background: $color-bg;
-    color: $color-text;
-    font-family: $font-family-base;
+  min-width: 320px;
+  background: $color-bg;
+  color: $color-text;
+  font-family: $font-family-base;
 }
 
 //Remove text-shadow in selection highlight: h5bp.com/i
@@ -47,13 +47,13 @@ body {
 //Customize the background color to match your design.
 
 ::-moz-selection { // scss-lint:disable VendorPrefix
-    color: $color-text-selection;
-    text-shadow: none;
+  color: $color-text-selection;
+  text-shadow: none;
 }
 
 ::selection {
-    color: $color-text-selection;
-    text-shadow: none;
+  color: $color-text-selection;
+  text-shadow: none;
 }
 
 // Remove the gap between images and the bottom of their containers: h5bp.com/i/440
@@ -64,18 +64,18 @@ iframe,
 svg,
 video,
 img {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 // A better looking default horizontal rule
 
 hr {
-    display: block;
-    height: 1px;
-    margin: 1rem 0;
-    padding: 0;
-    border: 0;
-    border-top: 1px solid $color-border;
+  display: block;
+  height: 1px;
+  margin: 1rem 0;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid $color-border;
 }
 
 
@@ -83,19 +83,19 @@ hr {
 // Remove default fieldset styles.
 
 fieldset {
-    margin: 0;
-    padding: 0;
-    border: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 // Allow only vertical resizing of textareas.
 
 textarea {
-    resize: vertical;
+  resize: vertical;
 }
 
 input::-moz-focus-inner {
-    border: 0;
+  border: 0;
 }
 
 
@@ -110,39 +110,39 @@ input::-moz-focus-inner {
    ========================================================================== */
 
 %heading-base {
-    margin: 0 0 0.2em;
-    //color: $color-text
-    font-family: $font-family-h;
-    font-weight: font-weight(bold);
+  margin: 0 0 0.2em;
+  //color: $color-text
+  font-family: $font-family-h;
+  font-weight: font-weight(bold);
 }
 
 @include classed-headings {
-    @extend %heading-base;
+  @extend %heading-base;
 }
 
 @each $font-head-num, $font-head-size in $font-sizes-headings {
 
-    h#{$font-head-num},
-    .h#{$font-head-num} {
-        font-size: font-size($font-head-size);
-        line-height: $font-lheight-h;
-    }
+  h#{$font-head-num},
+  .h#{$font-head-num} {
+    font-size: font-size($font-head-size);
+    line-height: $font-lheight-h;
+  }
 }
 
 p {
-    margin: 0 0 0.2em;
-    line-height: $font-lheight-h;
+  margin: 0 0 0.2em;
+  line-height: $font-lheight-h;
 }
 
 a:not([class]) {
-    color: $color-link;
-    text-decoration: underline;
+  color: $color-link;
+  text-decoration: underline;
 
-    &:hover {
-        //set to important so that hover is hardly overwritten by other styles
-        color: $color-link-hover !important; // scss-lint:disable ImportantRule
-        text-decoration: none;
-    }
+  &:hover {
+    //set to important so that hover is hardly overwritten by other styles
+    color: $color-link-hover !important; // scss-lint:disable ImportantRule
+    text-decoration: none;
+  }
 }
 
 /* ==========================================================================
@@ -151,36 +151,36 @@ a:not([class]) {
 
 @if $mq-responsive {
 
-    body::after,
-    body::before {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: z-index(behind) - 2;
-        display: block;
-        visibility: hidden;
-        overflow: hidden;
-        width: 1px;
-        height: 1px;
-    }
+  body::after,
+  body::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: z-index(behind) - 2;
+    display: block;
+    visibility: hidden;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+  }
 
-    body::after {
-        content: 'xs';
+  body::after {
+    content: 'xs';
 
-        @each $mq-key, $mq-value in $mq-breakpoints {
-            @include mq($mq-key) {
-                content: '#{$mq-key}';
-            }
-        }
+    @each $mq-key, $mq-value in $mq-breakpoints {
+      @include mq($mq-key) {
+        content: '#{$mq-key}';
+      }
     }
+  }
 
-    body::before {
-        content: '/#{map-to-JSON($mq-breakpoints)}/'; // scss-lint:disable NameFormat
-    }
+  body::before {
+    content: '/#{map-to-JSON($mq-breakpoints)}/'; // scss-lint:disable NameFormat
+  }
 
-    //fallback
-    head {
-        font-family: '/#{map-to-JSON($mq-breakpoints)}/'; // scss-lint:disable NameFormat
-    }
+  //fallback
+  head {
+    font-family: '/#{map-to-JSON($mq-breakpoints)}/'; // scss-lint:disable NameFormat
+  }
 }
 

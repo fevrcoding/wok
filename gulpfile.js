@@ -1,163 +1,31 @@
-/**
- * Grunt build tasks
- */
+const $ = require("@wok-cli/core");
+const { deploy } = require("@wok-cli/tasks");
 
-/*eslint-env node */
-/*eslint one-var: 0, no-new: 0, func-names: 0, strict: 0, import/no-extraneous-dependencies: 0 */
+const preset = require("@wok-cli/preset-standard");
+const ssh = require("@wok-cli/task-ssh");
+const rsync = require("@wok-cli/plugin-deploy-rsync");
+const lftp = require("@wok-cli/plugin-deploy-lftp");
 
-const fs = require('fs');
-const path = require('path');
-const gulp = require('gulp');
-const glob = require('globby');
-const _ = require('lodash');
-const log = require('fancy-log');
-const { red, yellow } = require('ansi-colors');
-const $ = require('gulp-load-plugins')();
-const { argv = {} } = require('yargs');
-const pkg = require('./package.json');
-const paths = require('./build/gulp-config/paths');
-
-const taskPath = path.join(process.cwd(), 'build', 'gulp-tasks');
-const optionsPath = path.join(process.cwd(), 'build', 'gulp-config');
-const banners = {
-    application: `/*! ${pkg.description} v${pkg.version} - ${pkg.author.name} - Copyright ${pkg.year} ${pkg.author.company} */\n`,
-    vendors: `/*! ${pkg.description} v${pkg.version} - ${pkg.author.name} - Vendor package */\n`
-};
-
-const logError = _.flow(red, log);
-const warn = _.flow(yellow, log.warn);
-
-
-pkg.year = new Date().getFullYear();
-
-
-//load configuration from files
-const options = ['hosts', 'properties'].reduce((obj, filename) => {
-
-    const configFilePath = path.join(optionsPath, `${filename}.js`);
-    const configLocalFilePath = path.join(optionsPath, `${filename}.local.js`);
-    let conf = {};
-
-    if (fs.existsSync(configFilePath)) {
-        Object.assign(conf, require(configFilePath));
-    }
-
-    if (fs.existsSync(configLocalFilePath)) {
-        conf = _.merge(conf, require(configLocalFilePath));
-    }
-
-    if (filename === 'properties') {
-        return Object.assign(obj, conf);
-    }
-
-    obj[filename] = conf; //eslint-disable-line no-param-reassign
-
-    return obj;
-
-}, {});
-
-if (fs.existsSync(path.join(optionsPath, 'paths.local.js'))) {
-    paths.merge(require(path.join(optionsPath, 'paths.local.js')));
-}
-
-if (_.has(argv, 'remotehost')) {
-    warn('WARNING: param `--remotehost` is deprecated use `--target` instead');
-    argv.target = argv.remotehost;
-}
-
-
-_.forOwn({
-    production: false,
-    command: null,
-    target: null //be explicit!
-}, (value, key) => {
-    options[key] = _.get(argv, key, value);
+const backup = $.task(ssh, { command: "backup" });
+const sync = $.task(deploy, {
+  src: "<%= paths.dist.root %>/",
+  exclude: [".svn*", ".tmp*", ".idea*", ".sass-cache*", "*.sublime-*"]
 });
 
-if (options.viewmatch) {
-    logError('`viewmatch` property has been removed. Use `viewsExt: [...]`');
-    process.exit();
-}
-options.viewmatch = `*.{${options.viewsExt.join(',')}}`;
+sync.tap("strategy", "rsync", rsync);
+sync.tap("strategy", "lftp", lftp);
 
-//force production env
-if (options.production) {
-    process.env.NODE_ENV = 'production';
-}
+const wok = preset($);
 
-if (options.target === null) {
-    options.target = options.production ? 'production' : 'development';
-}
-
-options.pkg = pkg;
-options.banners = banners;
-
-//unique build identifier
-options.buildHash = `buildhash${(Date.now())}`;
-
-
-glob.sync('./*.js', { cwd: taskPath }).forEach((taskFile) => {
-    const name = path.basename(taskFile, '.js');
-    const task = require(`${taskPath}/${taskFile}`)(gulp, $, options);
-    gulp.task(name, task);
-});
-
-gulp.task('default', (() => {
-
-    const tasks = [
-        'clean',
-        'images',
-        gulp.parallel('fonts', 'media', 'styles', 'scripts'),
-        'modernizr',
-        'views'
-    ];
-
-    if (options.styleguideDriven) {
-        tasks.push('styleguide');
+wok
+  .globalHook("watcher", "notifier", require("@wok-cli/plugin-notifier"))
+  .params("watch", {
+    notifier: {
+      message: "Updated!"
     }
+  })
+  .set("remote", ssh)
+  .set("deploy")
+  .compose(tasks => $.series(tasks.default, backup, sync));
 
-    if (options.production) {
-        tasks.push('rev');
-    }
-
-    return gulp.series(...tasks);
-})());
-
-gulp.task('serve', gulp.series('default', gulp.parallel('server', 'watch')));
-
-gulp.task('dev', (done) => {
-    logError('`dev` task has been removed. Please run `gulp`');
-    done();
-});
-
-
-gulp.task('dist', (done) => {
-    logError('`dist` task has been removed. Please run `gulp --production`');
-    done();
-});
-
-if (options.buildOnly) {
-
-    const buildCheck = (done) => {
-        const testHash = require('crypto').createHash('md5').update(fs.readFileSync(__filename, { encoding: 'utf8' })).digest('hex');
-
-        if (!argv.grunthash) {
-            logError('Cannot run this task directly');
-            done();
-            return;
-        }
-
-        if (argv.grunthash !== testHash) {
-            logError('Safety hash check not passed');
-            done();
-            return;
-        }
-        done();
-    };
-
-    gulp.task('build', gulp.series(buildCheck, 'default'));
-
-} else {
-
-    gulp.task('deploy', gulp.series('default', 'remote'));
-}
+module.exports = wok.resolve();

@@ -8,27 +8,27 @@
 // ==========================================================================
 
 @function perc($width, $container-width) {
-    @return percentage($width / $container-width);
+  @return percentage($width / $container-width);
 }
 
 @function perc-image-width($image-src, $container-width) {
-    @return percentage(image-width($image-src) / $container-width);
+  @return percentage(image-width($image-src) / $container-width);
 }
 
 @function strip-units($value) {
-    @return $value / ($value * 0 + 1);
+  @return $value / ($value * 0 + 1);
 }
 
 @function z-index($level: 'base') {
-    @return map-get($layers, $level);
+  @return map-get($layers, $level);
 }
 
 @function vw($width, $viewport-reference-width: $viewport-width) {
-    @return (strip-units($width) / strip-units($viewport-reference-width)) * 100 + vw;
+  @return (strip-units($width) / strip-units($viewport-reference-width)) * 100 + vw;
 }
 
 @function vh($height, $viewport-reference-height: $viewport-height) {
-    @return (strip-units($height) / strip-units($viewport-reference-height)) * 100 + vh;
+  @return (strip-units($height) / strip-units($viewport-reference-height)) * 100 + vh;
 }
 
 
@@ -36,119 +36,119 @@
 // ==========================================================================
 
 @mixin boost-performance ($translate: true) {
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 
-    @if ($translate) {
-        transform: translate3d(0, 0, 0);
-        will-change: transform;
-    }
+  @if ($translate) {
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
 }
 
 @mixin clearfix {
 
-    &::after {
-        display: table;
-        clear: both;
-        content: "";
-    }
+  &::after {
+    display: table;
+    clear: both;
+    content: "";
+  }
 }
 
 @mixin ir($image-url, $context: false) {
-    width: image-width($image-url);
-    height: image-height($image-url);
-    background: image-url($image-url) no-repeat 0 0;
-    background-size: 100% auto;
+  width: image-width($image-url);
+  height: image-height($image-url);
+  background: image-url($image-url) no-repeat 0 0;
+  background-size: 100% auto;
 }
 
 @mixin img-responsive($display: block) {
-    display: $display;
-    max-width: 100%;
-    height: auto;
+  display: $display;
+  max-width: 100%;
+  height: auto;
 }
 
 @mixin scrollbar-custom {
 
-    &::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
 
-    &::-webkit-scrollbar-button {
-        display: none;
-        width: 0;
-        height: 0;
-    }
+  &::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
 
-    &::-webkit-scrollbar-corner {
-        background-color: transparent;
-    }
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
 
-    &::-webkit-scrollbar-thumb {
-        background-color: rgba($color-light, 0.3);
-    }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba($color-light, 0.3);
+  }
 }
 
 //see https://github.com/tinganho/compass-placeholder
 @mixin placeholder {
 
-    &::-webkit-input-placeholder {
-        @content;
-    }
+  &::-webkit-input-placeholder {
+    @content;
+  }
 
-    &::-moz-placeholder {
-        @content;
-    }
+  &::-moz-placeholder {
+    @content;
+  }
 
-    &:-moz-placeholder {
-        @content;
-    }
+  &:-moz-placeholder {
+    @content;
+  }
 
-    &:-ms-input-placeholder {
-        @content;
-    }
+  &:-ms-input-placeholder {
+    @content;
+  }
 }
 
 @mixin classed-headings($headings...) {
-    @if length($headings) == 0 {
-        $headings: map-keys($font-sizes-headings);
-    }
-    $selectors: ();
-    @each $i in $headings {
-        $current-heading: nth($headings, $i);
-        $selector: unquote("h#{$current-heading}, .h#{$current-heading}");
-        $selectors: append($selectors, $selector, comma);
-    }
+  @if length($headings) == 0 {
+    $headings: map-keys($font-sizes-headings);
+  }
+  $selectors: ();
+  @each $i in $headings {
+    $current-heading: nth($headings, $i);
+    $selector: unquote("h#{$current-heading}, .h#{$current-heading}");
+    $selectors: append($selectors, $selector, comma);
+  }
 
-    #{$selectors} {
-        @content;
-    }
+  #{$selectors} {
+    @content;
+  }
 }
 
 @mixin triangle($color: $color-dark, $size: '5px', $direction: 'up') {
-    width: 0;
-    height: 0;
+  width: 0;
+  height: 0;
 
-    @if $direction == 'up' {
-        border-right: $size solid transparent;
-        border-bottom: $size solid $color;
-        border-left: $size solid transparent;
-    }
-    @if $direction == 'down' {
-        border-top: $size solid $color;
-        border-right: $size solid transparent;
-        border-left: $size solid transparent;
-    }
-    @if $direction == 'right' {
-        border-top: $size solid transparent;
-        border-bottom: $size solid transparent;
-        border-left: $size solid $color;
-    }
-    @if $direction == 'left' {
-        border-top: $size solid transparent;
-        border-right: $size solid $color;
-        border-bottom: $size solid transparent;
-    }
+  @if $direction == 'up' {
+    border-right: $size solid transparent;
+    border-bottom: $size solid $color;
+    border-left: $size solid transparent;
+  }
+  @if $direction == 'down' {
+    border-top: $size solid $color;
+    border-right: $size solid transparent;
+    border-left: $size solid transparent;
+  }
+  @if $direction == 'right' {
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: $size solid $color;
+  }
+  @if $direction == 'left' {
+    border-top: $size solid transparent;
+    border-right: $size solid $color;
+    border-bottom: $size solid transparent;
+  }
 }
 
 
@@ -157,71 +157,71 @@
 // ==========================================================================
 
 @function em($pixels, $context: $font-size-default) {
-    @if (unitless($pixels)) {
-        $pixels: $pixels * 1px;
-    }
+  @if (unitless($pixels)) {
+    $pixels: $pixels * 1px;
+  }
 
-    @if (unitless($context)) {
-        $context: $context * 1px;
-    }
-    @return #{$pixels / $context}em;
+  @if (unitless($context)) {
+    $context: $context * 1px;
+  }
+  @return #{$pixels / $context}em;
 }
 
 @function rem($pixels) {
-    @if (unitless($pixels)) {
-        $pixels: $pixels * 1px;
-    }
-    @return #{$pixels / $font-size-default}rem;
+  @if (unitless($pixels)) {
+    $pixels: $pixels * 1px;
+  }
+  @return #{$pixels / $font-size-default}rem;
 }
 
 
 @function font-size($size, $rem: true) {
-    $result: $size;
-    @if map-has-key($font-sizes, $size) {
-        $result: map-get($font-sizes, $size);
-    }
+  $result: $size;
+  @if map-has-key($font-sizes, $size) {
+    $result: map-get($font-sizes, $size);
+  }
 
-    @if $rem == true {
-        @return rem($result);
-    }
+  @if $rem == true {
+    @return rem($result);
+  }
 
-    @return $result;
+  @return $result;
 }
 
 @function font-weight($weight) {
-    @if map-has-key($font-weights, $weight) {
-        @return map-get($font-weights, $weight);
-    } @else {
-        @warn "Weight #{$weight} undefined";
-    }
+  @if map-has-key($font-weights, $weight) {
+    @return map-get($font-weights, $weight);
+  } @else {
+    @warn "Weight #{$weight} undefined";
+  }
 }
 
 @function line-height($size, $context: m) {
-    $context-size: font-size($context, false);
-    @return em($size, $context-size);
+  $context-size: font-size($context, false);
+  @return em($size, $context-size);
 }
 
 @mixin text-ellipsis() {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 @mixin visually-hidden {
-    position: absolute;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
 }
 
 @mixin reset-typography($font-weight: normal, $line-height: inherit) {
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: $font-size-default;
-    font-weight: $font-weight;
-    line-height: $line-height;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: $font-size-default;
+  font-weight: $font-weight;
+  line-height: $line-height;
 }

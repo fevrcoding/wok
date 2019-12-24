@@ -2,7 +2,7 @@
 
 @if build-env() != 'production' {
 
-    img[id^="chromeperfectpixel"] { // scss-lint:disable QualifyingElement
-        max-width: none !important; // scss-lint:disable ImportantRule
-    }
+  img[id^="chromeperfectpixel"] { // scss-lint:disable QualifyingElement
+    max-width: none !important; // scss-lint:disable ImportantRule
+  }
 }
