@@ -39,7 +39,7 @@
     "@wok-cli/plugin-deploy-lftp": "^1.0.0",
     "@wok-cli/plugin-deploy-rsync": "^1.0.0",
     "@wok-cli/plugin-notifier": "^1.0.0",
-    "@wok-cli/preset-standard": "^1.0.2",
+    "@wok-cli/preset-standard": "^1.0.4",
     "@wok-cli/stylelint-config-wok": "^1.0.0",
     "@wok-cli/task-ssh": "^1.0.0",
     "@wok-cli/tasks": "^1.0.0",
