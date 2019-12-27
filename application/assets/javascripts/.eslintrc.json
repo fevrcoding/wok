@@ -1,35 +1,3 @@
 {
-    "extends": [
-        "airbnb-base"
-    ],
-
-    "env": {
-        "commonjs": true,
-        "es6": true,
-        "browser": true
-    },
-
-    "globals": {
-        "Modernizr": true
-    },
-
-    "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "experimentalObjectRestSpread": false,
-            "jsx": false
-        }
-    },
-
-    "rules": {
-        "indent": [2, 4],
-        "no-multiple-empty-lines": [2, { "max": 3 }],
-        "spaced-comment": 0,
-        "comma-dangle": [2, "never"],
-        "eol-last": [1, "never"],
-        "padded-blocks": [1, { "classes": "always" }],
-        "max-len": 0,
-        "arrow-parens": 0
-    }
-}
+    "extends": "@wok-cli/eslint-config-wok/web"
+  }
