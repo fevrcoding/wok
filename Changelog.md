@@ -27,3 +27,7 @@ As a special case, images will be minified when the `--production` flag is set.
 ## Stylesheets
 
 We now use the `sass` (Dart) package instead of `node-sass` to provide support for the new [module features](https://sass-lang.com/blog/the-module-system-is-launched). 
+
+## JavaScript
+
+- removed babel-polyfill CDN (deprecated) in favor of latest [core-js](https://github.com/zloirock/core-js).
