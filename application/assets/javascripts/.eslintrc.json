@@ -1,3 +1,9 @@
 {
-    "extends": "@wok-cli/eslint-config-wok/web"
-  }
+    "extends": "@wok-cli/eslint-config-wok/web",
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "indent": ["error", 4]
+    }
+}

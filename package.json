@@ -37,7 +37,7 @@
     "@wok-cli/core": "^1.0.0",
     "@wok-cli/eslint-config-wok": "^1.0.0",
     "@wok-cli/preset-standard": "^1.0.4",
-    "@wok-cli/preset-wok": "^1.0.0",
+    "@wok-cli/preset-wok": "^1.0.2",
     "@wok-cli/stylelint-config-wok": "^1.0.0",
     "eslint": ">=6.5.1",
     "gulp": "^4.0.0",
@@ -55,7 +55,13 @@
     "not ie < 11"
   ],
   "eslintConfig": {
-    "extends": "@wok-cli/eslint-config-wok/node"
+    "extends": "@wok-cli/eslint-config-wok/node",
+    "rules": {
+      "indent": [
+        "error",
+        4
+      ]
+    }
   },
   "stylelint": {
     "extends": [

@@ -10,15 +10,15 @@
         'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
         'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
         'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
-        'timeStamp', 'trace', 'warn'
+        'timeStamp', 'trace', 'warn',
     ];
-    var length = methods.length; //eslint-disable-line prefer-destructuring
-    var console = (window.console = window.console || {}); //eslint-disable-line no-multi-assign
+    var length = methods.length; // eslint-disable-line prefer-destructuring
+    var console = (window.console = window.console || {}); // eslint-disable-line no-multi-assign
     var method;
 
     function noop() {}
 
-    while (length--) { //eslint-disable-line no-plusplus
+    while (length--) { // eslint-disable-line no-plusplus
         method = methods[length];
 
         // Only stub undefined methods.
