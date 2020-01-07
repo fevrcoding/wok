@@ -57,16 +57,16 @@ Available editor extensions for in-editor linting are listed [here](http://style
 
 ## Configuration
 
-This boilerplate implements [`@wok-cli/preset-standard`](#TODO) 
+This boilerplate implements [`@wok-cli/preset-standard`][1] and [`@wok-cli/preset-wok`][2]
 
 On a plain HTML project, the default configuration should work just fine. On other setups you might need to tweak some paths/options.
 
-See `@wok-cli` project [documentation](#TODO) for configuration and customization details.
+See `@wok-cli` project [documentation](https://dwightjack.github.io/wok-pkgs/) for configuration and customization details.
 
 
 ## Project Structure
 
-See [`@wok-cli/preset-standard`](#TODO)  documentation for details.
+See [`@wok-cli/preset-standard`][1] documentation for details.
 
 ### Using a bundler
 
@@ -80,44 +80,15 @@ From project root:
 
 ### Production build
 
-To generate a production ready build add the `--production` parameter:
+To generate a production build add the `--production` flag:
 
+```bash
+gulp --production
+```
 
-    gulp --production
+### Available tasks
 
-
-### Deploy and rollback:
-
-#### SSH and rsync
-
-By default WOK implements a simple set of deploy tasks requiring SSH remote access and [rsync](https://rsync.samba.org).
-
-To deploy and rollback with rsync first setup your [deploy targets](packages/core/cli#deploy-targets) in `wok.config.js`, then run:
-
-    #deploy to remote staging server. A backup of the deploy target folder (`paths.dist.root`) will be stored in `paths.backup`.
-    gulp deploy --target=staging
-
-    #deploy a production build to remote production server
-    gulp deploy --production --target=production
-
-    #rollback to the previous version in the remote production server
-    gulp remote --command=rollback --target=production
-
-#### FTP
-
-If you are on a shared hosting with FTP access, you can switch to the more basic `ftp` deploy strategy, which uses [lftp](http://lftp.yar.ru) mirroring feature for incremental upload.
-
-To switch to ftp mode, define a `deployStrategy: 'ftp'` property either on the deploy target object or on the root configuration object in in `wok.config.js`.
-
-**Note** Rollback and backup tasks won't be available with this configuration.
-
-See `@wok-cli/plugin-deploy-lftp` [documentation](#TODO) for more details.
-
-### Other Gulp tasks 
-
-- The boilerplate implements `@wok-cli/plugin-notifier` for in-development desktop notifications. To disable it, add a `enableNotify: false` proparty to your `wok.config.js` file.
-
-See [`@wok-cli/preset-standard`](#TODO)  documentation for more details.
+See [`@wok-cli/preset-standard`][1] and [`@wok-cli/preset-wok`][2] documentations for more details.
 
 ## Project Info
 
@@ -125,3 +96,6 @@ WOK was created by [Marco Solazzi](https://github.com/dwightjack) with contribut
 
 Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.
 Modified work Copyright © 2015-2020 Marco Solazzi, released under the MIT license.
+
+[1]: https://dwightjack.github.io/wok-pkgs/#/packages/preset-standard/
+[2]: https://dwightjack.github.io/wok-pkgs/#/packages/preset-wok/
