@@ -75,7 +75,7 @@ You can use [`@wok-cli/task-webpack`](https://dwightjack.github.io/wok-pkgs/#/pa
 1. Install dependencies:
 
 ```bash
-npm install webpack@^4.0.0 babel-loader --save-dev
+npm install @wok-cli/task-webpack webpack@^4.0.0 babel-loader --save-dev
 ```
 
 2. Edit `gulpfile.js` to substitute the scripts workflow with a webpack powered one:
@@ -96,7 +96,7 @@ wok
     .task(require('@wok-cli/task-webpack'))
     .params({
         entry: {
-            application: '<%= paths.src.root %>/<%= paths.scripts %>/application.js'
+            application: './<%= paths.src.root %>/<%= paths.scripts %>/application.js'
         },
         outputFolder: '<%= paths.dist.root %>/<%= paths.scripts %>'
     }).hook('config:chain', 'babel', (config) => {
@@ -117,16 +117,19 @@ wok
             '<%= paths.dist.root %>/<%= paths.dist.vendors %>/modernizr/*.js'
         ]);
 
-// 4. Remove the scripts watcher and add a webpack specific one:
-
+// 4. Remove the scripts watcher
 wok
 .get('watch')
     .hooks()
         .delete('watchers', 'scripts')
-        .set('watchers', 'webpack', (watchers, env, api, { tasks }) => {
-            watchers.push(tasks.webpack.watch)
-            return watchers;
-        });
+
+// 5. attach the webpack middleware to the server task
+wok.onResolve(({ server, scripts }) => {
+    scripts.asServeMiddleware(server);
+})
+
+
+module.exports = wok.resolve();
 ```
 
 ## Building
