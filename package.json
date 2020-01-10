@@ -34,9 +34,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
-    "@wok-cli/core": "^1.0.0",
-    "@wok-cli/eslint-config-wok": "^1.0.0",
-    "@wok-cli/preset-standard": "^1.0.4",
+    "@wok-cli/core": "^1.0.4",
+    "@wok-cli/eslint-config-wok": "^1.0.3",
+    "@wok-cli/preset-standard": "^1.0.7",
     "@wok-cli/preset-wok": "^1.0.2",
     "@wok-cli/stylelint-config-wok": "^1.0.0",
     "eslint": ">=6.5.1",
