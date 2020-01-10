@@ -57,7 +57,7 @@ Available editor extensions for in-editor linting are listed [here](http://style
 
 ## Configuration
 
-This boilerplate implements [`@wok-cli/preset-standard`][1] and [`@wok-cli/preset-wok`][2]
+This boilerplate implements [`@wok-cli/preset-standard`][preset-standard] and [`@wok-cli/preset-wok`][preset-wok]
 
 On a plain HTML project, the default configuration should work just fine. On other setups you might need to tweak some paths/options.
 
@@ -66,11 +66,68 @@ See `@wok-cli` project [documentation](https://dwightjack.github.io/wok-pkgs/) f
 
 ## Project Structure
 
-See [`@wok-cli/preset-standard`][1] documentation for details.
+See [`@wok-cli/preset-standard`][preset-standard] documentation for details.
 
-### Using a bundler
+### Using Webpack
 
-To use ES2015 modules follow the [webpack2 recipe](https://github.com/fevrcoding/wok/wiki/Gulp:-webpack-and-ES6). 
+You can use [`@wok-cli/task-webpack`](https://dwightjack.github.io/wok-pkgs/#/packages/task-webpack/) to integrate Webpack in your project:
+
+1. Install dependencies:
+
+```bash
+npm install webpack@^4.0.0 babel-loader --save-dev
+```
+
+2. Edit `gulpfile.js` to substitute the scripts workflow with a webpack powered one:
+
+```js
+// gulpfile.js
+const $ = require("@wok-cli/core");
+const preset = require("@wok-cli/preset-wok");
+
+const wok = preset($);
+
+// 1. Delete the default scripts task
+wok.delete('scripts');
+
+// 2. Set a new webpack-powered scripts task
+wok
+.set('scripts')
+    .task(require('@wok-cli/task-webpack'))
+    .params({
+        entry: {
+            application: '<%= paths.src.root %>/<%= paths.scripts %>/application.js'
+        },
+        outputFolder: '<%= paths.dist.root %>/<%= paths.scripts %>'
+    }).hook('config:chain', 'babel', (config) => {
+        // setup the babel loader
+        config.module
+            .rule('js')
+                .test(/\.m?js$/)
+                .use('babel')
+                    .loader('babel-loader');
+        return config;
+    });
+
+// 3. Prevent the minification task from parsing the bundle (webpack already does that for you):
+wok
+.get('$minifyJS')
+    .params()
+        .set('pattern', [
+            '<%= paths.dist.root %>/<%= paths.dist.vendors %>/modernizr/*.js'
+        ]);
+
+// 4. Remove the scripts watcher and add a webpack specific one:
+
+wok
+.get('watch')
+    .hooks()
+        .delete('watchers', 'scripts')
+        .set('watchers', 'webpack', (watchers, env, api, { tasks }) => {
+            watchers.push(tasks.webpack.watch)
+            return watchers;
+        });
+```
 
 ## Building
 
@@ -88,7 +145,7 @@ gulp --production
 
 ### Available tasks
 
-See [`@wok-cli/preset-standard`][1] and [`@wok-cli/preset-wok`][2] documentations for more details.
+See [`@wok-cli/preset-standard`][preset-standard] and [`@wok-cli/preset-wok`][preset-wok] documentations for more details.
 
 ## Project Info
 
@@ -97,5 +154,5 @@ WOK was created by [Marco Solazzi](https://github.com/dwightjack) with contribut
 Original work Copyright © 2014 Intesys S.r.l., released under the MIT license.
 Modified work Copyright © 2015-2020 Marco Solazzi, released under the MIT license.
 
-[1]: https://dwightjack.github.io/wok-pkgs/#/packages/preset-standard/
-[2]: https://dwightjack.github.io/wok-pkgs/#/packages/preset-wok/
+[preset-standard]: https://dwightjack.github.io/wok-pkgs/#/packages/preset-standard/
+[preset-wok]: https://dwightjack.github.io/wok-pkgs/#/packages/preset-wok/
