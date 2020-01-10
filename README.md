@@ -90,9 +90,16 @@ const wok = preset($);
 // 1. Delete the default scripts task
 wok.delete('scripts');
 
-// 2. Set a new webpack-powered scripts task
+// 2. Remove the scripts watcher
 wok
-.set('scripts')
+.get('watch')
+    .hooks()
+        .delete('watchers', 'scripts')
+
+
+// 3. Set the webpack task
+wok
+.set('webpack')
     .task(require('@wok-cli/task-webpack'))
     .params({
         entry: {
@@ -109,7 +116,7 @@ wok
         return config;
     });
 
-// 3. Prevent the minification task from parsing the bundle (webpack already does that for you):
+// 4. Prevent the minification task from parsing the bundle (webpack already does that for you):
 wok
 .get('$minifyJS')
     .params()
@@ -117,15 +124,24 @@ wok
             '<%= paths.dist.root %>/<%= paths.dist.vendors %>/modernizr/*.js'
         ]);
 
-// 4. Remove the scripts watcher
-wok
-.get('watch')
-    .hooks()
-        .delete('watchers', 'scripts')
+// 4. Redefine the scripts task to execute the webpack task
+// and ensure we don't run the task when the server is running (see 5.)
+wok.compose('scripts', ({ webpack }) => {
+
+    return function (done) {
+        if ($.env.$$isServe) {
+            done();
+            return;
+        }
+        return webpack(done)
+    }
+})
+
 
 // 5. attach the webpack middleware to the server task
-wok.onResolve(({ server, scripts }) => {
-    scripts.asServeMiddleware(server);
+// webpack will serve the compiled assets in development
+wok.onResolve(({ server, webpack }) => {
+    webpack.asServeMiddleware(server);
 })
 
 
